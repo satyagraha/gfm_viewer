@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>@{title}</title>
+@foreach{cssUri : cssUris}
+<link href="@{cssUri}" media="all" rel="stylesheet" type="text/css"/> 
+@end{}
+@if{cssText}
+<style type="text/css">
+@{cssText}
+</style>
+@end{}
+@if{jsText}
+<script type="text/javascript">
+@{jsText}
+</script>
+@end{}
+@foreach{jsUri : jsUris}
+<script type="text/javascript" src="@{jsUri}"></script>
+@end{}
+</head>
+<body class="markdown-body">
+@{content}
+</body>
+</html>

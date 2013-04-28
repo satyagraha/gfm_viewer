@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="code.satyagraha.gfm.viewer.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="GFM Viewer"
+            class="code.satyagraha.gfm.viewer.preferences.PreferencePage"
+            id="code.satyagraha.gfm.viewer.preferences.PreferencePage">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:code.satyagraha.gfm.viewer.views.GfmView">
+         <command
+               commandId="GFM Viewer plugin.GoBackward"
+               icon="icons/nav_backward.gif"
+               style="push">
+         </command>
+         <command
+               commandId="GFM Viewer plugin.GoForward"
+               icon="icons/nav_forward.gif"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="code.satyagraha.gfm.commands.GoForward"
+            id="GFM Viewer plugin.GoForward"
+            name="Go Forward">
+      </command>
+      <command
+            defaultHandler="code.satyagraha.gfm.commands.GoBackward"
+            id="GFM Viewer plugin.GoBackward"
+            name="Go Backward">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="GFM Support"
+            id="code.satyagraha.gfm.viewer">
+      </category>
+      <view
+            name="GFM View"
+            icon="icons/notepad.gif"
+            category="code.satyagraha.gfm.viewer"
+            class="code.satyagraha.gfm.viewer.views.GfmView"
+            id="code.satyagraha.gfm.viewer.views.GfmView">
+      </view>
+   </extension>
+
+</plugin>
