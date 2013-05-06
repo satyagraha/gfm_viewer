@@ -53,11 +53,11 @@
             id="code.satyagraha.gfm.viewer">
       </category>
       <view
-            name="GFM View"
-            icon="icons/notepad.gif"
             category="code.satyagraha.gfm.viewer"
             class="code.satyagraha.gfm.viewer.views.GfmView"
-            id="code.satyagraha.gfm.viewer.views.GfmView">
+            icon="icons/notepad.gif"
+            id="code.satyagraha.gfm.viewer.views.GfmView"
+            name="GFM View">
       </view>
    </extension>
 

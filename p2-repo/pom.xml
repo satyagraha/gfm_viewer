@@ -9,6 +9,6 @@
 		<relativePath>../parent</relativePath>
 	</parent>
 
-	<artifactId>code.satyagraha.gfm.viewer.update-site</artifactId>
-	<packaging>eclipse-update-site</packaging>
+	<artifactId>code.satyagraha.gfm.viewer.p2-repo</artifactId>
+	<packaging>eclipse-repository</packaging>
 </project>
