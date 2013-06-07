@@ -16,8 +16,9 @@ forward in the browsing history.
  
 ## Installation
 
-No Eclipse update site is currently available, so the following build and install process should be
-followed:
+Update site: `www.nodeclipse.org/updates/staging/`
+
+Alternatively the following build and install process can be followed:
 
 * Ensure you have [Maven](http://maven.apache.org/) executables installed for your OS
 * Clone this project's repository to a convenient location (a path not containing special characters
