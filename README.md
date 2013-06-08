@@ -3,6 +3,14 @@
 This project provides an Eclipse view which provides a reasonably accurate presentation of
 [GithHub Flavored Markdown](http://github.github.com/github-flavored-markdown/) files.
 
+<a href="https://help.github.com/articles/github-flavored-markdown">GitHub Flavored</a>
+ [Markdown](http://daringfireball.net/projects/markdown/) viewer plugin (GFM Viewer) adds View that displays .md files as they would be on GitHub.
+
+Created by <a href="https://github.com/satyagraha">Satyagraha</a>. Existing listing is <a href="/content/github-flavored-markdown-viewer-plugin-eclipse" title="GitHub Flavored Markdown viewer plugin for Eclipse">GitHub Flavored Markdown viewer plugin for Eclipse </a>. Wtih this entry you can download GFM into your Eclipse without manual build as described in author's README.
+
+Goes well together with <a href="/content/markdown-text-editor" title="Markdown Text Editor">Markdown Text Editor 0.9.0</a> by <a href="/user/4860/listings" title="Daniel Winterstein">Daniel Winterstein</a>, which also can be installed via <a href="/content/nodeclipse" title="Nodeclipse">Nodeclipse</a> update site.
+
+
 ## Usage
 
 After [installation](#installation), execute menu _Window_ -> _Show View_ -> _Other..._ and
@@ -16,8 +24,9 @@ forward in the browsing history.
  
 ## Installation
 
-No Eclipse update site is currently available, so the following build and install process should be
-followed:
+Update site: `www.nodeclipse.org/updates/staging/`
+
+Alternatively the following build and install process can be followed:
 
 * Ensure you have [Maven](http://maven.apache.org/) executables installed for your OS
 * Clone this project's repository to a convenient location (a path not containing special characters
