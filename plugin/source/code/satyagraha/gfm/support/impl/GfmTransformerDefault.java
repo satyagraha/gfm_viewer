@@ -2,6 +2,7 @@ package code.satyagraha.gfm.support.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -10,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.CharEncoding;
 import org.mvel2.templates.CompiledTemplate;
 import org.mvel2.templates.TemplateCompiler;
 import org.mvel2.templates.TemplateRuntime;
@@ -27,6 +29,8 @@ import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.core.impl.provider.entity.StringProvider;
 
 public class GfmTransformerDefault implements GfmTransformer {
+
+    private static final Charset UTF_8 = Charset.forName(CharEncoding.UTF_8);
 
     @XmlRootElement
     public static class Markdown {
@@ -57,7 +61,7 @@ public class GfmTransformerDefault implements GfmTransformer {
     
     @Override
     public void transformMarkdownFile(File mdFile, File htFile) throws IOException {
-        String mdText = FileUtils.readFileToString(mdFile);
+        String mdText = FileUtils.readFileToString(mdFile, UTF_8);
         String htText = transformMarkdownText(mdText);
         CompiledTemplate htmlTemplate = TemplateCompiler.compileTemplate(gfmConfig.getHtmlTemplate());
         Map<String, Object> vars = new HashMap<String, Object>();
@@ -68,7 +72,7 @@ public class GfmTransformerDefault implements GfmTransformer {
         vars.put("jsText", gfmConfig.getJsText());
         vars.put("jsUris", gfmConfig.getJsUris());
         String rendered = (String) TemplateRuntime.execute(htmlTemplate, vars);
-        FileUtils.writeStringToFile(htFile, rendered);
+        FileUtils.writeStringToFile(htFile, rendered, UTF_8);
     }
 
     @Override

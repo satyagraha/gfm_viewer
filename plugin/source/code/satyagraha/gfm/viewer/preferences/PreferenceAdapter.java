@@ -13,10 +13,12 @@ import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USERN
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 
 import code.satyagraha.gfm.support.api.GfmConfig;
@@ -24,6 +26,8 @@ import code.satyagraha.gfm.viewer.plugin.Activator;
 
 public class PreferenceAdapter implements GfmConfig {
 
+    private static final Charset UTF_8 = Charset.forName(CharEncoding.UTF_8);
+    
     @Override
     public String getApiUrl() {
         return getPreference(P_API_URL);
@@ -43,7 +47,7 @@ public class PreferenceAdapter implements GfmConfig {
     public String getHtmlTemplate() throws IOException {
         String templatePath = getPreference(P_TEMPLATE);
         return StringUtils.isNotBlank(templatePath)
-            ? FileUtils.readFileToString(new File(templatePath))
+            ? FileUtils.readFileToString(new File(templatePath), UTF_8)
             : PreferenceInitializer.getGfmConfigDefault().getHtmlTemplate();
     }
 

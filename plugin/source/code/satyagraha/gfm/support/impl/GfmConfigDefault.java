@@ -3,17 +3,20 @@ package code.satyagraha.gfm.support.impl;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.CharEncoding;
 
 import code.satyagraha.gfm.support.api.GfmConfig;
 
 public class GfmConfigDefault implements GfmConfig {
 
     private static final String API_ROOT_URL = "https://api.github.com";
-
+    private static final Charset UTF_8 = Charset.forName(CharEncoding.UTF_8);
+    
     /* (non-Javadoc)
      * @see code.satyagraha.gfm.support.GfmConfig#getApiUri()
      */
@@ -83,7 +86,7 @@ public class GfmConfigDefault implements GfmConfig {
         if (templateStream == null) {
             throw new FileNotFoundException(resourcePath);
         }
-        String htmlTemplateText = IOUtils.toString(templateStream);
+        String htmlTemplateText = IOUtils.toString(templateStream, UTF_8);
         IOUtils.closeQuietly(templateStream);
         return htmlTemplateText;
     }

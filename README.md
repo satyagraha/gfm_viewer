@@ -12,7 +12,11 @@ via the GitHub website.
 
 You may click internal and external hyperlinks in the presented web page, and then click the
 left and right arrow navigation icons in the top right of the view to navigate backwards and
-forward in the browsing history.   
+forward in the browsing history.
+
+N.B. If non-ASCII characters are used in the markdown file, the current implementation assumes
+[UTF-8](http://en.wikipedia.org/wiki/UTF-8) character encoding, see also
+[here](http://www.martinahrer.at/2007/06/03/eclipse-encoding-settings/).
  
 ## Installation
 
@@ -139,3 +143,8 @@ plugin is recommended as an excellent general markdown editor which complements 
 ## License
 
 Eclipse Public License 1.0
+
+## History
+
+* 1.0.0 - initial version
+* 1.0.1 - use UTF-8 text encoding, e.g. 快乐  ハッピー  ευτυχισμένος
