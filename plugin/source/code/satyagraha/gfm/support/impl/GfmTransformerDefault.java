@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.mvel2.templates.CompiledTemplate;
 import org.mvel2.templates.TemplateCompiler;
@@ -59,6 +60,11 @@ public class GfmTransformerDefault implements GfmTransformer {
         clientConfig.getClasses().add(StringProvider.class);
     }
     
+    @Override
+    public boolean isMarkdownFile(File file) {
+        return file.isFile() && FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("md");
+    }
+
     @Override
     public void transformMarkdownFile(File mdFile, File htFile) throws IOException {
         String mdText = FileUtils.readFileToString(mdFile, UTF_8);

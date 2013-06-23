@@ -6,6 +6,6 @@ import org.eclipse.core.resources.IFile;
 
 public interface GfmListener {
 
-    void showFile(IFile editorFile) throws IOException;
+    void showIFile(IFile editorFile) throws IOException;
 
 }

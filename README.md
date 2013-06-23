@@ -5,10 +5,16 @@ This project provides an Eclipse view which provides a reasonably accurate prese
 
 ## Usage
 
-After [installation](#installation), execute menu _Window_ -> _Show View_ -> _Other..._ and
-select entry _GFM Support_ -> _GFM Viewer_. Then, when files with an extension of `.md` are saved
+After [installation](#installation), the viewer may be accessed in any of the following ways:
+
+* Execute menu _Window_ -> _Show View_ -> _Other..._ and select entry
+_GFM Support_ -> _GFM Viewer_. Then, when files with an extension of `.md` are saved
 from an Eclipse editor, this view is updated as would be seen when browsing the file
 via the GitHub website.
+
+* When a markdown file is selected in any tree navigation view, then a _Show in GFM view_
+[context menu](http://en.wikipedia.org/wiki/Context_menu) entry is provided which when activated
+will automatically open the view and display the formatted markdown content.
 
 You may click internal and external hyperlinks in the presented web page, and then click the
 left and right arrow navigation icons in the top right of the view to navigate backwards and
@@ -52,6 +58,9 @@ The GFM viewer plugin should work adequately without further configuration, howe
 customised via menu _Window_ -> _Preferences_ -> _GFM Viewer_. On that dialog page, properties may be set
 as follows:
 
+* _Use Temp dir_: by default formatted HTML files are stored in the original markdown file's directory,
+thus enabling relative local links and images to work properly;
+select this option to instead have them in the user's temporary directory
 * _API URL_: specifies an alternate URL for GitHub API calls (typically for corporate users only)
 * _Username/Password_: a limit of 60 updates per hour is imposed by GitHub for unauthenticated
 usage of their markdown rendering API, so provide GitHub credentials in these fields to have this
@@ -59,6 +68,13 @@ limit raised, see [here](http://developer.github.com/v3/#rate-limiting) for back
 * _Template File_: an alternate HTML template file to the default may be provided
 * _CSS URL 1-3_: an alternate CSS presentation to the default may be provided
 * _JS URL 1-3_: an alternate JS implementation to the default may be provided
+
+Regarding the temporary formatted HTML files, when stored in the original markdown file directory note:
+
+* You may wish to add the exclusion pattern `.*.md.html` to your projects `.gitignore` file, which will prevent
+their inclusion in version control operations
+* You can manage the visibility of these files in Eclipse tree views via the _View_ menu (small triangle icon in
+top right of view), then select the _Filters..._ entry, and then set or clear the _.* resources_ check box
 
 ## Implementation
 
@@ -129,11 +145,11 @@ site as an alternative to the other one.
 
 ## To Do
 
-Areas meriting further attention include:
+Areas possibly meriting further attention include:
 
 * It appears that GitHub may use some kind of dynamic CSS generation: the consequence is that the coverage
 provided by this plugin's simple static CSS may well not include some important entries (simply because they
-were not apparent on the test content used in development)
+were not apparent on the test content used in development).
 
 ## Markdown Editors
 
@@ -148,3 +164,4 @@ Eclipse Public License 1.0
 
 * 1.0.0 - initial version
 * 1.0.1 - use UTF-8 text encoding, e.g. 快乐  ハッピー  ευτυχισμένος
+* 1.1.0 - transformation done in background job, provide context menu, temp dir option

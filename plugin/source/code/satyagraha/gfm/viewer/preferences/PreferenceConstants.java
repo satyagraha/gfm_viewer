@@ -5,6 +5,7 @@ package code.satyagraha.gfm.viewer.preferences;
  */
 public class PreferenceConstants {
 
+    public static final String P_USE_TEMP_DIR = "P_USE_TEMP_DIR";
     public static final String P_API_URL = "P_API_URL";
     public static final String P_USERNAME = "P_USERNAME";
     public static final String P_PASSWORD = "P_PASSWORD";

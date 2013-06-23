@@ -14,7 +14,7 @@ import org.eclipse.ui.ide.ResourceUtil;
 
 import code.satyagraha.gfm.viewer.plugin.Activator;
 
-public class EditorTracker implements IPartListener2 {
+public abstract class EditorTracker implements IPartListener2 {
 
     private IWorkbenchWindow workbenchWindow;
     private GfmListener gfmListener;
@@ -86,7 +86,7 @@ public class EditorTracker implements IPartListener2 {
             final IEditorPart editorPart = (IEditorPart) part;
             IEditorInput editorInput = editorPart.getEditorInput();
             final IFile editorFile = ResourceUtil.getFile(editorInput);
-            if (isMarkdownFile(editorFile) && isNewFile(editorFile)) {
+            if (isTrackableFile(editorFile) && isNewFile(editorFile)) {
                 Activator.debug("opening markdown editor found");
                 gfmFile = editorFile;
                 notifyGfmListener();
@@ -112,23 +112,12 @@ public class EditorTracker implements IPartListener2 {
             final IEditorPart editorPart = (IEditorPart) part;
             IEditorInput editorInput = editorPart.getEditorInput();
             final IFile editorFile = ResourceUtil.getFile(editorInput);
-            if (isMarkdownFile(editorFile) && isSameFile(editorFile)) {
+            if (isTrackableFile(editorFile) && isSameFile(editorFile)) {
                 Activator.debug("closing markdown editor found");
                 gfmFile = null;
                 notifyGfmListener();
             }
         }
-    }
-
-    private boolean isMarkdownFile(IFile file) {
-        if (file == null) {
-            return false;
-        }
-        String ext = file.getFileExtension();
-        if (ext == null) {
-            return false;
-        }
-        return ext.equals("md");
     }
 
     private boolean isNewFile(IFile editorFile) {
@@ -142,10 +131,13 @@ public class EditorTracker implements IPartListener2 {
     private void notifyGfmListener() {
         if (gfmListener != null) {
             try {
-                gfmListener.showFile(gfmFile);
+                gfmListener.showIFile(gfmFile);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
     }
+    
+    protected abstract boolean isTrackableFile(IFile iFile);
+    
 }

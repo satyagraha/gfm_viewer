@@ -76,9 +76,20 @@ public class GfmConfigDefault implements GfmConfig {
         return jsText;
     }
     
+    /* (non-Javadoc)
+     * @see code.satyagraha.gfm.support.api.GfmConfig#getJsUris()
+     */
     @Override
     public List<String> getJsUris() {
         return Arrays.asList();
+    }
+
+    /* (non-Javadoc)
+     * @see code.satyagraha.gfm.support.api.GfmConfig#useTempDir()
+     */
+    @Override
+    public boolean useTempDir() {
+        return false;
     }
     
     private String getResourceAsString(String resourcePath) throws IOException {

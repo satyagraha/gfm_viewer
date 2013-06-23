@@ -32,6 +32,35 @@
                style="push">
          </command>
       </menuContribution>
+      <menuContribution
+            allPopups="true"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <command
+               commandId="GFM Viewer plugin.ShowMarkdownFile"
+               label="Show in GFM view"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <with
+                        variable="activeMenuSelection">
+                     <count
+                           value="1">
+                     </count>
+                  </with>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IFile">
+                        <test
+                              property="org.eclipse.core.resources.extension"
+                              value="md">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </and>
+            </visibleWhen>
+         </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -44,6 +73,11 @@
             defaultHandler="code.satyagraha.gfm.commands.GoBackward"
             id="GFM Viewer plugin.GoBackward"
             name="Go Backward">
+      </command>
+      <command
+            defaultHandler="code.satyagraha.gfm.commands.ShowMarkdownFile"
+            id="GFM Viewer plugin.ShowMarkdownFile"
+            name="Show Markdown File">
       </command>
    </extension>
    <extension

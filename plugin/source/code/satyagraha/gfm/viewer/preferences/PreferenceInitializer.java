@@ -10,6 +10,7 @@ import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_JS_UR
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_PASSWORD;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_TEMPLATE;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USERNAME;
+import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USE_TEMP_DIR;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -39,6 +40,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
     public void initializeDefaultPreferences() {
 	    Activator.debug("");
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setDefault(P_USE_TEMP_DIR, false);
 		store.setDefault(P_API_URL, getGfmConfigDefault().getApiUrl());
 		store.setDefault(P_USERNAME, "");
 		store.setDefault(P_PASSWORD, "");

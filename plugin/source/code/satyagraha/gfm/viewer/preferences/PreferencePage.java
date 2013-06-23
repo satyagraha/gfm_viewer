@@ -10,9 +10,11 @@ import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_JS_UR
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_PASSWORD;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_TEMPLATE;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USERNAME;
+import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USE_TEMP_DIR;
 
 import java.io.File;
 
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
@@ -49,6 +51,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
     @Override
     public void createFieldEditors() {
         Composite parent = getFieldEditorParent();
+        
+        addField(new BooleanFieldEditor(P_USE_TEMP_DIR, "Use temp dir:", parent));
         
         addField(new StringFieldEditor(P_API_URL, "API URL:", parent));
         

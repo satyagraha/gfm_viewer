@@ -5,20 +5,22 @@ import java.util.List;
 
 public interface GfmConfig {
 
-    public abstract String getApiUrl();
-
-    public abstract String getUsername();
+    public boolean useTempDir();
     
-    public abstract String getPassword();
+    public String getApiUrl();
 
-    public abstract String getHtmlTemplate() throws IOException;
-
-    public abstract String getCssText() throws IOException;
-
-    public abstract List<String> getCssUris();
-
-    public abstract String getJsText() throws IOException;
+    public String getUsername();
     
-    public abstract List<String> getJsUris();
+    public String getPassword();
+
+    public String getHtmlTemplate() throws IOException;
+
+    public String getCssText() throws IOException;
+
+    public List<String> getCssUris();
+
+    public String getJsText() throws IOException;
+    
+    public List<String> getJsUris();
     
 }

@@ -1,5 +1,6 @@
 package code.satyagraha.gfm.viewer.preferences;
 
+import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USE_TEMP_DIR;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_API_URL;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_CSS_URL_1;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_CSS_URL_2;
@@ -27,25 +28,30 @@ import code.satyagraha.gfm.viewer.plugin.Activator;
 public class PreferenceAdapter implements GfmConfig {
 
     private static final Charset UTF_8 = Charset.forName(CharEncoding.UTF_8);
+
+    @Override
+    public boolean useTempDir() {
+        return getBooleanPreference(P_USE_TEMP_DIR);
+    }
     
     @Override
     public String getApiUrl() {
-        return getPreference(P_API_URL);
+        return getStringPreference(P_API_URL);
     }
 
     @Override
     public String getUsername() {
-        return getPreference(P_USERNAME);
+        return getStringPreference(P_USERNAME);
     }
     
     @Override
     public String getPassword() {
-        return getPreference(P_PASSWORD);
+        return getStringPreference(P_PASSWORD);
     }
     
     @Override
     public String getHtmlTemplate() throws IOException {
-        String templatePath = getPreference(P_TEMPLATE);
+        String templatePath = getStringPreference(P_TEMPLATE);
         return StringUtils.isNotBlank(templatePath)
             ? FileUtils.readFileToString(new File(templatePath), UTF_8)
             : PreferenceInitializer.getGfmConfigDefault().getHtmlTemplate();
@@ -61,11 +67,11 @@ public class PreferenceAdapter implements GfmConfig {
     public List<String> getCssUris() {
         List<String> cssUris = new ArrayList<String>();
         String cssUri;
-        cssUri = getPreference(P_CSS_URL_1);
+        cssUri = getStringPreference(P_CSS_URL_1);
         if (StringUtils.isNotBlank(cssUri)) cssUris.add(cssUri);
-        cssUri = getPreference(P_CSS_URL_2);
+        cssUri = getStringPreference(P_CSS_URL_2);
         if (StringUtils.isNotBlank(cssUri)) cssUris.add(cssUri);
-        cssUri = getPreference(P_CSS_URL_3);
+        cssUri = getStringPreference(P_CSS_URL_3);
         if (StringUtils.isNotBlank(cssUri)) cssUris.add(cssUri);
         return cssUris;
     }
@@ -80,17 +86,21 @@ public class PreferenceAdapter implements GfmConfig {
     public List<String> getJsUris() {
         List<String> jsUris = new ArrayList<String>();
         String jsUri;
-        jsUri = getPreference(P_JS_URL_1);
+        jsUri = getStringPreference(P_JS_URL_1);
         if (StringUtils.isNotBlank(jsUri)) jsUris.add(jsUri);
-        jsUri = getPreference(P_JS_URL_2);
+        jsUri = getStringPreference(P_JS_URL_2);
         if (StringUtils.isNotBlank(jsUri)) jsUris.add(jsUri);
-        jsUri = getPreference(P_JS_URL_3);
+        jsUri = getStringPreference(P_JS_URL_3);
         if (StringUtils.isNotBlank(jsUri)) jsUris.add(jsUri);
         return jsUris;
     }
     
-    private String getPreference(String preferenceId) {
+    private String getStringPreference(String preferenceId) {
         return Activator.getDefault().getPreferenceStore().getString(preferenceId);
+    }
+    
+    private boolean getBooleanPreference(String preferenceId) {
+        return Activator.getDefault().getPreferenceStore().getBoolean(preferenceId);
     }
     
 }

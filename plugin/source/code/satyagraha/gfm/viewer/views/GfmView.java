@@ -10,33 +10,30 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTException;
-import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.ProgressEvent;
-import org.eclipse.swt.browser.ProgressListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import code.satyagraha.gfm.support.api.GfmConfig;
+import code.satyagraha.gfm.support.api.GfmTransformer;
 import code.satyagraha.gfm.support.impl.GfmTransformerDefault;
 import code.satyagraha.gfm.viewer.plugin.Activator;
 import code.satyagraha.gfm.viewer.preferences.PreferenceAdapter;
 
-public class GfmView extends ViewPart implements ProgressListener, GfmListener {
+public class GfmView extends ViewPart implements GfmListener {
 
     /**
      * The ID of the view as specified by the extension.
      */
     public static final String ID = GfmView.class.getCanonicalName();
 
-    private Browser browser;
+    private GfmBrowser gfmBrowser;
 
-    private File lastFile;
-    private Integer lastScroll;
-
-    private GfmTransformerDefault gfmTransformer;
+    private GfmTransformer gfmTransformer;
+    
+    private GfmConfig gfmConfig;
 
     private EditorTracker editorTracker;
 
@@ -44,16 +41,37 @@ public class GfmView extends ViewPart implements ProgressListener, GfmListener {
     public void createPartControl(Composite parent) {
         Activator.debug("");
 
-        browser = new Browser(parent, SWT.NONE);
-        browser.addProgressListener(this);
+        gfmBrowser = new GfmBrowser(parent) {
+
+            @Override
+            public void handleDrop(File file) {
+                if (gfmTransformer.isMarkdownFile(file)) {
+                    showFile(file);
+                }
+            }
+
+            @Override
+            public void completed(ProgressEvent event) {
+                super.completed(event);
+                showBusy(false);
+            }
+        };
 
         gfmTransformer = new GfmTransformerDefault();
-        PreferenceAdapter preferenceAdapter = new PreferenceAdapter();
+        gfmConfig = new PreferenceAdapter();
         Logger logger = Logger.getLogger(GfmView.class.getCanonicalName());
         logger.setLevel(Level.WARNING);
-        gfmTransformer.setConfig(preferenceAdapter, logger);
+        gfmTransformer.setConfig(gfmConfig, logger);
 
-        editorTracker = new EditorTracker(getSite().getWorkbenchWindow(), this);
+        editorTracker = new EditorTracker(getSite().getWorkbenchWindow(), this) {
+
+            @Override
+            protected boolean isTrackableFile(IFile iFile) {
+                return iFile != null && gfmTransformer.isMarkdownFile(iFile.getLocation().toFile());
+            }
+
+        };
+        
     }
 
     @Override
@@ -67,59 +85,37 @@ public class GfmView extends ViewPart implements ProgressListener, GfmListener {
         editorTracker.close();
         editorTracker = null;
         gfmTransformer = null;
-        browser = null;
+        gfmBrowser.dispose();
+        gfmBrowser = null;
         super.dispose();
     }
 
     @Override
-    public void completed(ProgressEvent event) {
-        Activator.debug("");
-        if (lastScroll != null) {
-            browser.execute(String.format("setDocumentScrollTop(%d);", lastScroll));
-        }
-        showBusy(false);
-    }
-
-    @Override
-    public void changed(ProgressEvent event) {
-        // Activator.debug("");
-    }
-
-    @Override
-    public void showFile(IFile file) throws IOException {
-        if (file != null) {
-            Activator.debug(file.getFullPath().toString());
-            showBusy(true);
-            File mdFile = file.getRawLocation().toFile();
-            lastScroll = mdFile.equals(lastFile) ? getScrollTop() : null;
-            lastFile = mdFile;
-
-            final File htFile = File.createTempFile(this.getClass().getSimpleName(), ".html");
-
-            scheduleTransformation(mdFile, htFile, new Runnable() {
-                
-                @Override
-                public void run() {
-                    browser.setUrl(htFile.toURI().toString());
-                }
-            });
-            
+    public void showIFile(IFile iFile) {
+        if (iFile != null) {
+            Activator.debug(iFile.getFullPath().toString());
+            showFile(iFile.getRawLocation().toFile());
         } else {
             Activator.debug("(null)");
-            lastFile = null;
         }
     }
 
-    private Integer getScrollTop() {
-        Object position;
-        try {
-            position = browser.evaluate("return getDocumentScrollTop();");
-        } catch (SWTException e) {
-            Activator.debug(String.format("%s - %s", e.getClass().getCanonicalName(), e.getMessage()));
-            return null;
-        }
-        Activator.debug(String.format("position: %s", position));
-        return position != null ? ((Double) position).intValue() : null;
+    protected void showFile(File mdFile) {
+        showBusy(true);
+        final File htFile = createHtmlFile(mdFile);
+        scheduleTransformation(mdFile, htFile, new Runnable() {
+
+            @Override
+            public void run() {
+                gfmBrowser.showHtmlFile(htFile);
+            }
+        });
+    }
+
+    private File createHtmlFile(File mdFile) {
+        String htDir = gfmConfig.useTempDir() ? System.getProperty("java.io.tmpdir") : mdFile.getParent();
+        String htName = String.format(".%s.html", mdFile.getName());
+        return new File(htDir, htName);
     }
 
     private void scheduleTransformation(final File mdFile, final File htFile, final Runnable onDone) {
@@ -142,22 +138,39 @@ public class GfmView extends ViewPart implements ProgressListener, GfmListener {
         job.schedule();
     }
 
-    public static GfmView getInstance() {
-        return (GfmView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ID);
-    }
-
     public void goForward() {
         Activator.debug("");
-        if (browser != null) {
-            browser.forward();
+        if (gfmBrowser != null) {
+            gfmBrowser.forward();
         }
     }
 
     public void goBackward() {
         Activator.debug("");
-        if (browser != null) {
-            browser.back();
+        if (gfmBrowser != null) {
+            gfmBrowser.back();
         }
     }
+
+    public static GfmView getInstance() {
+        return (GfmView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ID);
+    }
+
+// (experimental) 
+//    private void showToolbarContributions() {
+//        IActionBars actionBars = this.getViewSite().getActionBars();
+//        if (actionBars != null) {
+//            IToolBarManager toolBarManager = actionBars.getToolBarManager();
+//            if (toolBarManager != null) {
+//                IContributionItem[] contributionItems = toolBarManager.getItems();
+//                for (IContributionItem contributionItem : contributionItems) {
+//                    Activator.debug("contributionItem: " + contributionItem.toString());
+//                    org.eclipse.jface.action.ContributionItem ci;
+//                    org.eclipse.ui.IViewSite ivs;
+//                    org.eclipse.swt.widgets.ToolItem ti;
+//                }
+//            }
+//        }
+//    }
 
 }
