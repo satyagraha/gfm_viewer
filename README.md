@@ -5,7 +5,7 @@ This project provides an Eclipse view which provides a reasonably accurate prese
 
 ## Usage
 
-After [installation](#installation), the viewer may be accessed in any of the following ways:
+After installation (see below), the viewer may be accessed in any of the following ways:
 
 * Execute menu _Window_ -> _Show View_ -> _Other..._ and select entry
 _GFM Support_ -> _GFM Viewer_. Then, when files with an extension of `.md` are saved
@@ -24,10 +24,21 @@ N.B. If non-ASCII characters are used in the markdown file, the current implemen
 [UTF-8](http://en.wikipedia.org/wiki/UTF-8) character encoding, see also
 [here](http://www.martinahrer.at/2007/06/03/eclipse-encoding-settings/).
  
-## Installation
+## Installation from Update Site
 
-No Eclipse update site is currently available, so the following build and install process should be
-followed:
+In Eclipse, do the following:
+* Go to menu _Help_ -> _Install New Software..._ and in the resulting dialog click the _Add..._
+button to present a further dialog, and here enter `GFM Viewer` as the _Name_ and 
+this [link](https://googledrive.com/host/0B2imkYUgmO5lWnpXMEhkZWdsWkU) as the _Location_ and press _OK_
+* Select the _GFM Viewer_ category in the install view, and proceed to install the software
+in the usual manner accepting all defaults
+* Eclipse will prompt for a restart, accept this, then the GFM viewer is usable as documented
+[above](#usage)
+
+## Installation from Source Code
+
+The following build and install process can be followed to build the plugin locally should there be an issue with the
+update site:
 
 * Ensure you have [Maven](http://maven.apache.org/) executables installed for your OS
 * Clone this project's repository to a convenient location (a path not containing special characters
@@ -37,7 +48,7 @@ like space is advised)
 * Build the plugin by executing the command: `mvn clean package`
 * Start your preferred Eclipse version in the normal way
 * In Eclipse, execute menu _Help_ -> _Install New Software..._ and in the resulting dialog click the _Add..._
-button to present a further dialog, and here enter `GFM Viewer` as the _Name_ and click the _Local..._
+button to present a further dialog, and here enter `GFM Viewer (local)` as the _Name_ and click the _Local..._
 button, then navigate to the directory `gfm_viewer/update-site/target/site` and press _OK_
 * Select the _GFM Viewer_ category in the install view, and proceed to install the software
 in the usual manner accepting all defaults
@@ -59,7 +70,7 @@ customised via menu _Window_ -> _Preferences_ -> _GFM Viewer_. On that dialog pa
 as follows:
 
 * _Use Temp dir_: by default formatted HTML files are stored in the original markdown file's directory,
-thus enabling relative local links and images to work properly;
+thus enabling relative local links to images to work properly;
 select this option to instead have them in the user's temporary directory
 * _API URL_: specifies an alternate URL for GitHub API calls (typically for corporate users only)
 * _Username/Password_: a limit of 60 updates per hour is imposed by GitHub for unauthenticated
@@ -165,3 +176,5 @@ Eclipse Public License 1.0
 * 1.0.0 - initial version
 * 1.0.1 - use UTF-8 text encoding, e.g. 快乐  ハッピー  ευτυχισμένος
 * 1.1.0 - transformation done in background job, provide context menu, temp dir option
+* 1.1.1 - added update site
+ 
