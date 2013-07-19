@@ -9,13 +9,17 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.swt.browser.ProgressEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import code.satyagraha.gfm.commands.Linked;
+import code.satyagraha.gfm.support.api.FileNature;
 import code.satyagraha.gfm.support.api.GfmConfig;
 import code.satyagraha.gfm.support.api.GfmTransformer;
 import code.satyagraha.gfm.support.impl.GfmTransformerDefault;
@@ -36,7 +40,7 @@ public class GfmView extends ViewPart implements GfmListener {
     private GfmConfig gfmConfig;
 
     private EditorTracker editorTracker;
-
+    
     @Override
     public void createPartControl(Composite parent) {
         Activator.debug("");
@@ -63,15 +67,16 @@ public class GfmView extends ViewPart implements GfmListener {
         logger.setLevel(Level.WARNING);
         gfmTransformer.setConfig(gfmConfig, logger);
 
-        editorTracker = new EditorTracker(getSite().getWorkbenchWindow(), this) {
-
+        FileNature markdownFileNature = new FileNature() {
+            
             @Override
-            protected boolean isTrackableFile(IFile iFile) {
+            public boolean isTrackableFile(IFile iFile) {
                 return iFile != null && gfmTransformer.isMarkdownFile(iFile.getLocation().toFile());
             }
-
         };
         
+        editorTracker = new EditorTracker(getSite().getWorkbenchWindow(), this, markdownFileNature);
+        editorTracker.setNotificationsEnabled(Linked.isLinked());
     }
 
     @Override
@@ -119,22 +124,34 @@ public class GfmView extends ViewPart implements GfmListener {
     }
 
     private void scheduleTransformation(final File mdFile, final File htFile, final Runnable onDone) {
-        Job job = new Job("Transforming: " + mdFile.getName()) {
+        final String jobName = "Transforming: " + mdFile.getName();
+        Job job = new Job(jobName) {
 
             @Override
             protected IStatus run(IProgressMonitor monitor) {
+                IStatus status = Status.OK_STATUS;
                 try {
                     gfmTransformer.transformMarkdownFile(mdFile, htFile);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    status = new Status(Status.ERROR, Activator.PLUGIN_ID, jobName, e);
                 }
-                Display.getDefault().asyncExec(onDone);
-                return Status.OK_STATUS;
+                return status;
             }
         };
         job.setUser(false);
         job.setSystem(false);
         job.setPriority(Job.SHORT);
+        job.addJobChangeListener(new JobChangeAdapter() {
+            
+            @Override
+            public void done(IJobChangeEvent event) {
+                if (event.getResult().isOK()) {
+                    Display.getDefault().asyncExec(onDone);
+                } else {
+                    // normal reporting has occurred
+                }
+            }
+        });
         job.schedule();
     }
 
@@ -154,6 +171,20 @@ public class GfmView extends ViewPart implements GfmListener {
 
     public static GfmView getInstance() {
         return (GfmView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ID);
+    }
+
+    public void setLinkedState(boolean state) {
+        Activator.debug("state: " + state);
+        if (editorTracker != null) {
+            editorTracker.setNotificationsEnabled(state);
+        }
+    }
+
+    public void reload() {
+        Activator.debug("");
+        if (editorTracker != null) {
+             editorTracker.notifyGfmListenerAlways();
+        }
     }
 
 // (experimental) 

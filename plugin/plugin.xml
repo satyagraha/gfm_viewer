@@ -22,13 +22,23 @@
             allPopups="false"
             locationURI="toolbar:code.satyagraha.gfm.viewer.views.GfmView">
          <command
-               commandId="GFM Viewer plugin.GoBackward"
-               icon="icons/nav_backward.gif"
+               commandId="GFM Viewer plugin.Reload"
+               icon="icons/reload.gif"
                style="push">
+         </command>
+         <command
+               commandId="GFM Viewer plugin.Linked"
+               icon="icons/linked.gif"
+               style="toggle">
          </command>
          <command
                commandId="GFM Viewer plugin.GoForward"
                icon="icons/nav_forward.gif"
+               style="push">
+         </command>
+         <command
+               commandId="GFM Viewer plugin.GoBackward"
+               icon="icons/nav_backward.gif"
                style="push">
          </command>
       </menuContribution>
@@ -65,14 +75,28 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
+            defaultHandler="code.satyagraha.gfm.commands.Reload"
+            id="GFM Viewer plugin.Reload"
+            name="Reload">
+      </command>
+      <command
+            defaultHandler="code.satyagraha.gfm.commands.Linked"
+            id="GFM Viewer plugin.Linked"
+            name="Linked">
+         <state
+               class="org.eclipse.ui.handlers.RegistryToggleState:true"
+               id="org.eclipse.ui.commands.toggleState">
+         </state>
+      </command>
+      <command
             defaultHandler="code.satyagraha.gfm.commands.GoForward"
             id="GFM Viewer plugin.GoForward"
             name="Go Forward">
       </command>
       <command
-            defaultHandler="code.satyagraha.gfm.commands.GoBackward"
-            id="GFM Viewer plugin.GoBackward"
-            name="Go Backward">
+            defaultHandler="code.satyagraha.gfm.commands.GoForward"
+            id="GFM Viewer plugin.GoForward"
+            name="Go Forward">
       </command>
       <command
             defaultHandler="code.satyagraha.gfm.commands.ShowMarkdownFile"
