@@ -120,7 +120,6 @@ public class EditorTracker implements IPartListener2 {
                         if (propId == IEditorPart.PROP_DIRTY && !editorPart.isDirty()) {
                             notifyGfmListenerIfEnabled();
                         }
-
                     }
                 });
             }

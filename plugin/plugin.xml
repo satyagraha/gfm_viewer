@@ -94,9 +94,9 @@
             name="Go Forward">
       </command>
       <command
-            defaultHandler="code.satyagraha.gfm.commands.GoForward"
-            id="GFM Viewer plugin.GoForward"
-            name="Go Forward">
+            defaultHandler="code.satyagraha.gfm.commands.GoBackward"
+            id="GFM Viewer plugin.GoBackward"
+            name="Go Backward">
       </command>
       <command
             defaultHandler="code.satyagraha.gfm.commands.ShowMarkdownFile"
