@@ -16,9 +16,14 @@ via the GitHub website.
 [context menu](http://en.wikipedia.org/wiki/Context_menu) entry is provided which when activated
 will automatically open the view and display the formatted markdown content.
 
-You may click internal and external hyperlinks in the presented web page, and then click the
-left and right arrow navigation icons in the top right of the view to navigate backwards and
-forward in the browsing history.
+* The GFM plugin view provides on its toolbar the following icons which may be clicked:
+	* ![nav_backward.gif](plugin/icons/nav_backward.gif) - navigate backwards in the browsing history
+	* ![nav_forward.gif](plugin/icons/nav_forward.gif) - navigate forwards in the browsing history
+	* ![linked.gif](plugin/icons/linked.gif) - link GFM View to editor to automatically update on save
+	* ![realod.gif](plugin/icons/reload.gif) - manually update GFM View from last linked file
+
+The GFM View-editor linked state is by default on, but if set off its state will be automatically
+saved and preserved in the Eclipse workspace provided the GFM view is not closed.
 
 N.B. If non-ASCII characters are used in the markdown file, the current implementation assumes
 [UTF-8](http://en.wikipedia.org/wiki/UTF-8) character encoding, see also
@@ -121,7 +126,7 @@ Then you can proceed as follows:
 to clone the GitHub repo by pasting the GitHub URL as this will avoid line termination issues later
 * Then  perform a simple (not Maven) import of all six directories
 below `gfm_viewer` as existing Eclipse projects, namely `ext-deps`, `feature`, `p2-repo`, `parent`, `plugin`,
-and `update-site` 
+`tests` and `update-site` 
 * If necessary, via the context menu on the new projects, select _Team_ -> _Share Project..._ -> _Git_
 and click through accepting the defaults to connect the projects to version control
 * Via the context menu on projects `ext-deps` and `parent` _only_, select _Configure_ -> _Convert to Maven Project_
@@ -160,7 +165,11 @@ Areas possibly meriting further attention include:
 
 * It appears that GitHub may use some kind of dynamic CSS generation: the consequence is that the coverage
 provided by this plugin's simple static CSS may well not include some important entries (simply because they
-were not apparent on the test content used in development).
+were not apparent on the test content used in development)
+* The `tests` module provides a first cut set of BDD tests; further coverage is desirable,
+however this would appear to require the
+[dependency injection facilities available in Eclipse 4](http://wiki.eclipse.org/Eclipse4/RCP/Dependency_Injection)
+and mandating that version would be premature at present 
 
 ## Markdown Editors
 
@@ -173,8 +182,9 @@ Eclipse Public License 1.0
 
 ## History
 
-* 1.0.0 - initial version
-* 1.0.1 - use UTF-8 text encoding, e.g. 快乐  ハッピー  ευτυχισμένος
-* 1.1.0 - transformation done in background job, provide context menu, temp dir option
+* 1.2.0 - link with editor/reload option, tests module
 * 1.1.1 - added update site
+* 1.1.0 - transformation done in background job, provide context menu, temp dir option
+* 1.0.1 - use UTF-8 text encoding, e.g. 快乐  ハッピー  ευτυχισμένος
+* 1.0.0 - initial version
  

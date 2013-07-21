@@ -32,6 +32,10 @@
     padding: 6px 10px;
 }
 
+.markdown-body img {
+    border: 0 none;
+}
+
 pre, code, tt {
     font-family: Consolas,"Liberation Mono",Courier,monospace;
     font-size: 12px;

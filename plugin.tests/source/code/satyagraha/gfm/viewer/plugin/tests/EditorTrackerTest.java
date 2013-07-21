@@ -146,4 +146,17 @@ public class EditorTrackerTest {
         verify(gfmListener, times(1)).showIFile(editorIFile);
     }
     
+    @Test
+    public void shouldNotifyOnNotifyAlwaysWhenNotEnabled() throws Exception {
+        // given
+        shouldNotifyOnEditorPartOpenedTrackableFile();
+        
+        // when
+        editorTracker.setNotificationsEnabled(false);
+        editorTracker.notifyGfmListenerAlways();
+        
+        // then
+        verify(gfmListener, times(2)).showIFile(editorIFile);
+    }
+    
 }
