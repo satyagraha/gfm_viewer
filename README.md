@@ -34,7 +34,7 @@ N.B. If non-ASCII characters are used in the markdown file, the current implemen
 In Eclipse, do the following:
 * Go to menu _Help_ -> _Install New Software..._ and in the resulting dialog click the _Add..._
 button to present a further dialog, and here enter `GFM Viewer` as the _Name_ and 
-this [link](https://googledrive.com/host/0B2imkYUgmO5lWnpXMEhkZWdsWkU) as the _Location_ and press _OK_
+this [link](https://googledrive.com/host/0B2imkYUgmO5laTR5UHNRMGJCcHM) as the _Location_ and press _OK_
 * Select the _GFM Viewer_ category in the install view, and proceed to install the software
 in the usual manner accepting all defaults
 * Eclipse will prompt for a restart, accept this, then the GFM viewer is usable as documented
@@ -182,6 +182,7 @@ Eclipse Public License 1.0
 
 ## History
 
+* 1.2.1 - fix update site link
 * 1.2.0 - link with editor/reload option, tests module
 * 1.1.1 - added update site
 * 1.1.0 - transformation done in background job, provide context menu, temp dir option
