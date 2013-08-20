@@ -1,4 +1,4 @@
-package code.satyagraha.gfm.viewer.plugin.tests;
+package code.satyagraha.gfm.viewer.views.tests;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.BDDMockito.given;

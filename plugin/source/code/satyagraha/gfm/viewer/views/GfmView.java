@@ -22,7 +22,9 @@ import code.satyagraha.gfm.commands.Linked;
 import code.satyagraha.gfm.support.api.FileNature;
 import code.satyagraha.gfm.support.api.GfmConfig;
 import code.satyagraha.gfm.support.api.GfmTransformer;
+import code.satyagraha.gfm.support.api.GfmWebServiceClient;
 import code.satyagraha.gfm.support.impl.GfmTransformerDefault;
+import code.satyagraha.gfm.support.impl.GfmWebServiceClientDefault;
 import code.satyagraha.gfm.viewer.plugin.Activator;
 import code.satyagraha.gfm.viewer.preferences.PreferenceAdapter;
 
@@ -61,11 +63,11 @@ public class GfmView extends ViewPart implements GfmListener {
             }
         };
 
-        gfmTransformer = new GfmTransformerDefault();
         gfmConfig = new PreferenceAdapter();
         Logger logger = Logger.getLogger(GfmView.class.getCanonicalName());
         logger.setLevel(Level.WARNING);
-        gfmTransformer.setConfig(gfmConfig, logger);
+        GfmWebServiceClient webServiceClient = new GfmWebServiceClientDefault(gfmConfig, logger);
+        gfmTransformer = new GfmTransformerDefault(gfmConfig, logger, webServiceClient);
 
         FileNature markdownFileNature = new FileNature() {
             
@@ -119,8 +121,7 @@ public class GfmView extends ViewPart implements GfmListener {
 
     private File createHtmlFile(File mdFile) {
         String htDir = gfmConfig.useTempDir() ? System.getProperty("java.io.tmpdir") : mdFile.getParent();
-        String htName = String.format(".%s.html", mdFile.getName());
-        return new File(htDir, htName);
+        return new File(htDir, gfmTransformer.htFilename(mdFile.getName()));
     }
 
     private void scheduleTransformation(final File mdFile, final File htFile, final Runnable onDone) {
