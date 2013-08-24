@@ -1,5 +1,6 @@
 package code.satyagraha.gfm.support.impl;
 
+import static org.apache.commons.io.FilenameUtils.getBaseName;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.io.File;
@@ -47,7 +48,8 @@ public class GfmTransformerDefault implements GfmTransformer {
     }
 
     private boolean isMarkdownFileExtension(String path) {
-        return FilenameUtils.getExtension(path).equalsIgnoreCase("md");
+        String extension = FilenameUtils.getExtension(path);
+        return extension.equals("") || extension.equalsIgnoreCase("md");
     }
     
     @Override
@@ -74,7 +76,7 @@ public class GfmTransformerDefault implements GfmTransformer {
     
     @Override
     public String htFilename(String mdFilename) {
-        return String.format(".%s.html", mdFilename);
+        return String.format(".%s.md.html", getBaseName(mdFilename));
     }
 
     private boolean useFilteredLinks() {

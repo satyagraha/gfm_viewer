@@ -1,8 +1,11 @@
 package code.satyagraha.gfm.viewer.support.tests;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 
 import java.io.File;
@@ -52,5 +55,48 @@ public class GfmTransformerTest {
         File mdFile = File.createTempFile("abc", ".md");
         assertThat(gfmTransformer.isMarkdownFile(mdFile), is(true));
     }
+
+    @Test
+    public void shouldTransformExplicitMarkdownLink() {
+        // given
+        
+        // when
+        String resultLink = getTransformedLink("path/to/markdown.md");
+        
+        // then
+        assertThat(resultLink, containsString(".md.html"));
+    }
+
+    @Test
+    public void shouldTransformImplicitMarkdownLink() {
+        // given
+        
+        // when
+        String resultLink = getTransformedLink("path/to/markdown");
+        
+        // then
+        assertThat(resultLink, containsString(".md.html"));
+    }
     
+    @Test
+    public void shouldNotTransformExplicitNonMarkdownLink() {
+        // given
+        
+        // when
+        String resultLink = getTransformedLink("path/to/something.htm");
+        
+        // then
+        assertThat(resultLink, not(containsString(".html")));
+    }
+    
+    private String getTransformedLink(String linkUri) {
+        // given
+        String htText = String.format("<a href=\"%s\">click me</a>", linkUri);
+        given(webServiceClient.transform(anyString())).willReturn(htText);
+        
+        // when
+        
+        // then
+        return gfmTransformer.transformMarkdownText("");
+    }
 }
