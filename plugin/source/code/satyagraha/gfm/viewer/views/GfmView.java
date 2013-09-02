@@ -1,13 +1,23 @@
 package code.satyagraha.gfm.viewer.views;
 
+import static org.apache.commons.io.FileUtils.iterateFiles;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
@@ -38,11 +48,13 @@ public class GfmView extends ViewPart implements GfmListener {
     private GfmBrowser gfmBrowser;
 
     private GfmTransformer gfmTransformer;
-    
+
     private GfmConfig gfmConfig;
 
     private EditorTracker editorTracker;
-    
+
+    private IOFileFilter markdownFileFilter;
+
     @Override
     public void createPartControl(Composite parent) {
         Activator.debug("");
@@ -70,15 +82,28 @@ public class GfmView extends ViewPart implements GfmListener {
         gfmTransformer = new GfmTransformerDefault(gfmConfig, logger, webServiceClient);
 
         FileNature markdownFileNature = new FileNature() {
-            
+
             @Override
             public boolean isTrackableFile(IFile iFile) {
                 return iFile != null && gfmTransformer.isMarkdownFile(iFile.getLocation().toFile());
             }
         };
-        
+
         editorTracker = new EditorTracker(getSite().getWorkbenchWindow(), this, markdownFileNature);
         editorTracker.setNotificationsEnabled(Linked.isLinked());
+
+        markdownFileFilter = new IOFileFilter() {
+
+            @Override
+            public boolean accept(File dir, String name) {
+                return accept(new File(dir, name));
+            }
+
+            @Override
+            public boolean accept(File file) {
+                return gfmTransformer.isMarkdownFile(file);
+            }
+        };
     }
 
     @Override
@@ -143,19 +168,37 @@ public class GfmView extends ViewPart implements GfmListener {
         job.setSystem(false);
         job.setPriority(Job.SHORT);
         job.addJobChangeListener(new JobChangeAdapter() {
-            
+
             @Override
             public void done(IJobChangeEvent event) {
+//                in principle, the following line should be enabled, but it appears to force project rebuild
+//                refreshFile(htFile);
                 if (event.getResult().isOK()) {
-                    Display.getDefault().asyncExec(onDone);
+                    if (onDone != null) {
+                        Display.getDefault().asyncExec(onDone);
+                    }
                 } else {
                     // normal reporting has occurred
                 }
             }
+
         });
         job.schedule();
     }
 
+    @SuppressWarnings("unused")
+    private void refreshFile(final File htFile) {
+        Path htPath = new Path(htFile.getAbsolutePath());
+        IFile htIFile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(htPath);
+        if (htIFile != null) {
+            try {
+                htIFile.refreshLocal(IResource.DEPTH_ZERO, null);
+            } catch (CoreException e) {
+                Activator.debug(e.toString());
+            }
+        }
+    }
+    
     public void goForward() {
         Activator.debug("");
         if (gfmBrowser != null) {
@@ -184,25 +227,28 @@ public class GfmView extends ViewPart implements GfmListener {
     public void reload() {
         Activator.debug("");
         if (editorTracker != null) {
-             editorTracker.notifyGfmListenerAlways();
+            editorTracker.notifyGfmListenerAlways();
         }
     }
 
-// (experimental) 
-//    private void showToolbarContributions() {
-//        IActionBars actionBars = this.getViewSite().getActionBars();
-//        if (actionBars != null) {
-//            IToolBarManager toolBarManager = actionBars.getToolBarManager();
-//            if (toolBarManager != null) {
-//                IContributionItem[] contributionItems = toolBarManager.getItems();
-//                for (IContributionItem contributionItem : contributionItems) {
-//                    Activator.debug("contributionItem: " + contributionItem.toString());
-//                    org.eclipse.jface.action.ContributionItem ci;
-//                    org.eclipse.ui.IViewSite ivs;
-//                    org.eclipse.swt.widgets.ToolItem ti;
-//                }
-//            }
-//        }
-//    }
+    public void generateIFile(IFile iFile) {
+        Activator.debug("iFile: " + iFile);
+        generateFile(iFile.getRawLocation().toFile());
+    }
+
+    public void generateIFolder(IFolder iFolder) {
+        Activator.debug("iFolder: " + iFolder);
+        File folder = iFolder.getRawLocation().toFile();
+        for (Iterator<File> files = iterateFiles(folder, markdownFileFilter, TrueFileFilter.INSTANCE); files.hasNext();) {
+            File file = files.next();
+            generateFile(file);
+        }
+    }
+
+    private void generateFile(File mdFile) {
+        Activator.debug("mdFile: " + mdFile);
+        final File htFile = createHtmlFile(mdFile);
+        scheduleTransformation(mdFile, htFile, null);
+    }
 
 }
