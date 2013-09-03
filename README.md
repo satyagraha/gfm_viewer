@@ -16,6 +16,11 @@ via the GitHub website.
 [context menu](http://en.wikipedia.org/wiki/Context_menu) entry is provided which when activated
 will automatically open the view and display the formatted markdown content.
 
+* When one or more directories and/or markdown files are selected in any tree navigation view,
+then a _Generate Markdown Preview_ context menu entry is presented which when activated will
+regenerate all associated markdown preview files (via background jobs recursively traversing 
+the directory trees): this is effectively a batch mode update facility.     
+
 * The GFM plugin view provides on its toolbar the following icons which may be clicked:
 	* ![nav_backward.gif](plugin/icons/nav_backward.gif) - navigate backwards in the browsing history
 	* ![nav_forward.gif](plugin/icons/nav_forward.gif) - navigate forwards in the browsing history
@@ -34,9 +39,10 @@ N.B. If non-ASCII characters are used in the markdown file, the current implemen
 In Eclipse, do the following:
 * Go to menu _Help_ -> _Install New Software..._ and in the resulting dialog click the _Add..._
 button to present a further dialog, and here enter `GFM Viewer` as the _Name_ and 
-this [link](https://googledrive.com/host/0B2imkYUgmO5laTR5UHNRMGJCcHM) as the _Location_ and press _OK_
-* Select the _GFM Viewer_ category in the install view, and proceed to install the software
-in the usual manner accepting all defaults
+this [link](http://dl.bintray.com/satyagraha/gfm-viewer) as the _Location_ and press _OK_
+* Select the _GFM Viewer_ category in the install view, and alter the checkbox settings
+there as necessary 
+* Proceed to install the software in the usual manner accepting all defaults
 * Eclipse will prompt for a restart, accept this, then the GFM viewer is usable as documented
 [above](#usage)
 
@@ -182,6 +188,7 @@ Eclipse Public License 1.0
 
 ## History
 
+* 1.3.0 - filtered links, batch mode, and bintray update site
 * 1.2.1 - fix update site link
 * 1.2.0 - link with editor/reload option, tests module
 * 1.1.1 - added update site
