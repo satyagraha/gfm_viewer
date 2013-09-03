@@ -7,8 +7,10 @@ import java.util.logging.Logger;
 
 import code.satyagraha.gfm.support.api.GfmConfig;
 import code.satyagraha.gfm.support.api.GfmTransformer;
+import code.satyagraha.gfm.support.api.GfmWebServiceClient;
 import code.satyagraha.gfm.support.impl.GfmConfigDefault;
 import code.satyagraha.gfm.support.impl.GfmTransformerDefault;
+import code.satyagraha.gfm.support.impl.GfmWebServiceClientDefault;
 
 public class GfmTrackFile {
     
@@ -37,9 +39,9 @@ public class GfmTrackFile {
     private Logger logger;
 
     public GfmTrackFile(GfmConfig gfmConfig) throws IOException {
-        gfmTransformer = new GfmTransformerDefault();
         logger = Logger.getLogger(GfmTrackFile.class.getCanonicalName());
-        gfmTransformer.setConfig(gfmConfig, logger);
+        GfmWebServiceClient webServiceClient = new GfmWebServiceClientDefault(gfmConfig, logger);
+        gfmTransformer = new GfmTransformerDefault(gfmConfig, logger, webServiceClient);
     }
     
     private void manage(String mdFilepath) throws IOException {

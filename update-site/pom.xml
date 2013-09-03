@@ -5,10 +5,88 @@
 	<parent>
 		<groupId>code.satyagraha.gfm.viewer</groupId>
 		<artifactId>code.satyagraha.gfm.viewer.parent</artifactId>
-		<version>1.2.1-SNAPSHOT</version>
+		<version>1.3.0-SNAPSHOT</version>
 		<relativePath>../parent</relativePath>
 	</parent>
 
 	<artifactId>code.satyagraha.gfm.viewer.update-site</artifactId>
 	<packaging>eclipse-update-site</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<configuration>
+					<archiveSite>true</archiveSite>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>bintray</id>
+			<properties>
+				<bintray.api.url>https://api.bintray.com</bintray.api.url>
+				<bintray.user.id>satyagraha</bintray.user.id>
+				<bintray.repository>gfm-viewer</bintray.repository>
+				<bintray.package>site</bintray.package>
+				<bintray.version>1.3.0</bintray.version>
+				<bintray.site.file>site_assembly.zip</bintray.site.file>
+			</properties>
+			<build>
+				<plugins>
+				<!--
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<property environment="env" />
+										<echoproperties />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				-->
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>${curl.path}</executable>
+									<arguments>
+										<argument>--verbose</argument>
+										<argument>--insecure</argument>
+										<argument>--user</argument>
+										<argument>${bintray.user.id}:${bintray.api.key}</argument>
+										<argument>--request</argument>
+										<argument>PUT</argument>
+										<argument>--upload-file</argument>
+										<argument>target/${bintray.site.file}</argument>
+										<argument>${bintray.api.url}/content/${bintray.user.id}/${bintray.repository}/${bintray.package}/${bintray.version}/${bintray.site.file};publish=0;explode=1</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 </project>

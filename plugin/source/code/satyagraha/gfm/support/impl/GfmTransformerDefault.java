@@ -1,70 +1,57 @@
 package code.satyagraha.gfm.support.impl;
 
+import static org.apache.commons.io.FilenameUtils.getBaseName;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.ws.rs.core.MediaType;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.CharEncoding;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.mvel2.templates.CompiledTemplate;
 import org.mvel2.templates.TemplateCompiler;
 import org.mvel2.templates.TemplateRuntime;
 
 import code.satyagraha.gfm.support.api.GfmConfig;
 import code.satyagraha.gfm.support.api.GfmTransformer;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
-import com.sun.jersey.api.client.filter.LoggingFilter;
-import com.sun.jersey.core.impl.provider.entity.StringProvider;
+import code.satyagraha.gfm.support.api.GfmWebServiceClient;
 
 public class GfmTransformerDefault implements GfmTransformer {
 
     private static final Charset UTF_8 = Charset.forName(CharEncoding.UTF_8);
 
-    @XmlRootElement
-    public static class Markdown {
-        public String text;
-        
-        public Markdown() {
-        }
-        
-        public Markdown(String text) {
-            this.text = text;
-        }
-    }
+    private final GfmConfig gfmConfig;
+    private final Logger logger;
+    private final GfmWebServiceClient webServiceClient;
     
-    private GfmConfig gfmConfig;
-    private Logger logger;
-    private ClientConfig clientConfig;
-    
-    @Override
-    public void setConfig(GfmConfig gfmConfig, Logger logger) {
+    public GfmTransformerDefault(GfmConfig gfmConfig, Logger logger, GfmWebServiceClient webServiceClient) {
         this.gfmConfig = gfmConfig;
         this.logger = logger;
-        logger.info("initializing");
-        
-        clientConfig = new DefaultClientConfig();
-        clientConfig.getProperties().put(ClientConfig.PROPERTY_FOLLOW_REDIRECTS, true);
-        clientConfig.getClasses().add(StringProvider.class);
+        this.webServiceClient = webServiceClient;
+        this.logger.info("initializing");
     }
     
     @Override
     public boolean isMarkdownFile(File file) {
-        return file.isFile() && FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("md");
+        return file.isFile() && isMarkdownFileExtension(file.getName());
     }
 
+    private boolean isMarkdownFileExtension(String path) {
+        String extension = FilenameUtils.getExtension(path);
+        return extension.equals("") || extension.equalsIgnoreCase("md");
+    }
+    
     @Override
     public void transformMarkdownFile(File mdFile, File htFile) throws IOException {
         String mdText = FileUtils.readFileToString(mdFile, UTF_8);
@@ -83,30 +70,52 @@ public class GfmTransformerDefault implements GfmTransformer {
 
     @Override
     public String transformMarkdownText(String mdText) {
-        if (clientConfig == null) {
-            throw new IllegalStateException("missing setConfig");
-        }
-        Client client = Client.create(clientConfig);
-        
-        String username = gfmConfig.getUsername();
-        if (username != null && username.length() > 0) {
-            String password = gfmConfig.getPassword();
-            client.removeFilter(null);
-            client.addFilter(new HTTPBasicAuthFilter(username, password));
-        }
-        client.addFilter(new LoggingFilter(logger));
-        
-        WebResource webResource = client.resource(gfmConfig.getApiUrl());
-
-        Markdown markdown = new Markdown(mdText); 
-        ClientResponse response = webResource
-                .path("markdown")
-                .type(MediaType.APPLICATION_JSON)
-                .entity(markdown)
-                .accept(MediaType.TEXT_HTML)
-                .post(ClientResponse.class);
-        String responseText = response.getEntity(String.class);
-        return responseText;
+        String responseText = webServiceClient.transform(mdText);
+        return useFilteredLinks() ? filterLinks(responseText) : responseText;
+    }
+    
+    @Override
+    public String htFilename(String mdFilename) {
+        return String.format(".%s.md.html", getBaseName(mdFilename));
     }
 
+    private boolean useFilteredLinks() {
+        return !gfmConfig.useTempDir();
+    }
+
+    private String filterLinks(String responseText) {
+        Document doc = Jsoup.parseBodyFragment(responseText);
+        Elements links = doc.select("a[href]");
+        for (Element link : links) {
+            String linkHref = link.attr("href");
+            URI uri;
+            try {
+                uri = new URI(linkHref);
+            } catch (URISyntaxException e) {
+                continue;
+            }
+            if (isLocalURI(uri) && isMarkdownPath(uri.getPath())) {
+                link.attr("href", makeHtmlPath(uri));
+            }
+        }
+        return doc.body().html();
+    }
+
+    private boolean isLocalURI(URI uri) {
+        return !uri.isAbsolute()
+                && isBlank(uri.getAuthority())
+                && isBlank(uri.getQuery());
+    }
+
+    private boolean isMarkdownPath(String path) {
+        return path != null && isMarkdownFileExtension(path);
+    }
+
+    private String makeHtmlPath(URI uri) {
+        String fragment = uri.getFragment() != null ? "#" + uri.getFragment() : "";
+        File mdPath = new File(uri.getPath());
+        File htPath = new File(mdPath.getParent(), htFilename(mdPath.getName()));
+        return htPath.getPath() + fragment;
+    }
+    
 }

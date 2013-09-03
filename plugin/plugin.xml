@@ -58,7 +58,8 @@
                            value="1">
                      </count>
                   </with>
-                  <iterate>
+                  <iterate
+                        operator="and">
                      <adapt
                            type="org.eclipse.core.resources.IFile">
                         <test
@@ -66,6 +67,37 @@
                               value="md">
                         </test>
                      </adapt>
+                  </iterate>
+               </and>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="GFM Viewer plugin.GenerateMarkdownPreview"
+               label="Generate Markdown Preview"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <with
+                        variable="activeMenuSelection">
+                     <count
+                           value="+">
+                     </count>
+                  </with>
+                  <iterate
+                        operator="and">
+                     <or>
+                        <adapt
+                              type="org.eclipse.core.resources.IFolder">
+                        </adapt>
+                        <adapt
+                              type="org.eclipse.core.resources.IFile">
+                           <test
+                                 property="org.eclipse.core.resources.extension"
+                                 value="md">
+                           </test>
+                        </adapt>
+                     </or>
                   </iterate>
                </and>
             </visibleWhen>
@@ -102,6 +134,11 @@
             defaultHandler="code.satyagraha.gfm.commands.ShowMarkdownFile"
             id="GFM Viewer plugin.ShowMarkdownFile"
             name="Show Markdown File">
+      </command>
+      <command
+            defaultHandler="code.satyagraha.gfm.commands.GenerateMarkdownPreview"
+            id="GFM Viewer plugin.GenerateMarkdownPreview"
+            name="Generate Markdown Preview">
       </command>
    </extension>
    <extension
