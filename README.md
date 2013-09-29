@@ -122,13 +122,15 @@ standards conformant HTML document
 
 If you want to do development on the plugin, proceed as follows:
 
+* get fresh new Eclipse Standard from <http://www.eclipse.org/downloads/>, or
+
 * You will need an Eclipse instance which does *not* have the GFM viewer installed, but does have the
 following PDE-related plugins installed (check via _Help_ -> _About Eclipse Platform_ -> _Installation Details_):
  * Eclipse Plug-in Development Environment
  * Eclipse RCP Plug-in Development Resources
  * Eclipse RCP SDK
 * If any of these are absent, you must install them from the relevant main Eclipse update site, e.g. for
-[Juno](http://download.eclipse.org/releases/juno)
+[Kepler](http://download.eclipse.org/releases/kepler)
 * Ensure the _Group items by category_ checkbox is unticked in the installer _Available Software_ dialog,
 otherwise these plugins may be hard to find
 
@@ -136,11 +138,11 @@ Then you can proceed as follows:
 * In the PDE Eclipse started with a new workspace, it is advisable to use the _Git Repositories_ view
 to clone the GitHub repo by pasting the GitHub URL as this will avoid line termination issues later
 * Then  perform a simple (not Maven) import of all six directories
-below `gfm_viewer` as existing Eclipse projects, namely `ext-deps`, `feature`, `p2-repo`, `parent`, `plugin`,
+below `gfm_viewer` as existing Eclipse projects, namely `ext-deps`, `feature`, `p2-repo`, `plugin`,
 `tests` and `update-site` 
-* If necessary, via the context menu on the new projects, select _Team_ -> _Share Project..._ -> _Git_
+* If necessary (e.g. before EGit 3.0), via the context menu on the new projects, select _Team_ -> _Share Project..._ -> _Git_
 and click through accepting the defaults to connect the projects to version control
-* Via the context menu on projects `ext-deps` and `parent` _only_, select _Configure_ -> _Convert to Maven Project_
+* Via the context menu on projects `ext-deps` and project base _only_, select _Configure_ -> _Convert to Maven Project_
 * Create an _Eclipse Maven_ run configuration for the _GFM Viewer ext-deps_ project with
 goals `clean package` and workspace refresh, and then run it 
 * Verify the last step created a jar file around 4Mb in size in the `lib` directory of project _GFM Viewer plugin_

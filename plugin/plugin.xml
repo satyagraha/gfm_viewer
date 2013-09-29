@@ -59,12 +59,19 @@
                      </count>
                   </with>
                   <iterate
-                        operator="and">
+                        operator="or">
                      <adapt
                            type="org.eclipse.core.resources.IFile">
                         <test
                               property="org.eclipse.core.resources.extension"
                               value="md">
+                        </test>
+                     </adapt>
+                     <adapt
+                           type="org.eclipse.core.resources.IFile">
+                        <test
+                              property="org.eclipse.core.resources.extension"
+                              value="markdown">
                         </test>
                      </adapt>
                   </iterate>
@@ -95,6 +102,13 @@
                            <test
                                  property="org.eclipse.core.resources.extension"
                                  value="md">
+                           </test>
+                        </adapt>
+                        <adapt
+                              type="org.eclipse.core.resources.IFile">
+                           <test
+                                 property="org.eclipse.core.resources.extension"
+                                 value="markdown">
                            </test>
                         </adapt>
                      </or>
