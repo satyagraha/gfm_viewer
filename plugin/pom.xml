@@ -6,7 +6,6 @@
 		<groupId>code.satyagraha.gfm.viewer</groupId>
 		<artifactId>code.satyagraha.gfm.viewer.parent</artifactId>
 		<version>1.3.0-SNAPSHOT</version>
-		<relativePath>../parent</relativePath>
 	</parent>
 
 	<artifactId>code.satyagraha.gfm.viewer.plugin</artifactId>
