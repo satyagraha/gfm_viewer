@@ -1,5 +1,10 @@
 # GitHub Flavored Markdown viewer plugin for Eclipse
 
+![](gfm-viewer-logo.png)
+ satyagraha: [![Build Status](https://secure.travis-ci.org/satyagraha/gfm_viewer.png)](http://travis-ci.org/satyagraha/gfm_viewer)
+ Nodeclipse: [![Build Status](https://secure.travis-ci.org/Nodeclipse/gfm_viewer.png)](http://travis-ci.org/Nodeclipse/gfm_viewer)
+
+
 This project provides an Eclipse view which provides a reasonably accurate presentation of
 [GithHub Flavored Markdown](http://github.github.com/github-flavored-markdown/) files.
 
@@ -52,10 +57,10 @@ The following build and install process can be followed to build the plugin loca
 update site:
 
 * Ensure you have [Maven](http://maven.apache.org/) executables installed for your OS
+and enviroment variable `JAVA_HOME` points to an installed JDK 6+
 * Clone this project's repository to a convenient location (a path not containing special characters
 like space is advised)
-* In a shell or command window, change working directory to `gfm_viewer/parent`, and set enviroment variable
-`JAVA_HOME` to point to an installed JDK 6+
+* In a shell or command window, change working directory to project root ( `gfm_viewer` with this README.md), 
 * Build the plugin by executing the command: `mvn clean package`
 * Start your preferred Eclipse version in the normal way
 * In Eclipse, execute menu _Help_ -> _Install New Software..._ and in the resulting dialog click the _Add..._

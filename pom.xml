@@ -1,0 +1,119 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>code.satyagraha.gfm.viewer</groupId>
+	<artifactId>code.satyagraha.gfm.viewer.parent</artifactId>
+	<version>1.3.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	
+	
+	<organization>
+		<name>Satyagraha</name>
+		<url>https://github.com/satyagraha/gfm_viewer</url>
+	</organization>
+	<!-- http://maven.apache.org/scm/git.html -->
+	<scm>
+		<url>https://github.com/satyagraha/gfm_viewer/</url>
+		<connection>scm:git:https://github.com/satyagraha/gfm_viewer.git</connection>
+		<developerConnection>scm:git:https://github.com/satyagraha/gfm_viewer.git</developerConnection>
+	</scm>
+    <issueManagement>
+    	<system>GitHub</system>
+    	<url>https://github.com/satyagraha/gfm_viewer/issues</url>
+    </issueManagement>
+    <ciManagement>
+    	<system>Travis CI</system>
+    	<url>http://travis-ci.org/satyagraha/gfm_viewer</url>
+    </ciManagement>    
+
+	<developers>
+		<developer>
+			<id>Satyagraha</id>
+			<name>Satyagraha</name>
+			<email></email>
+			<organization></organization>
+			<roles>
+				<role>Lead Developer</role>
+			</roles>
+			<timezone>0</timezone>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Paul Verest</name>
+			<organization>Nodeclipse organization</organization>
+			<organizationUrl>http://www.nodeclipse.org/</organizationUrl>
+			<timezone>+8</timezone>
+		</contributor>
+	</contributors>
+	
+
+	<properties>
+		<tycho-version>0.17.0</tycho-version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>eclipse-juno</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/juno</url>
+		</repository>
+	</repositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<environments>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<modules>
+		<module>ext-deps</module>
+		<module>plugin</module>
+		<module>plugin.tests</module>
+		<module>feature</module>
+		<module>update-site</module>
+		<module>p2-repo</module>
+	</modules>
+
+</project>
