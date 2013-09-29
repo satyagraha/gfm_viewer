@@ -58,8 +58,8 @@
                            value="1">
                      </count>
                   </with>
-                  <iterate
-                        operator="or">
+                  <iterate>
+                     <or>   
                      <adapt
                            type="org.eclipse.core.resources.IFile">
                         <test
@@ -74,6 +74,7 @@
                               value="markdown">
                         </test>
                      </adapt>
+                     </or>
                   </iterate>
                </and>
             </visibleWhen>
