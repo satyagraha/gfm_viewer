@@ -39,10 +39,10 @@ N.B. If non-ASCII characters are used in the markdown file, the current implemen
 [UTF-8](http://en.wikipedia.org/wiki/UTF-8) character encoding, see also
 [here](http://www.martinahrer.at/2007/06/03/eclipse-encoding-settings/).
 
-The plugin uses Eclipse default browser, that is Internet Explorer on Windows and Mozilla on Linux
-
-http://www.eclipse.org/swt/faq.php#browserlinuxrcp
-http://www.eclipse.org/swt/faq.php#browserlinux
+The plugin uses Eclipse default browser, e.g. Internet Explorer on Windows; if you use
+Linux, you will need to set up Mozilla Firefox as follows:
+* http://www.eclipse.org/swt/faq.php#browserlinuxrcp
+* http://www.eclipse.org/swt/faq.php#browserlinux
  
 ## Installation from Update Site
 
