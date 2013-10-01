@@ -200,6 +200,7 @@ Eclipse Public License 1.0
 
 ## History
 
+* 1.4.0 - hierarchical project structure
 * 1.3.0 - filtered links, batch mode, and bintray update site
 * 1.2.1 - fix update site link
 * 1.2.0 - link with editor/reload option, tests module
