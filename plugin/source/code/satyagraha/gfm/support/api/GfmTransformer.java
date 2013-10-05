@@ -13,4 +13,6 @@ public interface GfmTransformer {
     
     public String htFilename(String mdFilename);
 
+    public File createHtmlFile(File mdFile);
+    
 }

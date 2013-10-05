@@ -4,11 +4,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.State;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.ui.handlers.RegistryToggleState;
 
 import code.satyagraha.gfm.viewer.plugin.Activator;
 import code.satyagraha.gfm.viewer.views.GfmView;
@@ -29,10 +25,4 @@ public class Linked extends AbstractHandler {
         return null;
     }
 
-    public static boolean isLinked() {
-        ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getService(ICommandService.class);
-        Command command = commandService.getCommand("GFM Viewer plugin.Linked");
-        State state = command.getState(RegistryToggleState.STATE_ID);
-        return (Boolean) state.getValue();
-    }
 }

@@ -28,7 +28,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import code.satyagraha.gfm.commands.Linked;
 import code.satyagraha.gfm.support.api.FileNature;
 import code.satyagraha.gfm.support.api.GfmConfig;
 import code.satyagraha.gfm.support.api.GfmTransformer;
@@ -36,7 +35,6 @@ import code.satyagraha.gfm.support.api.GfmWebServiceClient;
 import code.satyagraha.gfm.support.impl.GfmTransformerDefault;
 import code.satyagraha.gfm.support.impl.GfmWebServiceClientDefault;
 import code.satyagraha.gfm.viewer.plugin.Activator;
-import code.satyagraha.gfm.viewer.preferences.PreferenceAdapter;
 
 public class GfmView extends ViewPart implements GfmListener {
 
@@ -48,8 +46,6 @@ public class GfmView extends ViewPart implements GfmListener {
     private GfmBrowser gfmBrowser;
 
     private GfmTransformer gfmTransformer;
-
-    private GfmConfig gfmConfig;
 
     private EditorTracker editorTracker;
 
@@ -75,7 +71,7 @@ public class GfmView extends ViewPart implements GfmListener {
             }
         };
 
-        gfmConfig = new PreferenceAdapter();
+        GfmConfig gfmConfig = Activator.getDefault().getInjector().getComponent(GfmConfig.class);
         Logger logger = Logger.getLogger(GfmView.class.getCanonicalName());
         logger.setLevel(Level.WARNING);
         GfmWebServiceClient webServiceClient = new GfmWebServiceClientDefault(gfmConfig, logger);
@@ -90,7 +86,7 @@ public class GfmView extends ViewPart implements GfmListener {
         };
 
         editorTracker = new EditorTracker(getSite().getWorkbenchWindow(), this, markdownFileNature);
-        editorTracker.setNotificationsEnabled(Linked.isLinked());
+        editorTracker.setNotificationsEnabled(ViewSupport.isLinked());
 
         markdownFileFilter = new IOFileFilter() {
 
@@ -134,7 +130,7 @@ public class GfmView extends ViewPart implements GfmListener {
 
     protected void showFile(File mdFile) {
         showBusy(true);
-        final File htFile = createHtmlFile(mdFile);
+        final File htFile = gfmTransformer.createHtmlFile(mdFile);
         scheduleTransformation(mdFile, htFile, new Runnable() {
 
             @Override
@@ -142,11 +138,6 @@ public class GfmView extends ViewPart implements GfmListener {
                 gfmBrowser.showHtmlFile(htFile);
             }
         });
-    }
-
-    private File createHtmlFile(File mdFile) {
-        String htDir = gfmConfig.useTempDir() ? System.getProperty("java.io.tmpdir") : mdFile.getParent();
-        return new File(htDir, gfmTransformer.htFilename(mdFile.getName()));
     }
 
     private void scheduleTransformation(final File mdFile, final File htFile, final Runnable onDone) {
@@ -247,7 +238,7 @@ public class GfmView extends ViewPart implements GfmListener {
 
     private void generateFile(File mdFile) {
         Activator.debug("mdFile: " + mdFile);
-        final File htFile = createHtmlFile(mdFile);
+        final File htFile = gfmTransformer.createHtmlFile(mdFile);
         scheduleTransformation(mdFile, htFile, null);
     }
 

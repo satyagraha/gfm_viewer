@@ -79,6 +79,12 @@ public class GfmTransformerDefault implements GfmTransformer {
         return String.format(".%s.md.html", getBaseName(mdFilename));
     }
 
+    @Override
+    public File createHtmlFile(File mdFile) {
+        String htDir = gfmConfig.useTempDir() ? System.getProperty("java.io.tmpdir") : mdFile.getParent();
+        return new File(htDir, htFilename(mdFile.getName()));
+    }
+
     private boolean useFilteredLinks() {
         return !gfmConfig.useTempDir();
     }

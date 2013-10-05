@@ -1,6 +1,5 @@
 package code.satyagraha.gfm.viewer.preferences;
 
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USE_TEMP_DIR;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_API_URL;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_CSS_URL_1;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_CSS_URL_2;
@@ -11,6 +10,7 @@ import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_JS_UR
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_PASSWORD;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_TEMPLATE;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USERNAME;
+import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USE_TEMP_DIR;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,9 +22,11 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 
+import code.satyagraha.gfm.di.Component;
 import code.satyagraha.gfm.support.api.GfmConfig;
 import code.satyagraha.gfm.viewer.plugin.Activator;
 
+@Component
 public class PreferenceAdapter implements GfmConfig {
 
     private static final Charset UTF_8 = Charset.forName(CharEncoding.UTF_8);
