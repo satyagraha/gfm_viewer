@@ -18,15 +18,15 @@ import code.satyagraha.gfm.viewer.plugin.Activator;
 public class EditorTracker implements IPartListener2 {
 
     private IWorkbenchWindow workbenchWindow;
-    private GfmListener gfmListener;
+    private MarkdownListener markupListener;
     private FileNature fileNature;
     
     private boolean notificationsEnabled;
-    private IFile gfmFile;
+    private IFile markupFile;
 
-    public EditorTracker(IWorkbenchWindow workbenchWindow, GfmListener gfmListener, FileNature fileNature) {
+    public EditorTracker(IWorkbenchWindow workbenchWindow, MarkdownListener markupListener, FileNature fileNature) {
         this.workbenchWindow = workbenchWindow;
-        this.gfmListener = gfmListener;
+        this.markupListener = markupListener;
         this.fileNature = fileNature;
         notificationsEnabled = true;
         Activator.debug("");
@@ -38,11 +38,11 @@ public class EditorTracker implements IPartListener2 {
         this.notificationsEnabled = notificationsEnabled;
     }
     
-    public void notifyGfmListenerAlways() {
+    public void notifyMarkdownListenerAlways() {
         Activator.debug("");
-        if (gfmListener != null) {
+        if (markupListener != null) {
             try {
-                gfmListener.showIFile(gfmFile);
+                markupListener.showIFile(markupFile);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -53,7 +53,7 @@ public class EditorTracker implements IPartListener2 {
         Activator.debug("");
         workbenchWindow.getPartService().removePartListener(this);
         workbenchWindow = null;
-        gfmListener = null;
+        markupListener = null;
     }
 
     @Override
@@ -110,15 +110,15 @@ public class EditorTracker implements IPartListener2 {
             final IFile editorFile = ResourceUtil.getFile(editorInput);
             if (fileNature.isTrackableFile(editorFile) && isNewFile(editorFile)) {
                 Activator.debug("opening markdown editor found");
-                gfmFile = editorFile;
-                notifyGfmListenerIfEnabled();
+                markupFile = editorFile;
+                notifyMarkdownListenerIfEnabled();
                 editorPart.addPropertyListener(new IPropertyListener() {
 
                     @Override
                     public void propertyChanged(Object source, int propId) {
                         Activator.debug(String.format("%s => %d", source, propId));
                         if (propId == IEditorPart.PROP_DIRTY && !editorPart.isDirty()) {
-                            notifyGfmListenerIfEnabled();
+                            notifyMarkdownListenerIfEnabled();
                         }
                     }
                 });
@@ -135,24 +135,24 @@ public class EditorTracker implements IPartListener2 {
             final IFile editorFile = ResourceUtil.getFile(editorInput);
             if (fileNature.isTrackableFile(editorFile) && isSameFile(editorFile)) {
                 Activator.debug("closing markdown editor found");
-                gfmFile = null;
-                notifyGfmListenerIfEnabled();
+                markupFile = null;
+                notifyMarkdownListenerIfEnabled();
             }
         }
     }
 
     private boolean isNewFile(IFile editorFile) {
-        return gfmFile == null || !gfmFile.getFullPath().equals(editorFile.getFullPath());
+        return markupFile == null || !markupFile.getFullPath().equals(editorFile.getFullPath());
     }
 
     private boolean isSameFile(IFile editorFile) {
-        return gfmFile != null && gfmFile.getFullPath().equals(editorFile.getFullPath());
+        return markupFile != null && markupFile.getFullPath().equals(editorFile.getFullPath());
     }
 
-    private void notifyGfmListenerIfEnabled() {
+    private void notifyMarkdownListenerIfEnabled() {
         Activator.debug("");
         if (notificationsEnabled) {
-            notifyGfmListenerAlways();
+            notifyMarkdownListenerAlways();
         }
     }
     

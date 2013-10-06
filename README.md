@@ -35,7 +35,7 @@ the directory trees): this is effectively a batch mode update facility.
 The GFM View-editor linked state is by default on, but if set off its state will be automatically
 saved and preserved in the Eclipse workspace provided the GFM view is not closed.
 
-N.B. If non-ASCII characters are used in the markdown file, the current implementation assumes
+If non-ASCII characters are used in the markdown file, the current implementation assumes
 [UTF-8](http://en.wikipedia.org/wiki/UTF-8) character encoding, see also
 [here](http://www.martinahrer.at/2007/06/03/eclipse-encoding-settings/).
 
@@ -43,6 +43,9 @@ The plugin uses Eclipse default browser, e.g. Internet Explorer on Windows; if y
 Linux, you will need to set up Mozilla Firefox as follows:
 * http://www.eclipse.org/swt/faq.php#browserlinuxrcp
 * http://www.eclipse.org/swt/faq.php#browserlinux
+
+If upgrading from an earlier version, if a workspace already has a GFM View active,
+you may need to close and re-open the GFM View to make it display correctly.
  
 ## Installation from Update Site
 
@@ -198,9 +201,19 @@ plugin is recommended as an excellent general markdown editor which complements 
 
 Eclipse Public License 1.0
 
+## Acknowledgements
+
+* Thanks to [Paul Verest](https://github.com/PaulVI) for sustained input into this project
+* The [Picocontainer](http://picocontainer.com/) dependency injection framework works well inside
+the Eclipse 3.x environment, and makes object management far easier than otherwise
+* The [ObjectAid](http://www.objectaid.com/) Eclipse plugin allows one easily to create UML class 
+diagrams as an aid to understanding the relationships between the entities
+* The [ispace](http://www.stribor.de/) Eclipse plugin creates a dependency graph of packages and
+classes in a project, highlighting circular dependencies which typically indicate poor design
+
 ## History
 
-* 1.4.0 - hierarchical project structure
+* 1.4.0 - hierarchical project structure, dependency injection
 * 1.3.0 - filtered links, batch mode, and bintray update site
 * 1.2.1 - fix update site link
 * 1.2.0 - link with editor/reload option, tests module

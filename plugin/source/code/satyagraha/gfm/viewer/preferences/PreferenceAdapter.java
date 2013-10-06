@@ -23,11 +23,11 @@ import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 
 import code.satyagraha.gfm.di.Component;
-import code.satyagraha.gfm.support.api.GfmConfig;
+import code.satyagraha.gfm.support.api.Config;
 import code.satyagraha.gfm.viewer.plugin.Activator;
 
 @Component
-public class PreferenceAdapter implements GfmConfig {
+public class PreferenceAdapter implements Config {
 
     private static final Charset UTF_8 = Charset.forName(CharEncoding.UTF_8);
 
@@ -56,13 +56,13 @@ public class PreferenceAdapter implements GfmConfig {
         String templatePath = getStringPreference(P_TEMPLATE);
         return StringUtils.isNotBlank(templatePath)
             ? FileUtils.readFileToString(new File(templatePath), UTF_8)
-            : PreferenceInitializer.getGfmConfigDefault().getHtmlTemplate();
+            : PreferenceInitializer.getConfigDefault().getHtmlTemplate();
     }
 
     @Override
     public String getCssText() throws IOException {
         List<String> cssUris = getCssUris();
-        return cssUris.isEmpty() ? PreferenceInitializer.getGfmConfigDefault().getCssText() : null;
+        return cssUris.isEmpty() ? PreferenceInitializer.getConfigDefault().getCssText() : null;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class PreferenceAdapter implements GfmConfig {
     @Override
     public String getJsText() throws IOException {
         List<String> jsUris = getJsUris();
-        return jsUris.isEmpty() ? PreferenceInitializer.getGfmConfigDefault().getJsText() : null;
+        return jsUris.isEmpty() ? PreferenceInitializer.getConfigDefault().getJsText() : null;
     }
     
     @Override

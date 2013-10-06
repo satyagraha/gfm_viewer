@@ -7,7 +7,7 @@ public class ComponentMatcher extends BaseMatcher<Class<?>> {
 
     @Override
     public boolean matches(Object object) {
-        return object != null && object.getClass() == Class.class && ((Class<?>)object).isAnnotationPresent(Component.class);
+        return object != null && object.getClass() == Class.class && ((Class<?>) object).isAnnotationPresent(Component.class);
     }
 
     @Override
@@ -16,5 +16,5 @@ public class ComponentMatcher extends BaseMatcher<Class<?>> {
     }
 
     public final static ComponentMatcher isComponent = new ComponentMatcher();
-    
+
 }

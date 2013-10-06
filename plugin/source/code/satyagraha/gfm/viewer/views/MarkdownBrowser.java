@@ -11,13 +11,13 @@ import org.eclipse.swt.widgets.Composite;
 
 import code.satyagraha.gfm.viewer.plugin.Activator;
 
-public abstract class GfmBrowser implements ProgressListener {
+public abstract class MarkdownBrowser implements ProgressListener {
 
     private Browser browser;
     private File lastHtFile;
     private Integer lastScroll;
 
-    public GfmBrowser(Composite parent) {
+    public MarkdownBrowser(Composite parent) {
         browser = new Browser(parent, SWT.NONE);
         browser.addProgressListener(this);
 //        setDropTarget();

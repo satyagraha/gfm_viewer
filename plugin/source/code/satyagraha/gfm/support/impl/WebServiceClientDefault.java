@@ -5,8 +5,9 @@ import java.util.logging.Logger;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import code.satyagraha.gfm.support.api.GfmConfig;
-import code.satyagraha.gfm.support.api.GfmWebServiceClient;
+import code.satyagraha.gfm.di.Component;
+import code.satyagraha.gfm.support.api.Config;
+import code.satyagraha.gfm.support.api.WebServiceClient;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -17,9 +18,10 @@ import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.core.impl.provider.entity.StringProvider;
 
-public class GfmWebServiceClientDefault implements GfmWebServiceClient {
+@Component
+public class WebServiceClientDefault implements WebServiceClient {
 
-    private final GfmConfig gfmConfig;
+    private final Config config;
     private final Logger logger;
     private final ClientConfig clientConfig;
 
@@ -35,8 +37,8 @@ public class GfmWebServiceClientDefault implements GfmWebServiceClient {
         }
     }
 
-    public GfmWebServiceClientDefault(GfmConfig gfmConfig, Logger logger) {
-        this.gfmConfig = gfmConfig;
+    public WebServiceClientDefault(Config config, Logger logger) {
+        this.config = config;
         this.logger = logger;
         logger.info("initializing");
         
@@ -49,15 +51,15 @@ public class GfmWebServiceClientDefault implements GfmWebServiceClient {
     public String transform(String mdText) {
         Client client = Client.create(clientConfig);
         
-        String username = gfmConfig.getUsername();
+        String username = config.getUsername();
         if (username != null && username.length() > 0) {
-            String password = gfmConfig.getPassword();
+            String password = config.getPassword();
             client.removeFilter(null);
             client.addFilter(new HTTPBasicAuthFilter(username, password));
         }
         client.addFilter(new LoggingFilter(logger));
         
-        WebResource webResource = client.resource(gfmConfig.getApiUrl());
+        WebResource webResource = client.resource(config.getApiUrl());
 
         Markdown markdown = new Markdown(mdText); 
         ClientResponse response = webResource

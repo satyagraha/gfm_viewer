@@ -3,7 +3,7 @@ package code.satyagraha.gfm.support.api;
 import java.io.IOException;
 import java.util.List;
 
-public interface GfmConfig {
+public interface Config {
 
     public boolean useTempDir();
     

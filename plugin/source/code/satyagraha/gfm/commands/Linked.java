@@ -7,21 +7,19 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import code.satyagraha.gfm.viewer.plugin.Activator;
-import code.satyagraha.gfm.viewer.views.GfmView;
+import code.satyagraha.gfm.viewer.views.MarkdownView;
 
 
 public class Linked extends AbstractHandler {
 
     @Override
     public Object execute(final ExecutionEvent event) throws ExecutionException {
-
         // locate the view and perform action
         // update toggled state
         final Command command = event.getCommand();
         final boolean state = !HandlerUtil.toggleCommandState(command);
         Activator.debug("state: " + state);
-        GfmView.getInstance().setLinkedState(state);
-
+        MarkdownView.getInstance().setLinkedState(state);
         return null;
     }
 

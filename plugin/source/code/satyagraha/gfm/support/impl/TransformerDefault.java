@@ -23,20 +23,22 @@ import org.mvel2.templates.CompiledTemplate;
 import org.mvel2.templates.TemplateCompiler;
 import org.mvel2.templates.TemplateRuntime;
 
-import code.satyagraha.gfm.support.api.GfmConfig;
-import code.satyagraha.gfm.support.api.GfmTransformer;
-import code.satyagraha.gfm.support.api.GfmWebServiceClient;
+import code.satyagraha.gfm.di.Component;
+import code.satyagraha.gfm.support.api.Config;
+import code.satyagraha.gfm.support.api.Transformer;
+import code.satyagraha.gfm.support.api.WebServiceClient;
 
-public class GfmTransformerDefault implements GfmTransformer {
+@Component
+public class TransformerDefault implements Transformer {
 
     private static final Charset UTF_8 = Charset.forName(CharEncoding.UTF_8);
 
-    private final GfmConfig gfmConfig;
+    private final Config config;
     private final Logger logger;
-    private final GfmWebServiceClient webServiceClient;
+    private final WebServiceClient webServiceClient;
     
-    public GfmTransformerDefault(GfmConfig gfmConfig, Logger logger, GfmWebServiceClient webServiceClient) {
-        this.gfmConfig = gfmConfig;
+    public TransformerDefault(Config config, Logger logger, WebServiceClient webServiceClient) {
+        this.config = config;
         this.logger = logger;
         this.webServiceClient = webServiceClient;
         this.logger.info("initializing");
@@ -56,14 +58,14 @@ public class GfmTransformerDefault implements GfmTransformer {
     public void transformMarkdownFile(File mdFile, File htFile) throws IOException {
         String mdText = FileUtils.readFileToString(mdFile, UTF_8);
         String htText = transformMarkdownText(mdText);
-        CompiledTemplate htmlTemplate = TemplateCompiler.compileTemplate(gfmConfig.getHtmlTemplate());
+        CompiledTemplate htmlTemplate = TemplateCompiler.compileTemplate(config.getHtmlTemplate());
         Map<String, Object> vars = new HashMap<String, Object>();
         vars.put("title", htFile.toString());
         vars.put("content", htText);
-        vars.put("cssText", gfmConfig.getCssText());
-        vars.put("cssUris", gfmConfig.getCssUris());
-        vars.put("jsText", gfmConfig.getJsText());
-        vars.put("jsUris", gfmConfig.getJsUris());
+        vars.put("cssText", config.getCssText());
+        vars.put("cssUris", config.getCssUris());
+        vars.put("jsText", config.getJsText());
+        vars.put("jsUris", config.getJsUris());
         String rendered = (String) TemplateRuntime.execute(htmlTemplate, vars);
         FileUtils.writeStringToFile(htFile, rendered, UTF_8);
     }
@@ -81,12 +83,12 @@ public class GfmTransformerDefault implements GfmTransformer {
 
     @Override
     public File createHtmlFile(File mdFile) {
-        String htDir = gfmConfig.useTempDir() ? System.getProperty("java.io.tmpdir") : mdFile.getParent();
+        String htDir = config.useTempDir() ? System.getProperty("java.io.tmpdir") : mdFile.getParent();
         return new File(htDir, htFilename(mdFile.getName()));
     }
 
     private boolean useFilteredLinks() {
-        return !gfmConfig.useTempDir();
+        return !config.useTempDir();
     }
 
     private String filterLinks(String responseText) {

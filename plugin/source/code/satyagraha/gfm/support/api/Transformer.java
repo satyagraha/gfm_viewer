@@ -3,7 +3,7 @@ package code.satyagraha.gfm.support.api;
 import java.io.File;
 import java.io.IOException;
 
-public interface GfmTransformer {
+public interface Transformer {
 
     public boolean isMarkdownFile(File file);
     

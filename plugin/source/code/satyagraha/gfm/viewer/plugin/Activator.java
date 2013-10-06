@@ -6,6 +6,11 @@ import static code.satyagraha.gfm.di.DIUtils.getBundleClasses;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -18,6 +23,9 @@ import code.satyagraha.gfm.di.Injector;
  */
 public class Activator extends AbstractUIPlugin {
 
+    // Top-level package
+    private static final String PACKAGE_PREFIX = "code.satyagraha.gfm";
+
     // The plug-in ID
     public static final String PLUGIN_ID = "code.satyagraha.gfm.viewer"; //$NON-NLS-1$
 
@@ -27,6 +35,15 @@ public class Activator extends AbstractUIPlugin {
     // Instance variables
     private Injector injector;
 
+    // Logging utility class
+    private static class LogFormatter extends Formatter {
+        
+        @Override
+        public String format(LogRecord record) {
+            return new Date(record.getMillis()) + " " + record.getSourceClassName() + " " + record.getSourceMethodName() + " : " + formatMessage(record) + "\n";
+        }
+    }
+    
     /**
      * The constructor
      */
@@ -45,12 +62,22 @@ public class Activator extends AbstractUIPlugin {
         super.start(context);
         plugin = this;
         debug("");
-        
-        Collection<Class<?>> components = with(getBundleClasses(getBundle(), "code.satyagraha.gfm")).retain(isComponent);
+
+        Collection<Class<?>> components = with(getBundleClasses(getBundle(), PACKAGE_PREFIX)).retain(isComponent);
         debug("components: " + components);
         injector = new Injector(components);
-//        GfmConfig instance = injector.getComponent(GfmConfig.class);
-//        debug("instance: " + instance);
+
+        Logger logger = Logger.getLogger(PACKAGE_PREFIX);
+        Level level = isDebugging() ? Level.FINE : Level.WARNING;
+        logger.setLevel(level);
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setFormatter(new LogFormatter());
+        handler.setLevel(level);
+        logger.addHandler(handler);
+        logger.setUseParentHandlers(false);
+
+        logger.info("registering logger");
+        injector.addInstance(logger);
     }
 
     /*
@@ -68,6 +95,11 @@ public class Activator extends AbstractUIPlugin {
         super.stop(context);
     }
 
+    /**
+     * Returns the associated injector
+     * 
+     * @return the injector
+     */
     public Injector getInjector() {
         return injector;
     }
@@ -102,7 +134,7 @@ public class Activator extends AbstractUIPlugin {
         if (plugin != null && plugin.isDebugging()) {
             StackTraceElement caller = Thread.currentThread().getStackTrace()[2];
             Date now = new Date();
-            String formatted = String.format("%s %s : %d %s %s", now, caller.getFileName(), caller.getLineNumber(), caller.getMethodName(), message);
+            String formatted = String.format("%s %s %d %s : %s", now, caller.getFileName(), caller.getLineNumber(), caller.getMethodName(), message);
             System.out.println(formatted);
         }
     }

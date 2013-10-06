@@ -17,24 +17,24 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import code.satyagraha.gfm.support.api.GfmConfig;
-import code.satyagraha.gfm.support.api.GfmWebServiceClient;
-import code.satyagraha.gfm.support.impl.GfmTransformerDefault;
+import code.satyagraha.gfm.support.api.Config;
+import code.satyagraha.gfm.support.api.WebServiceClient;
+import code.satyagraha.gfm.support.impl.TransformerDefault;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GfmTransformerTest {
+public class TransformerTest {
 
     @Mock
     private Logger logger;
 
     @Mock
-    private GfmConfig gfmConfig;
+    private Config config;
     
     @Mock
-    private GfmWebServiceClient webServiceClient;
+    private WebServiceClient webServiceClient;
     
     @InjectMocks
-    private GfmTransformerDefault gfmTransformer;
+    private TransformerDefault transformer;
     
     @Test
     public void shouldCallWebServiceClient() {
@@ -44,7 +44,7 @@ public class GfmTransformerTest {
         given(webServiceClient.transform(mdText)).willReturn(htText);
         
         // when
-        gfmTransformer.transformMarkdownText(mdText);
+        transformer.transformMarkdownText(mdText);
         
         // then
         verify(webServiceClient).transform(mdText);
@@ -53,7 +53,7 @@ public class GfmTransformerTest {
     @Test
     public void shouldIdentifyMarkdownFile() throws Exception {
         File mdFile = File.createTempFile("abc", ".md");
-        assertThat(gfmTransformer.isMarkdownFile(mdFile), is(true));
+        assertThat(transformer.isMarkdownFile(mdFile), is(true));
     }
 
     @Test
@@ -97,6 +97,6 @@ public class GfmTransformerTest {
         // when
         
         // then
-        return gfmTransformer.transformMarkdownText("");
+        return transformer.transformMarkdownText("");
     }
 }

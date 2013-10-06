@@ -6,3 +6,5 @@ target
 classes
 $*
 .*.md.html
+.ispace
+*.ucls

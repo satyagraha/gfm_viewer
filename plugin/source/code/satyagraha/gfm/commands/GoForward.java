@@ -5,14 +5,14 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
 import code.satyagraha.gfm.viewer.plugin.Activator;
-import code.satyagraha.gfm.viewer.views.GfmView;
+import code.satyagraha.gfm.viewer.views.MarkdownView;
 
 public class GoForward extends AbstractHandler {
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
         Activator.debug("");
-        GfmView.getInstance().goForward();
+        MarkdownView.getInstance().goForward();
         return null;
     }
 

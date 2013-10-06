@@ -10,24 +10,25 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import code.satyagraha.gfm.viewer.plugin.Activator;
-import code.satyagraha.gfm.viewer.views.GfmView;
+import code.satyagraha.gfm.viewer.views.MarkdownView;
 
 public class ShowMarkdownFile extends AbstractHandler {
 
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
         Activator.debug("");
+        
         IStructuredSelection structuredSelection = (IStructuredSelection) HandlerUtil.getActiveMenuSelection(event);
         Object firstElement = structuredSelection.getFirstElement();
         if (firstElement instanceof IFile) {
             IFile iFile = (IFile) firstElement;
             try {
-                IViewPart view = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().showView(GfmView.ID);
+                IViewPart view = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().showView(MarkdownView.ID);
                 HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().activate(view);
             } catch (PartInitException e) {
                 throw new ExecutionException("failed to show view", e);
             }
-            GfmView.getInstance().showIFile(iFile);
+            MarkdownView.getInstance().showIFile(iFile);
         } else {
             Activator.debug("unexpected selection: " + firstElement);
         }

@@ -5,21 +5,21 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import code.satyagraha.gfm.support.api.GfmConfig;
-import code.satyagraha.gfm.support.api.GfmTransformer;
-import code.satyagraha.gfm.support.api.GfmWebServiceClient;
-import code.satyagraha.gfm.support.impl.GfmConfigDefault;
-import code.satyagraha.gfm.support.impl.GfmTransformerDefault;
-import code.satyagraha.gfm.support.impl.GfmWebServiceClientDefault;
+import code.satyagraha.gfm.support.api.Config;
+import code.satyagraha.gfm.support.api.Transformer;
+import code.satyagraha.gfm.support.api.WebServiceClient;
+import code.satyagraha.gfm.support.impl.ConfigDefault;
+import code.satyagraha.gfm.support.impl.TransformerDefault;
+import code.satyagraha.gfm.support.impl.WebServiceClientDefault;
 
-public class GfmTrackFile {
+public class TrackFile {
     
-    private static class GfmConfigTrackFile extends GfmConfigDefault {
+    private static class ConfigTrackFile extends ConfigDefault {
         
         private String username;
         private String password;
 
-        public GfmConfigTrackFile(String username, String password) {
+        public ConfigTrackFile(String username, String password) {
             this.username = username;
             this.password = password;
         }
@@ -35,13 +35,13 @@ public class GfmTrackFile {
         }
     }
     
-    private GfmTransformer gfmTransformer;
+    private Transformer transformer;
     private Logger logger;
 
-    public GfmTrackFile(GfmConfig gfmConfig) throws IOException {
-        logger = Logger.getLogger(GfmTrackFile.class.getCanonicalName());
-        GfmWebServiceClient webServiceClient = new GfmWebServiceClientDefault(gfmConfig, logger);
-        gfmTransformer = new GfmTransformerDefault(gfmConfig, logger, webServiceClient);
+    public TrackFile(Config config) throws IOException {
+        logger = Logger.getLogger(TrackFile.class.getCanonicalName());
+        WebServiceClient webServiceClient = new WebServiceClientDefault(config, logger);
+        transformer = new TransformerDefault(config, logger, webServiceClient);
     }
     
     private void manage(String mdFilepath) throws IOException {
@@ -54,7 +54,7 @@ public class GfmTrackFile {
         while (true) {
             if (!htFile.exists() || htFile.lastModified() < mdFile.lastModified()) {
                 logger.info(String.format("Transforming %s", mdFile));
-                gfmTransformer.transformMarkdownFile(mdFile, htFile);
+                transformer.transformMarkdownFile(mdFile, htFile);
             }
             try {
                 Thread.sleep(TimeUnit.SECONDS.toMillis(1));
@@ -64,8 +64,8 @@ public class GfmTrackFile {
     }
 
     public static void main(String[] args) throws IOException {
-        GfmConfigTrackFile gfmConfig = new GfmConfigTrackFile(args[0], args[1]);
-        GfmTrackFile instance = new GfmTrackFile(gfmConfig);
+        ConfigTrackFile config = new ConfigTrackFile(args[0], args[1]);
+        TrackFile instance = new TrackFile(config);
         instance.manage(args[2]);
     }
 }
