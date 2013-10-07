@@ -7,3 +7,4 @@ install: ""
 
 script: "mvn -B clean package"
 
+after_failure: "cat /home/travis/build/satyagraha/gfm_viewer/plugin.tests/target/surefire-reports/*"
