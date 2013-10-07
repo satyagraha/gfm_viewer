@@ -1,4 +1,9 @@
 language: java
 
+jdk:
+  - oraclejdk7
+  
+install: ""
+
 script: "mvn -B clean package"
 
