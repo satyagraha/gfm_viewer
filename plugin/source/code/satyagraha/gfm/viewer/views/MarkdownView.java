@@ -24,7 +24,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener {
     /**
      * The ID of the view as specified by the extension.
      */
-    public static final String ID = MarkdownView.class.getCanonicalName();
+    public static final String ID = "code.satyagraha.gfm.viewer.views.GfmView";
 
     private MarkdownBrowser browser;
 

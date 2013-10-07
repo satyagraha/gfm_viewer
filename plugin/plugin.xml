@@ -20,7 +20,7 @@
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"
-            locationURI="toolbar:code.satyagraha.gfm.viewer.views.MarkdownView">
+            locationURI="toolbar:code.satyagraha.gfm.viewer.views.GfmView">
          <command
                commandId="GFM Viewer plugin.Reload"
                icon="icons/reload.gif"
@@ -166,7 +166,7 @@
             category="code.satyagraha.gfm.viewer"
             class="code.satyagraha.gfm.viewer.views.MarkdownView"
             icon="icons/notepad.gif"
-            id="code.satyagraha.gfm.viewer.views.MarkdownView"
+            id="code.satyagraha.gfm.viewer.views.GfmView"
             name="GFM View">
       </view>
    </extension>
