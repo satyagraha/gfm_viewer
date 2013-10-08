@@ -29,12 +29,18 @@ public class TransformerTest {
 
     @Mock
     private Config config;
-    
+
     @Mock
     private WebServiceClient webServiceClient;
-    
+
     @InjectMocks
     private TransformerDefault transformer;
+
+    @Test
+    public void shouldRecognizeKnownExtensions() {
+        assertThat(transformer.markdownExtensions().contains("md"), is(true));
+        assertThat(transformer.markdownExtensions().contains("markdown"), is(true));
+    }
     
     @Test
     public void shouldCallWebServiceClient() {
@@ -42,60 +48,70 @@ public class TransformerTest {
         String mdText = "hello world";
         String htText = String.format("<p>%s</p>", mdText);
         given(webServiceClient.transform(mdText)).willReturn(htText);
-        
+
         // when
         transformer.transformMarkdownText(mdText);
-        
+
         // then
         verify(webServiceClient).transform(mdText);
     }
-    
+
     @Test
     public void shouldIdentifyMarkdownFile() throws Exception {
-        File mdFile = File.createTempFile("abc", ".md");
-        assertThat(transformer.isMarkdownFile(mdFile), is(true));
+        for (String extension : transformer.markdownExtensions()) {
+            File mdFile = File.createTempFile("abc", "." + extension);
+            assertThat(transformer.isMarkdownFile(mdFile), is(true));
+        }
+    }
+
+    @Test
+    public void shouldNotIdentifyFileWithoutExtension() throws Exception {
+        File mdFile = File.createTempFile("abc", "");
+        assertThat(transformer.isMarkdownFile(mdFile), is(false));
     }
 
     @Test
     public void shouldTransformExplicitMarkdownLink() {
-        // given
-        
-        // when
-        String resultLink = getTransformedLink("path/to/markdown.md");
-        
-        // then
-        assertThat(resultLink, containsString(".md.html"));
+        for (String extension : transformer.markdownExtensions()) {
+            // given
+
+            // when
+            String resultLink = getTransformedLink("path/to/markdown." + extension);
+
+            // then
+            assertThat(resultLink, containsString(".md.html"));
+        }
     }
 
     @Test
     public void shouldTransformImplicitMarkdownLink() {
         // given
-        
+
         // when
         String resultLink = getTransformedLink("path/to/markdown");
-        
+
         // then
         assertThat(resultLink, containsString(".md.html"));
     }
-    
+
     @Test
     public void shouldNotTransformExplicitNonMarkdownLink() {
         // given
-        
+
         // when
         String resultLink = getTransformedLink("path/to/something.htm");
-        
+
         // then
         assertThat(resultLink, not(containsString(".html")));
     }
-    
+
     private String getTransformedLink(String linkUri) {
         // given
         String htText = String.format("<a href=\"%s\">click me</a>", linkUri);
         given(webServiceClient.transform(anyString())).willReturn(htText);
-        
+
         // when
-        
+
         // then
         return transformer.transformMarkdownText("");
     }

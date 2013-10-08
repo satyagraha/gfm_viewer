@@ -1,5 +1,7 @@
 package code.satyagraha.gfm.support.impl;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -9,6 +11,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -32,6 +35,8 @@ import code.satyagraha.gfm.support.api.WebServiceClient;
 public class TransformerDefault implements Transformer {
 
     private static final Charset UTF_8 = Charset.forName(CharEncoding.UTF_8);
+    private static List<String> MARKDOWN_EXTENSIONS = unmodifiableList(asList("md", "markdown"));
+
 
     private final Config config;
     private final Logger logger;
@@ -45,13 +50,23 @@ public class TransformerDefault implements Transformer {
     }
     
     @Override
+    public List<String> markdownExtensions() {
+        return MARKDOWN_EXTENSIONS;
+    }
+    
+    @Override
     public boolean isMarkdownFile(File file) {
         return file.isFile() && isMarkdownFileExtension(file.getName());
     }
 
     private boolean isMarkdownFileExtension(String path) {
+        String extension = FilenameUtils.getExtension(path).toLowerCase();
+        return MARKDOWN_EXTENSIONS.contains(extension);
+    }
+    
+    private boolean isEmptyFileExtension(String path) {
         String extension = FilenameUtils.getExtension(path);
-        return extension.equals("") || extension.equalsIgnoreCase("md");
+        return extension.length() == 0;
     }
     
     @Override
@@ -116,7 +131,7 @@ public class TransformerDefault implements Transformer {
     }
 
     private boolean isMarkdownPath(String path) {
-        return path != null && isMarkdownFileExtension(path);
+        return path != null && (isMarkdownFileExtension(path) || isEmptyFileExtension(path));
     }
 
     private String makeHtmlPath(URI uri) {

@@ -2,9 +2,12 @@ package code.satyagraha.gfm.support.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public interface Transformer {
 
+    public List<String> markdownExtensions();
+    
     public boolean isMarkdownFile(File file);
     
     public String transformMarkdownText(String mdText);

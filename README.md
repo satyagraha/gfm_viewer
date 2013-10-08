@@ -44,9 +44,6 @@ Linux, you will need to set up Mozilla Firefox as follows:
 * http://www.eclipse.org/swt/faq.php#browserlinuxrcp
 * http://www.eclipse.org/swt/faq.php#browserlinux
 
-If upgrading from an earlier version, if a workspace already has a GFM View active,
-you may need to close and re-open the GFM View to make it display correctly.
- 
 ## Installation from Update Site
 
 In Eclipse, do the following:
