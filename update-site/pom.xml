@@ -5,8 +5,7 @@
 	<parent>
 		<groupId>code.satyagraha.gfm.viewer</groupId>
 		<artifactId>code.satyagraha.gfm.viewer.parent</artifactId>
-		<version>1.3.0-SNAPSHOT</version>
-		<relativePath>../parent</relativePath>
+		<version>1.4.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>code.satyagraha.gfm.viewer.update-site</artifactId>
@@ -17,6 +16,7 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-packaging-plugin</artifactId>
+				<version>${tycho-version}</version>
 				<configuration>
 					<archiveSite>true</archiveSite>
 				</configuration>
@@ -32,7 +32,7 @@
 				<bintray.user.id>satyagraha</bintray.user.id>
 				<bintray.repository>gfm-viewer</bintray.repository>
 				<bintray.package>site</bintray.package>
-				<bintray.version>1.3.0</bintray.version>
+				<bintray.version>1.4.0</bintray.version>
 				<bintray.site.file>site_assembly.zip</bintray.site.file>
 			</properties>
 			<build>

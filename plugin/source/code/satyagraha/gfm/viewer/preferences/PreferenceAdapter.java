@@ -1,6 +1,5 @@
 package code.satyagraha.gfm.viewer.preferences;
 
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USE_TEMP_DIR;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_API_URL;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_CSS_URL_1;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_CSS_URL_2;
@@ -11,6 +10,7 @@ import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_JS_UR
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_PASSWORD;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_TEMPLATE;
 import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USERNAME;
+import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USE_TEMP_DIR;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,10 +22,12 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 
-import code.satyagraha.gfm.support.api.GfmConfig;
+import code.satyagraha.gfm.di.Component;
+import code.satyagraha.gfm.support.api.Config;
 import code.satyagraha.gfm.viewer.plugin.Activator;
 
-public class PreferenceAdapter implements GfmConfig {
+@Component
+public class PreferenceAdapter implements Config {
 
     private static final Charset UTF_8 = Charset.forName(CharEncoding.UTF_8);
 
@@ -54,13 +56,13 @@ public class PreferenceAdapter implements GfmConfig {
         String templatePath = getStringPreference(P_TEMPLATE);
         return StringUtils.isNotBlank(templatePath)
             ? FileUtils.readFileToString(new File(templatePath), UTF_8)
-            : PreferenceInitializer.getGfmConfigDefault().getHtmlTemplate();
+            : PreferenceInitializer.getConfigDefault().getHtmlTemplate();
     }
 
     @Override
     public String getCssText() throws IOException {
         List<String> cssUris = getCssUris();
-        return cssUris.isEmpty() ? PreferenceInitializer.getGfmConfigDefault().getCssText() : null;
+        return cssUris.isEmpty() ? PreferenceInitializer.getConfigDefault().getCssText() : null;
     }
 
     @Override
@@ -79,7 +81,7 @@ public class PreferenceAdapter implements GfmConfig {
     @Override
     public String getJsText() throws IOException {
         List<String> jsUris = getJsUris();
-        return jsUris.isEmpty() ? PreferenceInitializer.getGfmConfigDefault().getJsText() : null;
+        return jsUris.isEmpty() ? PreferenceInitializer.getConfigDefault().getJsText() : null;
     }
     
     @Override

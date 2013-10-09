@@ -23,7 +23,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import code.satyagraha.gfm.support.api.FileNature;
 import code.satyagraha.gfm.viewer.views.EditorTracker;
-import code.satyagraha.gfm.viewer.views.GfmListener;
+import code.satyagraha.gfm.viewer.views.MarkdownListener;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EditorTrackerTest {
@@ -32,7 +32,7 @@ public class EditorTrackerTest {
     private IWorkbenchWindow workbenchWindow;
     
     @Mock
-    private GfmListener gfmListener;
+    private MarkdownListener listener;
     
     @Mock
     private IPartService partService;
@@ -70,14 +70,14 @@ public class EditorTrackerTest {
         given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
         given(editorIFile.getFullPath()).willReturn(editorPath);
         given(fileNature.isTrackableFile(editorIFile)).willReturn(true);
-        editorTracker = new EditorTracker(workbenchWindow, gfmListener, fileNature);
+        editorTracker = new EditorTracker(workbenchWindow, listener, fileNature);
         
         // when
         editorTracker.partOpened(partRef);
         
         // then
-        verify(gfmListener).showIFile(editorIFile);
-        verifyNoMoreInteractions(gfmListener);
+        verify(listener).showIFile(editorIFile);
+        verifyNoMoreInteractions(listener);
     }
     
     @Test
@@ -89,8 +89,8 @@ public class EditorTrackerTest {
         editorTracker.partClosed(partRef);
         
         // then
-        verify(gfmListener).showIFile(null);
-        verifyNoMoreInteractions(gfmListener);
+        verify(listener).showIFile(null);
+        verifyNoMoreInteractions(listener);
     }
 
     @Test
@@ -102,13 +102,13 @@ public class EditorTrackerTest {
         given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
         given(editorIFile.getFullPath()).willReturn(editorPath);
         given(fileNature.isTrackableFile(editorIFile)).willReturn(false);
-        editorTracker = new EditorTracker(workbenchWindow, gfmListener, fileNature);
+        editorTracker = new EditorTracker(workbenchWindow, listener, fileNature);
         
         // when
         editorTracker.partOpened(partRef);
         
         // then
-        verifyNoMoreInteractions(gfmListener);
+        verifyNoMoreInteractions(listener);
     }
 
     @Test
@@ -125,7 +125,7 @@ public class EditorTrackerTest {
         propertyListener.propertyChanged(editorPart, IEditorPart.PROP_DIRTY);
         
         // then
-        verify(gfmListener, times(2)).showIFile(editorIFile);
+        verify(listener, times(2)).showIFile(editorIFile);
     }
 
     @Test
@@ -143,7 +143,7 @@ public class EditorTrackerTest {
         propertyListener.propertyChanged(editorPart, IEditorPart.PROP_DIRTY);
         
         // then
-        verify(gfmListener, times(1)).showIFile(editorIFile);
+        verify(listener, times(1)).showIFile(editorIFile);
     }
     
     @Test
@@ -153,10 +153,10 @@ public class EditorTrackerTest {
         
         // when
         editorTracker.setNotificationsEnabled(false);
-        editorTracker.notifyGfmListenerAlways();
+        editorTracker.notifyMarkdownListenerAlways();
         
         // then
-        verify(gfmListener, times(2)).showIFile(editorIFile);
+        verify(listener, times(2)).showIFile(editorIFile);
     }
     
 }

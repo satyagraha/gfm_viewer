@@ -1,5 +1,10 @@
 # GitHub Flavored Markdown viewer plugin for Eclipse
 
+![](gfm-viewer-logo.png)
+ satyagraha: [![Build Status](https://secure.travis-ci.org/satyagraha/gfm_viewer.png)](http://travis-ci.org/satyagraha/gfm_viewer)
+ Nodeclipse: [![Build Status](https://secure.travis-ci.org/Nodeclipse/gfm_viewer.png)](http://travis-ci.org/Nodeclipse/gfm_viewer)
+
+
 This project provides an Eclipse view which provides a reasonably accurate presentation of
 [GithHub Flavored Markdown](http://github.github.com/github-flavored-markdown/) files.
 
@@ -30,10 +35,15 @@ the directory trees): this is effectively a batch mode update facility.
 The GFM View-editor linked state is by default on, but if set off its state will be automatically
 saved and preserved in the Eclipse workspace provided the GFM view is not closed.
 
-N.B. If non-ASCII characters are used in the markdown file, the current implementation assumes
+If non-ASCII characters are used in the markdown file, the current implementation assumes
 [UTF-8](http://en.wikipedia.org/wiki/UTF-8) character encoding, see also
 [here](http://www.martinahrer.at/2007/06/03/eclipse-encoding-settings/).
- 
+
+The plugin uses Eclipse default browser, e.g. Internet Explorer on Windows; if you use
+Linux, you will need to set up Mozilla Firefox as follows:
+* http://www.eclipse.org/swt/faq.php#browserlinuxrcp
+* http://www.eclipse.org/swt/faq.php#browserlinux
+
 ## Installation from Update Site
 
 In Eclipse, do the following:
@@ -52,10 +62,10 @@ The following build and install process can be followed to build the plugin loca
 update site:
 
 * Ensure you have [Maven](http://maven.apache.org/) executables installed for your OS
+and enviroment variable `JAVA_HOME` points to an installed JDK 6+
 * Clone this project's repository to a convenient location (a path not containing special characters
 like space is advised)
-* In a shell or command window, change working directory to `gfm_viewer/parent`, and set enviroment variable
-`JAVA_HOME` to point to an installed JDK 6+
+* In a shell or command window, change working directory to project root ( `gfm_viewer` with this README.md), 
 * Build the plugin by executing the command: `mvn clean package`
 * Start your preferred Eclipse version in the normal way
 * In Eclipse, execute menu _Help_ -> _Install New Software..._ and in the resulting dialog click the _Add..._
@@ -117,13 +127,15 @@ standards conformant HTML document
 
 If you want to do development on the plugin, proceed as follows:
 
+* get fresh new Eclipse Standard from <http://www.eclipse.org/downloads/>, or
+
 * You will need an Eclipse instance which does *not* have the GFM viewer installed, but does have the
 following PDE-related plugins installed (check via _Help_ -> _About Eclipse Platform_ -> _Installation Details_):
  * Eclipse Plug-in Development Environment
  * Eclipse RCP Plug-in Development Resources
  * Eclipse RCP SDK
 * If any of these are absent, you must install them from the relevant main Eclipse update site, e.g. for
-[Juno](http://download.eclipse.org/releases/juno)
+[Kepler](http://download.eclipse.org/releases/kepler)
 * Ensure the _Group items by category_ checkbox is unticked in the installer _Available Software_ dialog,
 otherwise these plugins may be hard to find
 
@@ -131,11 +143,11 @@ Then you can proceed as follows:
 * In the PDE Eclipse started with a new workspace, it is advisable to use the _Git Repositories_ view
 to clone the GitHub repo by pasting the GitHub URL as this will avoid line termination issues later
 * Then  perform a simple (not Maven) import of all six directories
-below `gfm_viewer` as existing Eclipse projects, namely `ext-deps`, `feature`, `p2-repo`, `parent`, `plugin`,
+below `gfm_viewer` as existing Eclipse projects, namely `ext-deps`, `feature`, `p2-repo`, `plugin`,
 `tests` and `update-site` 
-* If necessary, via the context menu on the new projects, select _Team_ -> _Share Project..._ -> _Git_
+* If necessary (e.g. before EGit 3.0), via the context menu on the new projects, select _Team_ -> _Share Project..._ -> _Git_
 and click through accepting the defaults to connect the projects to version control
-* Via the context menu on projects `ext-deps` and `parent` _only_, select _Configure_ -> _Convert to Maven Project_
+* Via the context menu on projects `ext-deps` and project base _only_, select _Configure_ -> _Convert to Maven Project_
 * Create an _Eclipse Maven_ run configuration for the _GFM Viewer ext-deps_ project with
 goals `clean package` and workspace refresh, and then run it 
 * Verify the last step created a jar file around 4Mb in size in the `lib` directory of project _GFM Viewer plugin_
@@ -186,8 +198,19 @@ plugin is recommended as an excellent general markdown editor which complements 
 
 Eclipse Public License 1.0
 
+## Acknowledgements
+
+* Thanks to [Paul Verest](https://github.com/PaulVI) for sustained input into this project
+* The [Picocontainer](http://picocontainer.com/) dependency injection framework works well inside
+the Eclipse 3.x environment, and makes object management far easier than otherwise
+* The [ObjectAid](http://www.objectaid.com/) Eclipse plugin allows one easily to create UML class 
+diagrams as an aid to understanding the relationships between the entities
+* The [ispace](http://www.stribor.de/) Eclipse plugin creates a dependency graph of packages and
+classes in a project, highlighting circular dependencies which typically indicate poor design
+
 ## History
 
+* 1.4.0 - hierarchical project structure, dependency injection
 * 1.3.0 - filtered links, batch mode, and bintray update site
 * 1.2.1 - fix update site link
 * 1.2.0 - link with editor/reload option, tests module
@@ -195,4 +218,3 @@ Eclipse Public License 1.0
 * 1.1.0 - transformation done in background job, provide context menu, temp dir option
 * 1.0.1 - use UTF-8 text encoding, e.g. 快乐  ハッピー  ευτυχισμένος
 * 1.0.0 - initial version
- 

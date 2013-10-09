@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.eclipse.core.resources.IFile;
 
-public interface GfmListener {
+public interface MarkdownListener {
 
     void showIFile(IFile editorFile) throws IOException;
 

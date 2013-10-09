@@ -1,0 +1,15 @@
+language: java
+
+jdk: oraclejdk7
+  
+env: DISPLAY=:99.0
+ 
+before_install: "sh -e /etc/init.d/xvfb start"
+  
+install: export
+
+script: "mvn -B clean package"
+
+after_failure:
+ - cat /home/travis/build/satyagraha/gfm_viewer/plugin.tests/target/work/data/.metadata/.log
+ - cat /home/travis/build/satyagraha/gfm_viewer/plugin.tests/target/surefire-reports/*

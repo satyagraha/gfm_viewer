@@ -1,5 +1,7 @@
 package code.satyagraha.gfm.support.impl;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -9,6 +11,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -23,23 +26,32 @@ import org.mvel2.templates.CompiledTemplate;
 import org.mvel2.templates.TemplateCompiler;
 import org.mvel2.templates.TemplateRuntime;
 
-import code.satyagraha.gfm.support.api.GfmConfig;
-import code.satyagraha.gfm.support.api.GfmTransformer;
-import code.satyagraha.gfm.support.api.GfmWebServiceClient;
+import code.satyagraha.gfm.di.Component;
+import code.satyagraha.gfm.support.api.Config;
+import code.satyagraha.gfm.support.api.Transformer;
+import code.satyagraha.gfm.support.api.WebServiceClient;
 
-public class GfmTransformerDefault implements GfmTransformer {
+@Component
+public class TransformerDefault implements Transformer {
 
     private static final Charset UTF_8 = Charset.forName(CharEncoding.UTF_8);
+    private static List<String> MARKDOWN_EXTENSIONS = unmodifiableList(asList("md", "markdown"));
 
-    private final GfmConfig gfmConfig;
+
+    private final Config config;
     private final Logger logger;
-    private final GfmWebServiceClient webServiceClient;
+    private final WebServiceClient webServiceClient;
     
-    public GfmTransformerDefault(GfmConfig gfmConfig, Logger logger, GfmWebServiceClient webServiceClient) {
-        this.gfmConfig = gfmConfig;
+    public TransformerDefault(Config config, Logger logger, WebServiceClient webServiceClient) {
+        this.config = config;
         this.logger = logger;
         this.webServiceClient = webServiceClient;
         this.logger.info("initializing");
+    }
+    
+    @Override
+    public List<String> markdownExtensions() {
+        return MARKDOWN_EXTENSIONS;
     }
     
     @Override
@@ -48,22 +60,27 @@ public class GfmTransformerDefault implements GfmTransformer {
     }
 
     private boolean isMarkdownFileExtension(String path) {
+        String extension = FilenameUtils.getExtension(path).toLowerCase();
+        return MARKDOWN_EXTENSIONS.contains(extension);
+    }
+    
+    private boolean isEmptyFileExtension(String path) {
         String extension = FilenameUtils.getExtension(path);
-        return extension.equals("") || extension.equalsIgnoreCase("md");
+        return extension.length() == 0;
     }
     
     @Override
     public void transformMarkdownFile(File mdFile, File htFile) throws IOException {
         String mdText = FileUtils.readFileToString(mdFile, UTF_8);
         String htText = transformMarkdownText(mdText);
-        CompiledTemplate htmlTemplate = TemplateCompiler.compileTemplate(gfmConfig.getHtmlTemplate());
+        CompiledTemplate htmlTemplate = TemplateCompiler.compileTemplate(config.getHtmlTemplate());
         Map<String, Object> vars = new HashMap<String, Object>();
         vars.put("title", htFile.toString());
         vars.put("content", htText);
-        vars.put("cssText", gfmConfig.getCssText());
-        vars.put("cssUris", gfmConfig.getCssUris());
-        vars.put("jsText", gfmConfig.getJsText());
-        vars.put("jsUris", gfmConfig.getJsUris());
+        vars.put("cssText", config.getCssText());
+        vars.put("cssUris", config.getCssUris());
+        vars.put("jsText", config.getJsText());
+        vars.put("jsUris", config.getJsUris());
         String rendered = (String) TemplateRuntime.execute(htmlTemplate, vars);
         FileUtils.writeStringToFile(htFile, rendered, UTF_8);
     }
@@ -79,8 +96,14 @@ public class GfmTransformerDefault implements GfmTransformer {
         return String.format(".%s.md.html", getBaseName(mdFilename));
     }
 
+    @Override
+    public File createHtmlFile(File mdFile) {
+        String htDir = config.useTempDir() ? System.getProperty("java.io.tmpdir") : mdFile.getParent();
+        return new File(htDir, htFilename(mdFile.getName()));
+    }
+
     private boolean useFilteredLinks() {
-        return !gfmConfig.useTempDir();
+        return !config.useTempDir();
     }
 
     private String filterLinks(String responseText) {
@@ -108,7 +131,7 @@ public class GfmTransformerDefault implements GfmTransformer {
     }
 
     private boolean isMarkdownPath(String path) {
-        return path != null && isMarkdownFileExtension(path);
+        return path != null && (isMarkdownFileExtension(path) || isEmptyFileExtension(path));
     }
 
     private String makeHtmlPath(URI uri) {

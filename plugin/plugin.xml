@@ -58,8 +58,8 @@
                            value="1">
                      </count>
                   </with>
-                  <iterate
-                        operator="and">
+                  <iterate>
+                     <or>   
                      <adapt
                            type="org.eclipse.core.resources.IFile">
                         <test
@@ -67,6 +67,14 @@
                               value="md">
                         </test>
                      </adapt>
+                     <adapt
+                           type="org.eclipse.core.resources.IFile">
+                        <test
+                              property="org.eclipse.core.resources.extension"
+                              value="markdown">
+                        </test>
+                     </adapt>
+                     </or>
                   </iterate>
                </and>
             </visibleWhen>
@@ -95,6 +103,13 @@
                            <test
                                  property="org.eclipse.core.resources.extension"
                                  value="md">
+                           </test>
+                        </adapt>
+                        <adapt
+                              type="org.eclipse.core.resources.IFile">
+                           <test
+                                 property="org.eclipse.core.resources.extension"
+                                 value="markdown">
                            </test>
                         </adapt>
                      </or>
@@ -149,7 +164,7 @@
       </category>
       <view
             category="code.satyagraha.gfm.viewer"
-            class="code.satyagraha.gfm.viewer.views.GfmView"
+            class="code.satyagraha.gfm.viewer.views.MarkdownView"
             icon="icons/notepad.gif"
             id="code.satyagraha.gfm.viewer.views.GfmView"
             name="GFM View">
