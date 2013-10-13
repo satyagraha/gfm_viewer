@@ -1,6 +1,10 @@
-# GitHub Flavored Markdown viewer plugin for Eclipse
+# GitHub Flavored Markdown Viewer plugin for Eclipse
 
-![](gfm-viewer-logo.png)
+![](plugin/src/site/markdown/gfm-viewer-logo.png)
+<a href="http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=900708" 
+title="Drag and drop into a running Eclipse to install GitHub Flavored Markdown viewer plugin">
+  <img src="http://marketplace.eclipse.org/sites/all/modules/custom/marketplace/images/installbutton.png"/>
+</a>
  satyagraha: [![Build Status](https://secure.travis-ci.org/satyagraha/gfm_viewer.png)](http://travis-ci.org/satyagraha/gfm_viewer)
  Nodeclipse: [![Build Status](https://secure.travis-ci.org/Nodeclipse/gfm_viewer.png)](http://travis-ci.org/Nodeclipse/gfm_viewer)
 
@@ -8,7 +12,14 @@
 This project provides an Eclipse view which provides a reasonably accurate presentation of
 [GithHub Flavored Markdown](http://github.github.com/github-flavored-markdown/) files.
 
+It is also new way to create Eclipse plugin help contents.
+Check project sources and developer instructions at GitHub
+<https://github.com/satyagraha/gfm_viewer> .
+
 ## Usage
+
+**Note: Usage & Configuration were copied into built-in Help. When changing please delete here
+ and add links into `plugin/src/site/markdown`**
 
 After installation (see below), the viewer may be accessed in any of the following ways:
 
@@ -43,6 +54,30 @@ The plugin uses Eclipse default browser, e.g. Internet Explorer on Windows; if y
 Linux, you will need to set up Mozilla Firefox as follows:
 * http://www.eclipse.org/swt/faq.php#browserlinuxrcp
 * http://www.eclipse.org/swt/faq.php#browserlinux
+
+## Configuration
+
+The GFM viewer plugin should work adequately without further configuration, however its operation may be
+customized via menu _Window_ -> _Preferences_ -> _GFM Viewer_. On that dialog page, properties may be set
+as follows:
+
+* _Use Temp dir_: by default formatted HTML files are stored in the original markdown file's directory,
+thus enabling relative local links to images to work properly;
+select this option to instead have them in the user's temporary directory
+* _API URL_: specifies an alternate URL for GitHub API calls (typically for corporate users only)
+* _Username/Password_: a limit of 60 updates per hour is imposed by GitHub for unauthenticated
+usage of their markdown rendering API, so provide GitHub credentials in these fields to have this
+limit raised, see [here](http://developer.github.com/v3/#rate-limiting) for background
+* _Template File_: an alternate HTML template file to the default may be provided
+* _CSS URL 1-3_: an alternate CSS presentation to the default may be provided
+* _JS URL 1-3_: an alternate JS implementation to the default may be provided
+
+Regarding the temporary formatted HTML files, when stored in the original markdown file directory note:
+
+* You may wish to add the exclusion pattern `.*.md.html` to your projects `.gitignore` file, which will prevent
+their inclusion in version control operations
+* You can manage the visibility of these files in Eclipse tree views via the _View_ menu (small triangle icon in
+top right of view), then select the _Filters..._ entry, and then set or clear the _.* resources_ check box
 
 ## Installation from Update Site
 
@@ -83,30 +118,6 @@ in the usual manner accepting all defaults
 then click button _Uninstall..._ and proceed accepting all defaults
 * Provided the plugin was the last one installed, alternatively you can select the _Installation History_ tab
 in the dialog, pick the previous history entry, and then click the _Revert_ button  
-
-## Configuration
-
-The GFM viewer plugin should work adequately without further configuration, however its operation may be
-customised via menu _Window_ -> _Preferences_ -> _GFM Viewer_. On that dialog page, properties may be set
-as follows:
-
-* _Use Temp dir_: by default formatted HTML files are stored in the original markdown file's directory,
-thus enabling relative local links to images to work properly;
-select this option to instead have them in the user's temporary directory
-* _API URL_: specifies an alternate URL for GitHub API calls (typically for corporate users only)
-* _Username/Password_: a limit of 60 updates per hour is imposed by GitHub for unauthenticated
-usage of their markdown rendering API, so provide GitHub credentials in these fields to have this
-limit raised, see [here](http://developer.github.com/v3/#rate-limiting) for background
-* _Template File_: an alternate HTML template file to the default may be provided
-* _CSS URL 1-3_: an alternate CSS presentation to the default may be provided
-* _JS URL 1-3_: an alternate JS implementation to the default may be provided
-
-Regarding the temporary formatted HTML files, when stored in the original markdown file directory note:
-
-* You may wish to add the exclusion pattern `.*.md.html` to your projects `.gitignore` file, which will prevent
-their inclusion in version control operations
-* You can manage the visibility of these files in Eclipse tree views via the _View_ menu (small triangle icon in
-top right of view), then select the _Filters..._ entry, and then set or clear the _.* resources_ check box
 
 ## Implementation
 

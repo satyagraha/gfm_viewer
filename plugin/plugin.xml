@@ -170,5 +170,13 @@
             name="GFM View">
       </view>
    </extension>
+   
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="HelpToc.xml"
+            primary="true">
+      </toc>
+   </extension>
 
 </plugin>
