@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C:\Users\pverest\git\gfm_viewer_Enide\plugin\src\site\markdown\.usage.md.html</title>
+
+
+<style type="text/css">
+
+.markdown-body {
+    border: 1px solid #CACACA;
+    padding: 30px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.markdown-body h2 {
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.markdown-body code {
+    white-space: nowrap;
+}
+
+.markdown-body code, .markdown-body tt {
+    background-color: #F8F8F8;
+    border: 1px solid #EAEAEA;
+    border-radius: 3px 3px 3px 3px;
+    margin: 0 2px;
+    padding: 0 5px;
+}
+
+.markdown-body .highlight pre, .markdown-body pre {
+    background-color: #F8F8F8;
+    border: 1px solid #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    font-size: 13px;
+    line-height: 19px;
+    overflow: auto;
+    padding: 6px 10px;
+}
+
+.markdown-body img {
+    border: 0 none;
+}
+
+pre, code, tt {
+    font-family: Consolas,"Liberation Mono",Courier,monospace;
+    font-size: 12px;
+}
+
+</style>
+
+
+<script type="text/javascript">
+
+function getDocumentScrollTop() 
+{
+   var res = document.body.scrollTop || document.documentElement.scrollTop || window.pageYOffset || 0;
+   // alert(res);
+   return res;
+}
+
+function setDocumentScrollTop(ypos) 
+{
+	window.scrollTo(0, ypos);
+}
+
+</script>
+
+
+</head>
+<body class="markdown-body">
+<h2> <a name="usage" class="anchor" href="..md.html#usage"><span class="octicon octicon-link"></span></a>Usage</h2> 
+<p>After installation (see below), the viewer may be accessed in any of the following ways:</p> 
+<ul> 
+ <li><p>Execute menu <em>Window</em> -&gt; <em>Show View</em> -&gt; <em>Other...</em> and select entry <em>GFM Support</em> -&gt; <em>GFM Viewer</em>. Then, when files with an extension of <code>.md</code> are saved from an Eclipse editor, this view is updated as would be seen when browsing the file via the GitHub website.</p></li> 
+ <li><p>When a markdown file is selected in any tree navigation view, then a <em>Show in GFM view</em> <a href="http://en.wikipedia.org/wiki/Context_menu">context menu</a> entry is provided which when activated will automatically open the view and display the formatted markdown content.</p></li> 
+ <li><p>When one or more directories and/or markdown files are selected in any tree navigation view, then a <em>Generate Markdown Preview</em> context menu entry is presented which when activated will regenerate all associated markdown preview files (via background jobs recursively traversing the directory trees): this is effectively a batch mode update facility. </p></li> 
+ <li> <p>The GFM plugin view provides on its toolbar the following icons which may be clicked:</p> 
+  <ul> 
+   <li> <a href="nav_backward.gif" target="_blank"><img src="nav_backward.gif" alt="nav_backward.gif" style="max-width:100%;" /></a> - navigate backwards in the browsing history</li> 
+   <li> <a href="nav_forward.gif" target="_blank"><img src="nav_forward.gif" alt="nav_forward.gif" style="max-width:100%;" /></a> - navigate forwards in the browsing history</li> 
+   <li> <a href="linked.gif" target="_blank"><img src="linked.gif" alt="linked.gif" style="max-width:100%;" /></a> - link GFM View to editor to automatically update on save</li> 
+   <li> <a href="reload.gif" target="_blank"><img src="reload.gif" alt="realod.gif" style="max-width:100%;" /></a> - manually update GFM View from last linked file</li> 
+  </ul> </li> 
+</ul>
+<p>The GFM View-editor linked state is by default on, but if set off its state will be automatically saved and preserved in the Eclipse workspace provided the GFM view is not closed.</p> 
+<p>If non-ASCII characters are used in the markdown file, the current implementation assumes <a href="http://en.wikipedia.org/wiki/UTF-8">UTF-8</a> character encoding, see also <a href="http://www.martinahrer.at/2007/06/03/eclipse-encoding-settings/">here</a>.</p> 
+<p>The plugin uses Eclipse default browser, e.g. Internet Explorer on Windows; if you use Linux, you will need to set up Mozilla Firefox as follows:</p> 
+<ul> 
+ <li><a href="http://www.eclipse.org/swt/faq.php#browserlinuxrcp">http://www.eclipse.org/swt/faq.php#browserlinuxrcp</a></li> 
+ <li><a href="http://www.eclipse.org/swt/faq.php#browserlinux">http://www.eclipse.org/swt/faq.php#browserlinux</a></li> 
+</ul>
+</body>
+</html>

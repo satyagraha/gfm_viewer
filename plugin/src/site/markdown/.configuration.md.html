@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C:\Users\pverest\git\gfm_viewer_Enide\plugin\src\site\markdown\.configuration.md.html</title>
+
+
+<style type="text/css">
+
+.markdown-body {
+    border: 1px solid #CACACA;
+    padding: 30px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.markdown-body h2 {
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.markdown-body code {
+    white-space: nowrap;
+}
+
+.markdown-body code, .markdown-body tt {
+    background-color: #F8F8F8;
+    border: 1px solid #EAEAEA;
+    border-radius: 3px 3px 3px 3px;
+    margin: 0 2px;
+    padding: 0 5px;
+}
+
+.markdown-body .highlight pre, .markdown-body pre {
+    background-color: #F8F8F8;
+    border: 1px solid #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    font-size: 13px;
+    line-height: 19px;
+    overflow: auto;
+    padding: 6px 10px;
+}
+
+.markdown-body img {
+    border: 0 none;
+}
+
+pre, code, tt {
+    font-family: Consolas,"Liberation Mono",Courier,monospace;
+    font-size: 12px;
+}
+
+</style>
+
+
+<script type="text/javascript">
+
+function getDocumentScrollTop() 
+{
+   var res = document.body.scrollTop || document.documentElement.scrollTop || window.pageYOffset || 0;
+   // alert(res);
+   return res;
+}
+
+function setDocumentScrollTop(ypos) 
+{
+	window.scrollTo(0, ypos);
+}
+
+</script>
+
+
+</head>
+<body class="markdown-body">
+<h2> <a name="configuration" class="anchor" href="..md.html#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2> 
+<p>The GFM viewer plugin should work adequately without further configuration, however its operation may be customized via menu <em>Window</em> -&gt; <em>Preferences</em> -&gt; <em>GFM Viewer</em>. On that dialog page, properties may be set as follows:</p> 
+<ul> 
+ <li> <em>Use Temp dir</em>: by default formatted HTML files are stored in the original markdown file's directory, thus enabling relative local links to images to work properly; select this option to instead have them in the user's temporary directory</li> 
+ <li> <em>API URL</em>: specifies an alternate URL for GitHub API calls (typically for corporate users only)</li> 
+ <li> <em>Username/Password</em>: a limit of 60 updates per hour is imposed by GitHub for unauthenticated usage of their markdown rendering API, so provide GitHub credentials in these fields to have this limit raised, see <a href="http://developer.github.com/v3/#rate-limiting">here</a> for background</li> 
+ <li> <em>Template File</em>: an alternate HTML template file to the default may be provided</li> 
+ <li> <em>CSS URL 1-3</em>: an alternate CSS presentation to the default may be provided</li> 
+ <li> <em>JS URL 1-3</em>: an alternate JS implementation to the default may be provided</li> 
+</ul>
+<p>Regarding the temporary formatted HTML files, when stored in the original markdown file directory note:</p> 
+<ul> 
+ <li>You may wish to add the exclusion pattern <code>.*.md.html</code> to your projects <code>.gitignore</code> file, which will prevent their inclusion in version control operations</li> 
+ <li>You can manage the visibility of these files in Eclipse tree views via the <em>View</em> menu (small triangle icon in top right of view), then select the <em>Filters...</em> entry, and then set or clear the <em>.* resources</em> check box</li> 
+</ul>
+</body>
+</html>
