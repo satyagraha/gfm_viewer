@@ -21,6 +21,27 @@
 					<archiveSite>true</archiveSite>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<descriptors>
+						<descriptor>assembly.xml</descriptor>
+					</descriptors>
+					<appendAssemblyId>false</appendAssemblyId>
+					<finalName>site-assembly-${project.version}</finalName>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -30,33 +51,17 @@
 			<properties>
 				<bintray.api.url>https://api.bintray.com</bintray.api.url>
 				<bintray.user.id>satyagraha</bintray.user.id>
-				<bintray.repository>gfm-viewer</bintray.repository>
-				<bintray.package>site</bintray.package>
+				<bintray.repository>generic</bintray.repository>
+				<bintray.package>gfm-viewer</bintray.package>
 				<bintray.version>1.4.0</bintray.version>
-				<bintray.site.file>site_assembly.zip</bintray.site.file>
+				<bintray.upload.file>site-assembly-${project.version}.zip</bintray.upload.file>
 			</properties>
 			<build>
 				<plugins>
-				<!--
-					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.7</version>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<target>
-										<property environment="env" />
-										<echoproperties />
-									</target>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				-->
+					<!-- <plugin> <artifactId>maven-antrun-plugin</artifactId> <version>1.7</version> 
+						<executions> <execution> <phase>package</phase> <goals> <goal>run</goal> 
+						</goals> <configuration> <target> <property environment="env" /> <echoproperties 
+						/> </target> </configuration> </execution> </executions> </plugin> -->
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
@@ -77,8 +82,8 @@
 										<argument>--request</argument>
 										<argument>PUT</argument>
 										<argument>--upload-file</argument>
-										<argument>target/${bintray.site.file}</argument>
-										<argument>${bintray.api.url}/content/${bintray.user.id}/${bintray.repository}/${bintray.package}/${bintray.version}/${bintray.site.file};publish=0;explode=1</argument>
+										<argument>target/${bintray.upload.file}</argument>
+										<argument>${bintray.api.url}/content/${bintray.user.id}/${bintray.repository}/${bintray.package}/${bintray.version}/${bintray.upload.file};publish=0;explode=1</argument>
 									</arguments>
 								</configuration>
 							</execution>
