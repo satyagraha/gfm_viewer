@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="GitHub Flavored Markdown Viewer Help" topic="src/site/markdown/.index.md.html">
+	<topic label="Markdown"  href="src/site/markdown/.markdown.md.html"/>
+	<topic label="Github Flavored Markdown (GFM)"  href="src/site/markdown/.github-flavored-markdown.md.html"/>
+	<topic label="Usage"  href="src/site/markdown/.usage.md.html"/>
+	<topic label="Configuration"  href="src/site/markdown/.configuration.md.html"/>
+</toc>
