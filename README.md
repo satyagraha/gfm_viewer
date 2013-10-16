@@ -221,7 +221,8 @@ classes in a project, highlighting circular dependencies which typically indicat
 
 ## History
 
-* 1.4.0 - hierarchical project structure, dependency injection
+* 1.5.DEV - Help page how to add Help to an Eclipse plugin
+* 1.4.0 - hierarchical project structure, dependency injection, built-in Help, fix NPE when changing perspective
 * 1.3.0 - filtered links, batch mode, and bintray update site
 * 1.2.1 - fix update site link
 * 1.2.0 - link with editor/reload option, tests module
