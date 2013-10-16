@@ -12,4 +12,4 @@ Require-Bundle: org.eclipse.core.resources,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .,
- lib/code.satyagraha.gfm.viewer.ext-deps-1.4.0-SNAPSHOT.jar
+ lib/code.satyagraha.gfm.viewer.ext-deps-1.5.0-SNAPSHOT.jar
