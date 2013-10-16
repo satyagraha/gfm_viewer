@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C:\Users\pverest\git\gfm_viewer_Enide\plugin\src\site\markdown\.adding-help-to-eclipse-plugin.md.html</title>
+
+
+<style type="text/css">
+
+.markdown-body {
+    border: 1px solid #CACACA;
+    padding: 30px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.markdown-body h2 {
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.markdown-body code {
+    white-space: nowrap;
+}
+
+.markdown-body code, .markdown-body tt {
+    background-color: #F8F8F8;
+    border: 1px solid #EAEAEA;
+    border-radius: 3px 3px 3px 3px;
+    margin: 0 2px;
+    padding: 0 5px;
+}
+
+.markdown-body .highlight pre, .markdown-body pre {
+    background-color: #F8F8F8;
+    border: 1px solid #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    font-size: 13px;
+    line-height: 19px;
+    overflow: auto;
+    padding: 6px 10px;
+}
+
+.markdown-body img {
+    border: 0 none;
+}
+
+pre, code, tt {
+    font-family: Consolas,"Liberation Mono",Courier,monospace;
+    font-size: 12px;
+}
+
+</style>
+
+
+<script type="text/javascript">
+
+function getDocumentScrollTop() 
+{
+   var res = document.body.scrollTop || document.documentElement.scrollTop || window.pageYOffset || 0;
+   // alert(res);
+   return res;
+}
+
+function setDocumentScrollTop(ypos) 
+{
+	window.scrollTo(0, ypos);
+}
+
+</script>
+
+
+</head>
+<body class="markdown-body">
+<h1> <a name="adding-help-to-eclipse-plugin" class="anchor" href="..md.html#adding-help-to-eclipse-plugin"><span class="octicon octicon-link"></span></a>Adding Help to Eclipse plugin</h1> 
+<p>by <a href="http://with-eclipse.github.io/">Paul Verest</a></p> 
+<p>( If you don't have an Eclipse plugin, you can quickly create one via <a href="http://maven.apache.org/">maven</a> archetype <code>mvn archetype:generate -DarchetypeCatalog=http://open-archetypes.github.io/maven-repo/snapshots/</code><br /> in a list select <code>tycho-eclipse-plugin-archetype</code> , continue reading at <a href="https://github.com/open-archetypes/tycho-eclipse-plugin-archetype">https://github.com/open-archetypes/tycho-eclipse-plugin-archetype</a> )</p> 
+<p>Open <code>plugin.xml</code> add</p> 
+<div class="highlight highlight-xml">
+ <pre>   <span class="nt">&lt;extension</span>
+         <span class="na">point=</span><span class="s">&quot;org.eclipse.help.toc&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;toc</span>
+            <span class="na">file=</span><span class="s">&quot;HelpToc.xml&quot;</span>
+            <span class="na">primary=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;/toc&gt;</span>
+   <span class="nt">&lt;/extension&gt;</span>
+</pre>
+</div> 
+<p>Add <code>HeplToc.xml</code> and help folder into <code>build.properties</code>, e.g.:</p> 
+<div class="highlight highlight-txt">
+ <pre>    <span class="err">source..</span> <span class="err">=</span> <span class="err">source/</span>
+    <span class="err">output..</span> <span class="err">=</span> <span class="err">target/classes/</span>
+    <span class="err">bin.includes</span> <span class="err">=</span> <span class="err">plugin.xml,\</span>
+                   <span class="err">META-INF/,\</span>
+                   <span class="err">.,\</span>
+                   <span class="err">icons/,\</span>
+                   <span class="err">HelpToc.xml,\</span>
+                   <span class="err">help/</span>
+</pre>
+</div> 
+<p>Next add file <code>HelpToc.xml</code> with content similar to this:</p> 
+<div class="highlight highlight-xml">
+ <pre>    <span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+    <span class="cp">&lt;?NLS TYPE=&quot;org.eclipse.help.toc&quot;?&gt;</span>
+
+    <span class="nt">&lt;toc</span> <span class="na">label=</span><span class="s">&quot;GitHub Flavored Markdown Viewer Help&quot;</span> <span class="na">topic=</span><span class="s">&quot;help/.index.md.html&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;topic</span> <span class="na">label=</span><span class="s">&quot;Markdown&quot;</span>  <span class="na">href=</span><span class="s">&quot;help/.markdown.md.html&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;topic</span> <span class="na">label=</span><span class="s">&quot;Github Flavored Markdown (GFM)&quot;</span>  <span class="na">href=</span><span class="s">&quot;help/.github-flavored-markdown.md.html&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;topic</span> <span class="na">label=</span><span class="s">&quot;Usage&quot;</span>  <span class="na">href=</span><span class="s">&quot;help/.usage.md.html&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;topic</span> <span class="na">label=</span><span class="s">&quot;Configuration&quot;</span>  <span class="na">href=</span><span class="s">&quot;help/.configuration.md.html&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/toc&gt;</span>
+</pre>
+</div> 
+<p>That is per every Help page that you author with Markdown, you add one line.</p> 
+<p>There should also be <code>index.md</code> with content like:</p> 
+<div class="highlight highlight-txt">
+ <pre>    <span class="c">##Table of Contents</span>
+
+    <span class="err">-</span> <span class="err">[Markdown](.markdown.md.html)</span>
+    <span class="err">-</span> <span class="err">[Github</span> <span class="err">Flavored</span> <span class="nb">Markdown</span> <span class="p">(</span><span class="s">GFM</span><span class="p">)</span><span class="err">](.github-flavored-markdown.md.html)</span>
+    <span class="err">-</span> <span class="err">[Usage](.usage.md.html)</span>
+    <span class="err">-</span> <span class="err">[Configuration](.configuration.md.html)</span>
+</pre>
+</div> 
+<p>Now right-click <code>help</code> folder and select <code>Generate Markdown Preview</code>. You get all <code>.*.md.html</code> files needed.</p>
+</body>
+</html>
