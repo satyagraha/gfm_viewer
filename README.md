@@ -188,6 +188,10 @@ of the Tycho P2 Repository generation facility, prompted by the
 After a Maven Tycho build you may select the directory `gfm_viewer/p2-repo/target/repository` as a local update
 site as an alternative to the other one.
 
+In order to update version:
+
+	mvn -Dtycho.mode=maven org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=1.5.0-SNAPSHOT
+
 ## To Do
 
 Areas possibly meriting further attention include:
@@ -221,7 +225,8 @@ classes in a project, highlighting circular dependencies which typically indicat
 
 ## History
 
-* 1.4.0 - hierarchical project structure, dependency injection
+* 1.5.DEV - Help page how to add Help to an Eclipse plugin
+* 1.4.0 - hierarchical project structure, dependency injection, built-in Help, fix NPE when changing perspective
 * 1.3.0 - filtered links, batch mode, and bintray update site
 * 1.2.1 - fix update site link
 * 1.2.0 - link with editor/reload option, tests module

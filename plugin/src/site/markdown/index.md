@@ -17,3 +17,5 @@ Check project sources and developer instructions at GitHub
 - [Github Flavored Markdown (GFM)](.github-flavored-markdown.md.html)
 - [Usage](.usage.md.html)
 - [Configuration](.configuration.md.html)
+- [Adding Help to Eclipse plugin](.adding-help-to-eclipse-plugin.md.html)
+
