@@ -7,5 +7,4 @@
 	<topic label="Usage"  href="src/site/markdown/.usage.md.html"/>
 	<topic label="Configuration"  href="src/site/markdown/.configuration.md.html"/>
 	<topic label="Adding Help to Eclipse plugin"  href="src/site/markdown/.adding-help-to-eclipse-plugin.md.html"/>
-	.md
 </toc>
