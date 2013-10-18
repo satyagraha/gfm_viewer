@@ -2,6 +2,7 @@
 .classpath
 *.class
 *.jar
+bin
 target
 classes
 $*
