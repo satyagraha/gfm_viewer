@@ -11,10 +11,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IPartService;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IPropertyListener;
-import org.eclipse.ui.IWorkbenchPartReference;
-import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.IWorkbenchPage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -22,23 +21,21 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import code.satyagraha.gfm.support.api.FileNature;
-import code.satyagraha.gfm.viewer.views.EditorTracker;
+import code.satyagraha.gfm.viewer.views.MarkdownEditorTracker;
 import code.satyagraha.gfm.viewer.views.MarkdownListener;
+import code.satyagraha.gfm.viewer.views.impl.PageEditorTracker;
 
 @RunWith(MockitoJUnitRunner.class)
-public class EditorTrackerTest {
+public class MarkdownEditorTrackerTest {
     
     @Mock
-    private IWorkbenchWindow workbenchWindow;
+    private IWorkbenchPage workbenchPage;
     
     @Mock
     private MarkdownListener listener;
     
     @Mock
-    private IPartService partService;
-    
-    @Mock
-    private IWorkbenchPartReference partRef;
+    private IEditorReference editorPartRef;
     
     @Mock
     private IEditorPart editorPart;
@@ -55,25 +52,29 @@ public class EditorTrackerTest {
     @Mock
     private FileNature fileNature;
 
-    private EditorTracker editorTracker;
+    private PageEditorTracker pageEditorTracker;
+    
+    private MarkdownEditorTracker editorTracker;
 
     private ArgumentCaptor<IPropertyListener> propertyListenerCaptor;
    
     @Test
     public void shouldNotifyOnEditorPartOpenedTrackableFile() throws Exception {
         // given
-        given(workbenchWindow.getPartService()).willReturn(partService);
-        given(partRef.getPart(true)).willReturn(editorPart);
+        given(editorPartRef.getPage()).willReturn(workbenchPage);
+        given(editorPartRef.getEditor(true)).willReturn(editorPart);
         given(editorPart.getEditorInput()).willReturn(editorInput);
         propertyListenerCaptor = ArgumentCaptor.forClass(IPropertyListener.class);
         willDoNothing().given(editorPart).addPropertyListener(propertyListenerCaptor.capture());
         given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
         given(editorIFile.getFullPath()).willReturn(editorPath);
         given(fileNature.isTrackableFile(editorIFile)).willReturn(true);
-        editorTracker = new EditorTracker(workbenchWindow, listener, fileNature);
+        
+        pageEditorTracker = new PageEditorTracker(workbenchPage);
+        editorTracker = new MarkdownEditorTracker(pageEditorTracker, listener, fileNature);
         
         // when
-        editorTracker.partOpened(partRef);
+        pageEditorTracker.partOpened(editorPartRef);
         
         // then
         verify(listener).showIFile(editorIFile);
@@ -86,7 +87,7 @@ public class EditorTrackerTest {
         shouldNotifyOnEditorPartOpenedTrackableFile();
         
         // when
-        editorTracker.partClosed(partRef);
+        pageEditorTracker.partClosed(editorPartRef);
         
         // then
         verify(listener).showIFile(null);
@@ -96,16 +97,17 @@ public class EditorTrackerTest {
     @Test
     public void shouldNotNotifyOnEditorPartOpenedNonTrackableFile() throws Exception {
         // given
-        given(workbenchWindow.getPartService()).willReturn(partService);
-        given(partRef.getPart(true)).willReturn(editorPart);
+        given(editorPartRef.getPart(true)).willReturn(editorPart);
         given(editorPart.getEditorInput()).willReturn(editorInput);
         given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
         given(editorIFile.getFullPath()).willReturn(editorPath);
         given(fileNature.isTrackableFile(editorIFile)).willReturn(false);
-        editorTracker = new EditorTracker(workbenchWindow, listener, fileNature);
+        
+        pageEditorTracker = new PageEditorTracker(workbenchPage);
+        editorTracker = new MarkdownEditorTracker(pageEditorTracker, listener, fileNature);
         
         // when
-        editorTracker.partOpened(partRef);
+        pageEditorTracker.partOpened(editorPartRef);
         
         // then
         verifyNoMoreInteractions(listener);

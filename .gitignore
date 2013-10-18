@@ -5,7 +5,7 @@
 target
 classes
 $*
-/.*.md.html
-# some .*.md.html files are generated Eclipse Help
+.*.md.html
+!site/.*.md.html
 .ispace
 *.ucls

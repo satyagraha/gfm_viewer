@@ -18,6 +18,7 @@ import code.satyagraha.gfm.viewer.plugin.Activator;
 import code.satyagraha.gfm.viewer.views.api.Scheduler;
 import code.satyagraha.gfm.viewer.views.api.Scheduler.Callback;
 import code.satyagraha.gfm.viewer.views.api.ViewSupport;
+import code.satyagraha.gfm.viewer.views.impl.PageEditorTracker;
 
 public class MarkdownView extends ViewPart implements MarkdownListener {
 
@@ -26,16 +27,21 @@ public class MarkdownView extends ViewPart implements MarkdownListener {
      */
     public static final String ID = "code.satyagraha.gfm.viewer.views.GfmView";
 
+    private static int instances = 0;
+
+    private final int instance;
     private MarkdownBrowser browser;
-
     private Transformer transformer;
-
     private Scheduler scheduler;
-    
     private ViewSupport viewSupport;
-    
-    private EditorTracker editorTracker;
+    private MarkdownEditorTracker editorTracker;
 
+    public MarkdownView() {
+        instances++;
+        instance = instances;
+        Activator.debug("instance: " + instance);
+    }
+    
     @Override
     public void createPartControl(Composite parent) {
         Activator.debug("");
@@ -70,7 +76,8 @@ public class MarkdownView extends ViewPart implements MarkdownListener {
             }
         };
 
-        editorTracker = new EditorTracker(getSite().getWorkbenchWindow(), this, markdownFileNature);
+        PageEditorTracker pageEditorTracker = new PageEditorTracker(getSite().getPage());
+        editorTracker = new MarkdownEditorTracker(pageEditorTracker, this, markdownFileNature);
         editorTracker.setNotificationsEnabled(viewSupport.isLinked());
 
     }
@@ -94,10 +101,10 @@ public class MarkdownView extends ViewPart implements MarkdownListener {
     @Override
     public void showIFile(IFile iFile) {
         if (iFile != null) {
-            Activator.debug(iFile.getFullPath().toString());
+            Activator.debug("instance: " + instance + " " + iFile.getFullPath().toString());
             showFile(iFile.getRawLocation().toFile());
         } else {
-            Activator.debug("(null)");
+            Activator.debug("instance: " + instance + " (null)");
         }
     }
 
