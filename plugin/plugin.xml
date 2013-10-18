@@ -16,14 +16,15 @@
             id="code.satyagraha.gfm.viewer.preferences.PreferencePage">
       </page>
    </extension>
+   
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"
             locationURI="toolbar:code.satyagraha.gfm.viewer.views.GfmView">
          <command
-               commandId="GFM Viewer plugin.Reload"
-               icon="icons/reload.gif"
+               commandId="GFM Viewer plugin.Preferences"
+               icon="icons/etool16/settings16.png"
                style="push">
          </command>
          <command
@@ -32,13 +33,18 @@
                style="toggle">
          </command>
          <command
-               commandId="GFM Viewer plugin.GoForward"
-               icon="icons/nav_forward.gif"
+               commandId="GFM Viewer plugin.Reload"
+               icon="icons/reload.gif"
                style="push">
          </command>
          <command
                commandId="GFM Viewer plugin.GoBackward"
                icon="icons/nav_backward.gif"
+               style="push">
+         </command>
+         <command
+               commandId="GFM Viewer plugin.GoForward"
+               icon="icons/nav_forward.gif"
                style="push">
          </command>
       </menuContribution>
@@ -119,8 +125,14 @@
          </command>
       </menuContribution>
    </extension>
+   
    <extension
          point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="code.satyagraha.gfm.commands.Preferences"
+            id="GFM Viewer plugin.Preferences"
+            name="Preferences">
+      </command>
       <command
             defaultHandler="code.satyagraha.gfm.commands.Reload"
             id="GFM Viewer plugin.Reload"
@@ -136,14 +148,14 @@
          </state>
       </command>
       <command
-            defaultHandler="code.satyagraha.gfm.commands.GoForward"
-            id="GFM Viewer plugin.GoForward"
-            name="Go Forward">
-      </command>
-      <command
             defaultHandler="code.satyagraha.gfm.commands.GoBackward"
             id="GFM Viewer plugin.GoBackward"
             name="Go Backward">
+      </command>
+      <command
+            defaultHandler="code.satyagraha.gfm.commands.GoForward"
+            id="GFM Viewer plugin.GoForward"
+            name="Go Forward">
       </command>
       <command
             defaultHandler="code.satyagraha.gfm.commands.ShowMarkdownFile"
@@ -156,6 +168,7 @@
             name="Generate Markdown Preview">
       </command>
    </extension>
+   
    <extension
          point="org.eclipse.ui.views">
       <category
