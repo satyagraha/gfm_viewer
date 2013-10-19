@@ -1,4 +1,4 @@
-package code.satyagraha.gfm.commands;
+package code.satyagraha.gfm.viewer.commands;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.Command;

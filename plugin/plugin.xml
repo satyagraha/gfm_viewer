@@ -129,17 +129,17 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="code.satyagraha.gfm.commands.Preferences"
+            defaultHandler="code.satyagraha.gfm.viewer.commands.Preferences"
             id="GFM Viewer plugin.Preferences"
             name="Preferences">
       </command>
       <command
-            defaultHandler="code.satyagraha.gfm.commands.Reload"
+            defaultHandler="code.satyagraha.gfm.viewer.commands.Reload"
             id="GFM Viewer plugin.Reload"
             name="Reload">
       </command>
       <command
-            defaultHandler="code.satyagraha.gfm.commands.Linked"
+            defaultHandler="code.satyagraha.gfm.viewer.commands.Linked"
             id="GFM Viewer plugin.Linked"
             name="Linked">
          <state
@@ -148,22 +148,22 @@
          </state>
       </command>
       <command
-            defaultHandler="code.satyagraha.gfm.commands.GoBackward"
+            defaultHandler="code.satyagraha.gfm.viewer.commands.GoBackward"
             id="GFM Viewer plugin.GoBackward"
             name="Go Backward">
       </command>
       <command
-            defaultHandler="code.satyagraha.gfm.commands.GoForward"
+            defaultHandler="code.satyagraha.gfm.viewer.commands.GoForward"
             id="GFM Viewer plugin.GoForward"
             name="Go Forward">
       </command>
       <command
-            defaultHandler="code.satyagraha.gfm.commands.ShowMarkdownFile"
+            defaultHandler="code.satyagraha.gfm.viewer.commands.ShowMarkdownFile"
             id="GFM Viewer plugin.ShowMarkdownFile"
             name="Show Markdown File">
       </command>
       <command
-            defaultHandler="code.satyagraha.gfm.commands.GenerateMarkdownPreview"
+            defaultHandler="code.satyagraha.gfm.viewer.commands.GenerateMarkdownPreview"
             id="GFM Viewer plugin.GenerateMarkdownPreview"
             name="Generate Markdown Preview">
       </command>
