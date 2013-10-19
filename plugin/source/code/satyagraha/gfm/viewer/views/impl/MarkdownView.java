@@ -1,4 +1,4 @@
-package code.satyagraha.gfm.viewer.views;
+package code.satyagraha.gfm.viewer.views.impl;
 
 import java.io.File;
 
@@ -9,18 +9,21 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.browser.ProgressEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import code.satyagraha.gfm.di.DIManager;
 import code.satyagraha.gfm.support.api.FileNature;
 import code.satyagraha.gfm.support.api.Transformer;
+import code.satyagraha.gfm.ui.api.PageEditorTracker;
+import code.satyagraha.gfm.ui.api.Scheduler;
+import code.satyagraha.gfm.ui.api.Scheduler.Callback;
+import code.satyagraha.gfm.ui.impl.PageEditorTrackerDefault;
 import code.satyagraha.gfm.viewer.plugin.Activator;
-import code.satyagraha.gfm.viewer.views.api.Scheduler;
-import code.satyagraha.gfm.viewer.views.api.Scheduler.Callback;
-import code.satyagraha.gfm.viewer.views.api.ViewSupport;
-import code.satyagraha.gfm.viewer.views.impl.PageEditorTracker;
+import code.satyagraha.gfm.viewer.views.api.MarkdownListener;
+import code.satyagraha.gfm.viewer.views.api.ViewerSupport;
+import code.satyagraha.gfm.viewer.views.api.ViewerActions;
 
-public class MarkdownView extends ViewPart implements MarkdownListener {
+public class MarkdownView extends ViewPart implements MarkdownListener, ViewerActions {
 
     /**
      * The ID of the view as specified by the extension.
@@ -33,7 +36,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener {
     private MarkdownBrowser browser;
     private Transformer transformer;
     private Scheduler scheduler;
-    private ViewSupport viewSupport;
+    private ViewerSupport viewSupport;
     private MarkdownEditorTracker editorTracker;
 
     public MarkdownView() {
@@ -62,11 +65,11 @@ public class MarkdownView extends ViewPart implements MarkdownListener {
             }
         };
 
-        transformer = Activator.getDefault().getInjector().getInstance(Transformer.class);
+        transformer = DIManager.getDefault().getInjector().getInstance(Transformer.class);
         
-        scheduler = Activator.getDefault().getInjector().getInstance(Scheduler.class);
+        scheduler = DIManager.getDefault().getInjector().getInstance(Scheduler.class);
         
-        viewSupport = Activator.getDefault().getInjector().getInstance(ViewSupport.class);
+        viewSupport = DIManager.getDefault().getInjector().getInstance(ViewerSupport.class);
 
         FileNature markdownFileNature = new FileNature() {
 
@@ -76,7 +79,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener {
             }
         };
 
-        PageEditorTracker pageEditorTracker = new PageEditorTracker(getSite().getPage());
+        PageEditorTracker pageEditorTracker = new PageEditorTrackerDefault(getSite().getPage());
         editorTracker = new MarkdownEditorTracker(pageEditorTracker, this, markdownFileNature);
         editorTracker.setNotificationsEnabled(viewSupport.isLinked());
 
@@ -132,6 +135,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener {
         }
     }
     
+    @Override
     public void goForward() {
         Activator.debug("");
         if (browser != null) {
@@ -139,6 +143,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener {
         }
     }
 
+    @Override
     public void goBackward() {
         Activator.debug("");
         if (browser != null) {
@@ -146,6 +151,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener {
         }
     }
 
+    @Override
     public void setLinkedState(boolean state) {
         Activator.debug("state: " + state);
         if (editorTracker != null) {
@@ -153,6 +159,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener {
         }
     }
 
+    @Override
     public void reload() {
         Activator.debug("");
         if (editorTracker != null) {
@@ -160,8 +167,4 @@ public class MarkdownView extends ViewPart implements MarkdownListener {
         }
     }
 
-    public static MarkdownView getInstance() {
-        return (MarkdownView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ID);
-    }
-    
 }

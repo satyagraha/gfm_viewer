@@ -177,7 +177,7 @@
       </category>
       <view
             category="code.satyagraha.gfm.viewer"
-            class="code.satyagraha.gfm.viewer.views.MarkdownView"
+            class="code.satyagraha.gfm.viewer.views.impl.MarkdownView"
             icon="icons/notepad.gif"
             id="code.satyagraha.gfm.viewer.views.GfmView"
             name="GFM View">

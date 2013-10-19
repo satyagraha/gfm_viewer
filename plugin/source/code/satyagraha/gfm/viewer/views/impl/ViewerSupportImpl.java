@@ -7,10 +7,10 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.RegistryToggleState;
 
 import code.satyagraha.gfm.di.Component;
-import code.satyagraha.gfm.viewer.views.api.ViewSupport;
+import code.satyagraha.gfm.viewer.views.api.ViewerSupport;
 
 @Component
-public class ViewSupportImpl implements ViewSupport {
+public class ViewerSupportImpl implements ViewerSupport {
 
     @Override
     public boolean isLinked() {

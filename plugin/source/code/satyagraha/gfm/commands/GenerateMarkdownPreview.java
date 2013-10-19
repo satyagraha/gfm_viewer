@@ -10,8 +10,9 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import code.satyagraha.gfm.di.DIManager;
+import code.satyagraha.gfm.ui.api.Scheduler;
 import code.satyagraha.gfm.viewer.plugin.Activator;
-import code.satyagraha.gfm.viewer.views.api.Scheduler;
 
 public class GenerateMarkdownPreview extends AbstractHandler {
 
@@ -19,7 +20,7 @@ public class GenerateMarkdownPreview extends AbstractHandler {
     public Object execute(ExecutionEvent event) throws ExecutionException {
         Activator.debug("");
         
-        Scheduler scheduler = Activator.getDefault().getInjector().getInstance(Scheduler.class);
+        Scheduler scheduler = DIManager.getDefault().getInjector().getInstance(Scheduler.class);
         
         IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getActiveMenuSelection(event);
         for (@SuppressWarnings("rawtypes") Iterator items = selection.iterator(); items.hasNext(); ) {

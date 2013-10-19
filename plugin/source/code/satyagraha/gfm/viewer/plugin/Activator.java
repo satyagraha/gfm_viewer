@@ -1,10 +1,5 @@
 package code.satyagraha.gfm.viewer.plugin;
 
-import static ch.lambdaj.collection.LambdaCollections.with;
-import static code.satyagraha.gfm.di.ComponentMatcher.isComponent;
-import static code.satyagraha.gfm.di.DIUtils.getBundleClasses;
-
-import java.util.Collection;
 import java.util.Date;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Formatter;
@@ -16,7 +11,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import code.satyagraha.gfm.di.Injector;
+import code.satyagraha.gfm.di.DIManager;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -31,9 +26,6 @@ public class Activator extends AbstractUIPlugin {
 
     // The shared instance
     private static Activator plugin;
-
-    // Instance variables
-    private Injector injector;
 
     // Logging utility class
     private static class LogFormatter extends Formatter {
@@ -58,14 +50,12 @@ public class Activator extends AbstractUIPlugin {
      * )
      */
     @Override
-    public void start(BundleContext context) throws Exception {
-        super.start(context);
+    public void start(BundleContext bundleContext) throws Exception {
+        super.start(bundleContext);
         plugin = this;
         debug("");
 
-        Collection<Class<?>> components = with(getBundleClasses(getBundle(), PACKAGE_PREFIX)).retain(isComponent);
-        debug("components: " + components);
-        injector = new Injector(components);
+        DIManager.start(bundleContext, PACKAGE_PREFIX);
 
         Logger logger = Logger.getLogger(PACKAGE_PREFIX);
         Level level = isDebugging() ? Level.FINE : Level.WARNING;
@@ -77,7 +67,7 @@ public class Activator extends AbstractUIPlugin {
         logger.setUseParentHandlers(false);
 
         logger.info("registering logger");
-        injector.addInstance(logger);
+        DIManager.getDefault().getInjector().addInstance(logger);
     }
 
     /*
@@ -93,15 +83,6 @@ public class Activator extends AbstractUIPlugin {
         // gfmConfigRegistration.unregister();
         plugin = null;
         super.stop(context);
-    }
-
-    /**
-     * Returns the associated injector
-     * 
-     * @return the injector
-     */
-    public Injector getInjector() {
-        return injector;
     }
 
     /**
@@ -138,5 +119,5 @@ public class Activator extends AbstractUIPlugin {
             System.out.println(formatted);
         }
     }
-
+    
 }

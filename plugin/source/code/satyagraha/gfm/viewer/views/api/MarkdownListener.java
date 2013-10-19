@@ -1,4 +1,4 @@
-package code.satyagraha.gfm.viewer.views;
+package code.satyagraha.gfm.viewer.views.api;
 
 import java.io.IOException;
 

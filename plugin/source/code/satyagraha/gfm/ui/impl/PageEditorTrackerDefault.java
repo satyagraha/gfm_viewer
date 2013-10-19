@@ -1,21 +1,25 @@
-package code.satyagraha.gfm.viewer.views.impl;
+package code.satyagraha.gfm.ui.impl;
 
 import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartReference;
 
-import code.satyagraha.gfm.viewer.views.api.EditorPartListener;
+import code.satyagraha.gfm.ui.api.EditorPartListener;
+import code.satyagraha.gfm.ui.api.PageEditorTracker;
 
-public class PageEditorTracker implements IPartListener2 {
+public class PageEditorTrackerDefault implements PageEditorTracker {
 
     private final IWorkbenchPage workbenchPage;
     private EditorPartListener listener;
 
-    public PageEditorTracker(IWorkbenchPage workbenchPage) {
+    public PageEditorTrackerDefault(IWorkbenchPage workbenchPage) {
         this.workbenchPage = workbenchPage;
     }
 
+    /* (non-Javadoc)
+     * @see code.satyagraha.gfm.viewer.ui.impl.PageEditorTrackerApi#subscribe(code.satyagraha.gfm.support.impl.EditorPartListener)
+     */
+    @Override
     public void subscribe(EditorPartListener listener) {
         if (listener == null) {
             throw new NullPointerException();
@@ -27,6 +31,10 @@ public class PageEditorTracker implements IPartListener2 {
         }
     }
 
+    /* (non-Javadoc)
+     * @see code.satyagraha.gfm.viewer.ui.impl.PageEditorTrackerApi#unsubscribe(code.satyagraha.gfm.support.impl.EditorPartListener)
+     */
+    @Override
     public void unsubscribe(EditorPartListener listener) {
         if (this.listener != null) {
             if (this.listener != listener) {

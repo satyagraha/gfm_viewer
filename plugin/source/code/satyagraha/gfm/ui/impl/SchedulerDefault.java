@@ -1,10 +1,11 @@
-package code.satyagraha.gfm.viewer.views.impl;
+package code.satyagraha.gfm.ui.impl;
 
 import static org.apache.commons.io.FileUtils.iterateFiles;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -20,17 +21,19 @@ import org.eclipse.swt.widgets.Display;
 
 import code.satyagraha.gfm.di.Component;
 import code.satyagraha.gfm.support.api.Transformer;
-import code.satyagraha.gfm.viewer.plugin.Activator;
-import code.satyagraha.gfm.viewer.views.api.Scheduler;
+import code.satyagraha.gfm.ui.api.Scheduler;
 
 @Component
 public class SchedulerDefault implements Scheduler {
 
     private final Transformer transformer;
+    private final Logger logger;
     private final IOFileFilter markdownFileFilter;
+    private final String pluginId = "unknown"; // TODO
   
-    public SchedulerDefault(Transformer transformer) {
+    public SchedulerDefault(Transformer transformer, Logger logger) {
         this.transformer = transformer;
+        this.logger = logger;
         
         markdownFileFilter = new IOFileFilter() {
 
@@ -58,7 +61,7 @@ public class SchedulerDefault implements Scheduler {
                 try {
                     transformer.transformMarkdownFile(mdFile, htFile);
                 } catch (IOException e) {
-                    status = new Status(Status.ERROR, Activator.PLUGIN_ID, jobName, e);
+                    status = new Status(Status.ERROR, pluginId, jobName, e);
                 }
                 return status;
             }
@@ -93,13 +96,13 @@ public class SchedulerDefault implements Scheduler {
 
     @Override
     public void generateIFile(IFile iFile) {
-        Activator.debug("iFile: " + iFile);
+        logger.fine("iFile: " + iFile);
         generateFile(iFile.getRawLocation().toFile());
     }
 
     @Override
     public void generateIFolder(IFolder iFolder) {
-        Activator.debug("iFolder: " + iFolder);
+        logger.fine("iFolder: " + iFolder);
         File folder = iFolder.getRawLocation().toFile();
         for (Iterator<File> files = iterateFiles(folder, markdownFileFilter, TrueFileFilter.INSTANCE); files.hasNext();) {
             File file = files.next();
@@ -108,7 +111,7 @@ public class SchedulerDefault implements Scheduler {
     }
 
     private void generateFile(File mdFile) {
-        Activator.debug("mdFile: " + mdFile);
+        logger.fine("mdFile: " + mdFile);
         scheduleTransformation(mdFile, null);
     }
     

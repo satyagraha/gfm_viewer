@@ -1,4 +1,4 @@
-package code.satyagraha.gfm.viewer.views.api;
+package code.satyagraha.gfm.ui.api;
 
 import org.eclipse.ui.IEditorPart;
 

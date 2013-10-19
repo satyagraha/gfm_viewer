@@ -1,4 +1,4 @@
-package code.satyagraha.gfm.viewer.views;
+package code.satyagraha.gfm.viewer.views.impl;
 
 import java.io.IOException;
 
@@ -9,9 +9,10 @@ import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.ide.ResourceUtil;
 
 import code.satyagraha.gfm.support.api.FileNature;
+import code.satyagraha.gfm.ui.api.EditorPartListener;
+import code.satyagraha.gfm.ui.api.PageEditorTracker;
 import code.satyagraha.gfm.viewer.plugin.Activator;
-import code.satyagraha.gfm.viewer.views.api.EditorPartListener;
-import code.satyagraha.gfm.viewer.views.impl.PageEditorTracker;
+import code.satyagraha.gfm.viewer.views.api.MarkdownListener;
 
 public class MarkdownEditorTracker implements EditorPartListener {
 
