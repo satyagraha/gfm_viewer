@@ -153,15 +153,18 @@ otherwise these plugins may be hard to find
 Then you can proceed as follows:
 * In the PDE Eclipse started with a new workspace, it is advisable to use the _Git Repositories_ view
 to clone the GitHub repo by pasting the GitHub URL as this will avoid line termination issues later
-* Then  perform a simple (not Maven) import of all six directories
-below `gfm_viewer` as existing Eclipse projects, namely `ext-deps`, `feature`, `p2-repo`, `plugin`,
-`tests` and `update-site` 
+
+* Then switch to the _Plug-in Development_ perspective, then activate the context menu in the _Package Explorer_ panel
+and select entry _Import_ -> _Maven_ -> _Existing Maven Projects_ and navigate to the top-level project clone folder
+* Click through and accept all the defaults to complete the import process
 * If necessary (e.g. before EGit 3.0), via the context menu on the new projects, select _Team_ -> _Share Project..._ -> _Git_
 and click through accepting the defaults to connect the projects to version control
-* Via the context menu on projects `ext-deps` and project base _only_, select _Configure_ -> _Convert to Maven Project_
-* Create an _Eclipse Maven_ run configuration for the _GFM Viewer ext-deps_ project with
+* Create an _Eclipse Maven_ run configuration for the _GFM Viewer parent_ project with
 goals `clean package` and workspace refresh, and then run it 
-* Verify the last step created a jar file around 4Mb in size in the `lib` directory of project _GFM Viewer plugin_
+* Verify the last step created a jar file around 4Mb in size in the `lib` directory of project _GFM Viewer plugin_,
+although there will still be build errors at this point
+* Expand the _GFM Viewer plugin_ child project and open its `plugin.xml` file, select the _Overview_ tab and click the
+_Update the classpath settings_ link; the projects should now build successfully
 * Create an _Eclipse Application_ run configuration for the _GFM Viewer plugin_ project, and then run it
 * If the child Eclipse instance has memory problems, consider adding `-XX:MaxPermSize=128m` to the launch
 configuration JVM arguments
