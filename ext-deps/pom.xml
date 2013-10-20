@@ -4,11 +4,15 @@
 	<parent>
 		<groupId>code.satyagraha.gfm.viewer</groupId>
 		<artifactId>code.satyagraha.gfm.viewer.parent</artifactId>
-		<version>1.5.0-SNAPSHOT</version>
+		<version>1.5.0</version>
 	</parent>
 
 	<artifactId>code.satyagraha.gfm.viewer.ext-deps</artifactId>
 	<packaging>bundle</packaging>
+
+	<properties>
+		<plugin.lib.dir>${project.build.directory}/../../plugin/lib</plugin.lib.dir>
+	</properties>
 
 	<repositories>
 		<repository>
@@ -122,6 +126,33 @@
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.4.1</version>
+				<executions>
+					<execution>
+						<id>clean-plugin-lib-dir</id>
+						<phase>package</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+						<configuration>
+							<excludeDefaultDirectories>true</excludeDefaultDirectories>
+							<filesets>
+								<fileset>
+									<directory>${plugin.lib.dir}</directory>
+									<includes>
+										<include>*</include>
+									</includes>
+									<followSymlinks>false</followSymlinks>
+								</fileset>
+							</filesets>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.7</version>
 				<executions>
@@ -140,7 +171,7 @@
 									<type>${project.packaging}</type>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>${project.build.directory}/../../plugin/lib</outputDirectory>
+							<outputDirectory>${plugin.lib.dir}</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>

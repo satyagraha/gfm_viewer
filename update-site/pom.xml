@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>code.satyagraha.gfm.viewer</groupId>
 		<artifactId>code.satyagraha.gfm.viewer.parent</artifactId>
-		<version>1.5.0-SNAPSHOT</version>
+		<version>1.5.0</version>
 	</parent>
 
 	<artifactId>code.satyagraha.gfm.viewer.update-site</artifactId>
@@ -53,7 +53,7 @@
 				<bintray.user.id>satyagraha</bintray.user.id>
 				<bintray.repository>generic</bintray.repository>
 				<bintray.package>gfm-viewer</bintray.package>
-				<bintray.version>1.4.0</bintray.version>
+				<bintray.version>${project.version}</bintray.version>
 				<bintray.upload.file>site-assembly-${project.version}.zip</bintray.upload.file>
 			</properties>
 			<build>
