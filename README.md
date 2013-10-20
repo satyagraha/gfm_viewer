@@ -190,9 +190,12 @@ site as an alternative to the other one.
 
 In order to update version:
 
-	mvn -Dtycho.mode=maven org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=1.5.0-SNAPSHOT
+	mvn -Dtycho.mode=maven org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=1.5.0
 	
-The repository has Travis CI configured (see buttons about), so every commit should be built and result seen.	
+Make sure to do a search through all files to find any occurrences of the old version, as they will be present
+in some Eclipse plugin manifest and build properties files.
+
+The repository has Travis CI configured (see buttons about), so every commit will be built and the result seen.	
 
 ## To Do
 
