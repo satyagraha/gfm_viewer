@@ -50,10 +50,15 @@ If non-ASCII characters are used in the markdown file, the current implementatio
 [UTF-8](http://en.wikipedia.org/wiki/UTF-8) character encoding, see also
 [here](http://www.martinahrer.at/2007/06/03/eclipse-encoding-settings/).
 
-The plugin uses Eclipse default browser, e.g. Internet Explorer on Windows; if you use
+The plugin uses Eclipse's default browser, e.g. Internet Explorer on Windows; if you use
 Linux, you will need to set up Mozilla Firefox as follows:
 * http://www.eclipse.org/swt/faq.php#browserlinuxrcp
 * http://www.eclipse.org/swt/faq.php#browserlinux
+
+If you want to view two (or more) markdown files simultaneously, simply open a new Eclipse window via menu
+_Window_ -> _New Window_ and there open another instance of the viewer: then any markdown files edited
+in that window will display in that window's viewer, independently of the original window and its 
+editors and viewer.
 
 ## Configuration
 
