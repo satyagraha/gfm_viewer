@@ -64,6 +64,11 @@ public class ConfigDefault implements Config {
     public boolean useTempDir() {
         return false;
     }
+
+    @Override
+    public boolean useEclipseConsole() {
+        return false;
+    }
     
     private String getResourceAsString(String resourcePath) throws IOException {
         InputStream templateStream = ConfigDefault.class.getResourceAsStream(resourcePath);

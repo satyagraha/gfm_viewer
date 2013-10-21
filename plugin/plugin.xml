@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="code.satyagraha.gfm.viewer.preferences.PreferenceInitializer">
+            class="code.satyagraha.gfm.viewer.plugin.preferences.PreferenceInitializer">
       </initializer>
    </extension>
 
@@ -12,7 +12,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             name="GFM Viewer"
-            class="code.satyagraha.gfm.viewer.preferences.PreferencePage"
+            class="code.satyagraha.gfm.viewer.plugin.preferences.PreferencePage"
             id="code.satyagraha.gfm.viewer.preferences.PreferencePage">
       </page>
    </extension>

@@ -1,16 +1,17 @@
-package code.satyagraha.gfm.viewer.preferences;
+package code.satyagraha.gfm.viewer.plugin.preferences;
 
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_API_URL;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_CSS_URL_1;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_CSS_URL_2;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_CSS_URL_3;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_JS_URL_1;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_JS_URL_2;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_JS_URL_3;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_PASSWORD;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_TEMPLATE;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USERNAME;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USE_TEMP_DIR;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_API_URL;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_CSS_URL_1;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_CSS_URL_2;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_CSS_URL_3;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_JS_URL_1;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_JS_URL_2;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_JS_URL_3;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_PASSWORD;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_TEMPLATE;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USERNAME;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USE_ECLIPSE_CONSOLE;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USE_TEMP_DIR;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -38,7 +39,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	@Override
     public void initializeDefaultPreferences() {
-	    Activator.debug("");
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setDefault(P_USE_TEMP_DIR, false);
 		store.setDefault(P_API_URL, getConfigDefault().getApiUrl());
@@ -51,6 +51,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(P_JS_URL_1, "");
 		store.setDefault(P_JS_URL_2, "");
 		store.setDefault(P_JS_URL_3, "");
+		store.setDefault(P_USE_ECLIPSE_CONSOLE, false);
 	}
 
 }

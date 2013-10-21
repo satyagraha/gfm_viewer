@@ -76,6 +76,9 @@ limit raised, see [here](http://developer.github.com/v3/#rate-limiting) for back
 * _Template File_: an alternate HTML template file to the default may be provided
 * _CSS URL 1-3_: an alternate CSS presentation to the default may be provided
 * _JS URL 1-3_: an alternate JS implementation to the default may be provided
+* _Use Eclipse Console_: shows debugging output in Console view
+
+Some preference changes will require Eclipse to be restarted to take effect.
 
 Regarding the temporary formatted HTML files, when stored in the original markdown file directory note:
 

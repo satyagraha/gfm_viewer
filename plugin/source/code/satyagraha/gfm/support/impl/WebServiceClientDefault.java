@@ -21,8 +21,9 @@ import com.sun.jersey.core.impl.provider.entity.StringProvider;
 @Component
 public class WebServiceClientDefault implements WebServiceClient {
 
+    private static Logger LOGGER = Logger.getLogger(WebServiceClientDefault.class.getPackage().getName());
+
     private final Config config;
-    private final Logger logger;
     private final ClientConfig clientConfig;
 
     @XmlRootElement
@@ -37,10 +38,9 @@ public class WebServiceClientDefault implements WebServiceClient {
         }
     }
 
-    public WebServiceClientDefault(Config config, Logger logger) {
+    public WebServiceClientDefault(Config config) {
         this.config = config;
-        this.logger = logger;
-        logger.info("initializing");
+        LOGGER.fine("");
         
         clientConfig = new DefaultClientConfig();
         clientConfig.getProperties().put(ClientConfig.PROPERTY_FOLLOW_REDIRECTS, true);
@@ -57,7 +57,7 @@ public class WebServiceClientDefault implements WebServiceClient {
             client.removeFilter(null);
             client.addFilter(new HTTPBasicAuthFilter(username, password));
         }
-        client.addFilter(new LoggingFilter(logger));
+        client.addFilter(new LoggingFilter(LOGGER));
         
         WebResource webResource = client.resource(config.getApiUrl());
 

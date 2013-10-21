@@ -13,7 +13,9 @@ import code.satyagraha.gfm.support.impl.TransformerDefault;
 import code.satyagraha.gfm.support.impl.WebServiceClientDefault;
 
 public class TrackFile {
-    
+
+    private static Logger LOGGER = Logger.getLogger(TrackFile.class.getPackage().getName());
+
     private static class ConfigTrackFile extends ConfigDefault {
         
         private String username;
@@ -39,9 +41,8 @@ public class TrackFile {
     private Logger logger;
 
     public TrackFile(Config config) throws IOException {
-        logger = Logger.getLogger(TrackFile.class.getCanonicalName());
-        WebServiceClient webServiceClient = new WebServiceClientDefault(config, logger);
-        transformer = new TransformerDefault(config, logger, webServiceClient);
+        WebServiceClient webServiceClient = new WebServiceClientDefault(config);
+        transformer = new TransformerDefault(config, webServiceClient);
     }
     
     private void manage(String mdFilepath) throws IOException {
@@ -64,6 +65,7 @@ public class TrackFile {
     }
 
     public static void main(String[] args) throws IOException {
+        LOGGER.info("commencing execution");
         ConfigTrackFile config = new ConfigTrackFile(args[0], args[1]);
         TrackFile instance = new TrackFile(config);
         instance.manage(args[2]);

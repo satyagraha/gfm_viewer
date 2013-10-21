@@ -1,6 +1,7 @@
 package code.satyagraha.gfm.viewer.views.impl;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.IEditorInput;
@@ -11,12 +12,12 @@ import org.eclipse.ui.ide.ResourceUtil;
 import code.satyagraha.gfm.support.api.FileNature;
 import code.satyagraha.gfm.ui.api.EditorPartListener;
 import code.satyagraha.gfm.ui.api.PageEditorTracker;
-import code.satyagraha.gfm.viewer.plugin.Activator;
 import code.satyagraha.gfm.viewer.views.api.MarkdownListener;
 
 public class MarkdownEditorTracker implements EditorPartListener {
 
     private static int instances = 0;
+    private static Logger LOGGER = Logger.getLogger(MarkdownEditorTracker.class.getPackage().getName());
 
     private final int instance;
     private MarkdownListener markdownListener;
@@ -32,17 +33,17 @@ public class MarkdownEditorTracker implements EditorPartListener {
         this.fileNature = fileNature;
         this.pageEditorTracker = pageEditorTracker;
         notificationsEnabled = true;
-        Activator.debug("instance: " + instance);
+        LOGGER.fine("instance: " + instance);
         pageEditorTracker.subscribe(this);
     }
 
     public void setNotificationsEnabled(boolean notificationsEnabled) {
-        Activator.debug("notificationsEnabled: " + notificationsEnabled);
+        LOGGER.fine("notificationsEnabled: " + notificationsEnabled);
         this.notificationsEnabled = notificationsEnabled;
     }
 
     public void notifyMarkdownListenerAlways() {
-        Activator.debug("");
+        LOGGER.fine("");
         if (markdownListener != null) {
             try {
                 markdownListener.showIFile(markupFile);
@@ -53,7 +54,7 @@ public class MarkdownEditorTracker implements EditorPartListener {
     }
 
     public void close() {
-        Activator.debug("");
+        LOGGER.fine("");
         pageEditorTracker.unsubscribe(this);
         pageEditorTracker = null;
         markdownListener = null;
@@ -61,18 +62,18 @@ public class MarkdownEditorTracker implements EditorPartListener {
 
     @Override
     public void editorShown(final IEditorPart editorPart) {
-        Activator.debug("instance: " + instance);
+        LOGGER.fine("instance: " + instance);
         IEditorInput editorInput = editorPart.getEditorInput();
         final IFile editorFile = ResourceUtil.getFile(editorInput);
         if (fileNature.isTrackableFile(editorFile) && isNewFile(editorFile)) {
-            Activator.debug("opening markdown editor found; instance: " + instance);
+            LOGGER.fine("opening markdown editor found; instance: " + instance);
             markupFile = editorFile;
             notifyMarkdownListenerIfEnabled();
             editorPart.addPropertyListener(new IPropertyListener() {
 
                 @Override
                 public void propertyChanged(Object source, int propId) {
-                    Activator.debug(String.format("%s => %d", source, propId));
+                    LOGGER.fine(String.format("%s => %d", source, propId));
                     if (propId == IEditorPart.PROP_DIRTY && !editorPart.isDirty()) {
                         notifyMarkdownListenerIfEnabled();
                     }
@@ -83,11 +84,11 @@ public class MarkdownEditorTracker implements EditorPartListener {
 
     @Override
     public void editorClosed(final IEditorPart editorPart) {
-        Activator.debug("");
+        LOGGER.fine("");
         IEditorInput editorInput = editorPart.getEditorInput();
         final IFile editorFile = ResourceUtil.getFile(editorInput);
         if (fileNature.isTrackableFile(editorFile) && isSameFile(editorFile)) {
-            Activator.debug("closing markdown editor found");
+            LOGGER.fine("closing markdown editor found");
             markupFile = null;
             notifyMarkdownListenerIfEnabled();
         }
@@ -102,7 +103,7 @@ public class MarkdownEditorTracker implements EditorPartListener {
     }
 
     private void notifyMarkdownListenerIfEnabled() {
-        Activator.debug("");
+        LOGGER.fine("");
         if (notificationsEnabled) {
             notifyMarkdownListenerAlways();
         }

@@ -1,16 +1,17 @@
-package code.satyagraha.gfm.viewer.preferences;
+package code.satyagraha.gfm.viewer.plugin.preferences;
 
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_API_URL;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_CSS_URL_1;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_CSS_URL_2;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_CSS_URL_3;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_JS_URL_1;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_JS_URL_2;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_JS_URL_3;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_PASSWORD;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_TEMPLATE;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USERNAME;
-import static code.satyagraha.gfm.viewer.preferences.PreferenceConstants.P_USE_TEMP_DIR;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_API_URL;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_CSS_URL_1;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_CSS_URL_2;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_CSS_URL_3;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_JS_URL_1;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_JS_URL_2;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_JS_URL_3;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_PASSWORD;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_TEMPLATE;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USERNAME;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USE_ECLIPSE_CONSOLE;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USE_TEMP_DIR;
 
 import java.io.File;
 
@@ -73,6 +74,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
         addField(new StringFieldEditor(P_JS_URL_1, "JS URL 1:", parent));
         addField(new StringFieldEditor(P_JS_URL_2, "JS URL 2:", parent));
         addField(new StringFieldEditor(P_JS_URL_3, "JS URL 3:", parent));
+        
+        addField(new BooleanFieldEditor(P_USE_ECLIPSE_CONSOLE, "Use Eclipse Console:", parent));
     }
 
     /*

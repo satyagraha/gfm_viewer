@@ -34,19 +34,18 @@ import code.satyagraha.gfm.support.api.WebServiceClient;
 @Component
 public class TransformerDefault implements Transformer {
 
+    private static Logger LOGGER = Logger.getLogger(TransformerDefault.class.getPackage().getName());
+    
     private static final Charset UTF_8 = Charset.forName(CharEncoding.UTF_8);
     private static List<String> MARKDOWN_EXTENSIONS = unmodifiableList(asList("md", "markdown"));
 
-
     private final Config config;
-    private final Logger logger;
     private final WebServiceClient webServiceClient;
     
-    public TransformerDefault(Config config, Logger logger, WebServiceClient webServiceClient) {
+    public TransformerDefault(Config config, WebServiceClient webServiceClient) {
         this.config = config;
-        this.logger = logger;
         this.webServiceClient = webServiceClient;
-        this.logger.info("initializing");
+        LOGGER.fine("");
     }
     
     @Override

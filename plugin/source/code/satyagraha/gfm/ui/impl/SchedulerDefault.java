@@ -26,14 +26,14 @@ import code.satyagraha.gfm.ui.api.Scheduler;
 @Component
 public class SchedulerDefault implements Scheduler {
 
+    private static Logger LOGGER = Logger.getLogger(SchedulerDefault.class.getPackage().getName());
+
     private final Transformer transformer;
-    private final Logger logger;
     private final IOFileFilter markdownFileFilter;
     private final String pluginId = "unknown"; // TODO
   
-    public SchedulerDefault(Transformer transformer, Logger logger) {
+    public SchedulerDefault(Transformer transformer) {
         this.transformer = transformer;
-        this.logger = logger;
         
         markdownFileFilter = new IOFileFilter() {
 
@@ -96,13 +96,13 @@ public class SchedulerDefault implements Scheduler {
 
     @Override
     public void generateIFile(IFile iFile) {
-        logger.fine("iFile: " + iFile);
+        LOGGER.fine("iFile: " + iFile);
         generateFile(iFile.getRawLocation().toFile());
     }
 
     @Override
     public void generateIFolder(IFolder iFolder) {
-        logger.fine("iFolder: " + iFolder);
+        LOGGER.fine("iFolder: " + iFolder);
         File folder = iFolder.getRawLocation().toFile();
         for (Iterator<File> files = iterateFiles(folder, markdownFileFilter, TrueFileFilter.INSTANCE); files.hasNext();) {
             File file = files.next();
@@ -111,7 +111,7 @@ public class SchedulerDefault implements Scheduler {
     }
 
     private void generateFile(File mdFile) {
-        logger.fine("mdFile: " + mdFile);
+        LOGGER.fine("mdFile: " + mdFile);
         scheduleTransformation(mdFile, null);
     }
     

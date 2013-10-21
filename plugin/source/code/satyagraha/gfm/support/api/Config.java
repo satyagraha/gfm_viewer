@@ -22,5 +22,7 @@ public interface Config {
     public String getJsText() throws IOException;
     
     public List<String> getJsUris();
+
+    public boolean useEclipseConsole();
     
 }

@@ -9,7 +9,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,9 +22,6 @@ import code.satyagraha.gfm.support.impl.TransformerDefault;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TransformerTest {
-
-    @Mock
-    private Logger logger;
 
     @Mock
     private Config config;

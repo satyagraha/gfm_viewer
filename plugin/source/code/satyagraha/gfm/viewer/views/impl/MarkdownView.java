@@ -1,6 +1,8 @@
 package code.satyagraha.gfm.viewer.views.impl;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -18,10 +20,9 @@ import code.satyagraha.gfm.ui.api.PageEditorTracker;
 import code.satyagraha.gfm.ui.api.Scheduler;
 import code.satyagraha.gfm.ui.api.Scheduler.Callback;
 import code.satyagraha.gfm.ui.impl.PageEditorTrackerDefault;
-import code.satyagraha.gfm.viewer.plugin.Activator;
 import code.satyagraha.gfm.viewer.views.api.MarkdownListener;
-import code.satyagraha.gfm.viewer.views.api.ViewerSupport;
 import code.satyagraha.gfm.viewer.views.api.ViewerActions;
+import code.satyagraha.gfm.viewer.views.api.ViewerSupport;
 
 public class MarkdownView extends ViewPart implements MarkdownListener, ViewerActions {
 
@@ -31,6 +32,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
     public static final String ID = "code.satyagraha.gfm.viewer.views.GfmView";
 
     private static int instances = 0;
+    private static Logger LOGGER = Logger.getLogger(MarkdownView.class.getPackage().getName());
 
     private final int instance;
     private MarkdownBrowser browser;
@@ -39,15 +41,17 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
     private ViewerSupport viewSupport;
     private MarkdownEditorTracker editorTracker;
 
+
     public MarkdownView() {
         instances++;
         instance = instances;
-        Activator.debug("instance: " + instance);
+//        logger = DIManager.getDefault().getInjector().getInstance(Logger.class);
+        LOGGER.fine("instance: " + instance);
     }
     
     @Override
     public void createPartControl(Composite parent) {
-        Activator.debug("");
+        LOGGER.fine("");
 
         browser = new MarkdownBrowser(parent) {
 
@@ -87,12 +91,12 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
 
     @Override
     public void setFocus() {
-        Activator.debug("");
+        LOGGER.fine("");
     }
 
     @Override
     public void dispose() {
-        Activator.debug("");
+        LOGGER.fine("");
         editorTracker.close();
 //        editorTracker = null;
 //        transformer = null;
@@ -104,10 +108,10 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
     @Override
     public void showIFile(IFile iFile) {
         if (iFile != null) {
-            Activator.debug("instance: " + instance + " " + iFile.getFullPath().toString());
+            LOGGER.fine("instance: " + instance + " " + iFile.getFullPath().toString());
             showFile(iFile.getRawLocation().toFile());
         } else {
-            Activator.debug("instance: " + instance + " (null)");
+            LOGGER.fine("instance: " + instance + " (null)");
         }
     }
 
@@ -130,14 +134,14 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
             try {
                 htIFile.refreshLocal(IResource.DEPTH_ZERO, null);
             } catch (CoreException e) {
-                Activator.debug(e.toString());
+                LOGGER.log(Level.WARNING, "unable to locate file", e);
             }
         }
     }
     
     @Override
     public void goForward() {
-        Activator.debug("");
+        LOGGER.fine("");
         if (browser != null) {
             browser.forward();
         }
@@ -145,7 +149,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
 
     @Override
     public void goBackward() {
-        Activator.debug("");
+        LOGGER.fine("");
         if (browser != null) {
             browser.back();
         }
@@ -153,7 +157,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
 
     @Override
     public void setLinkedState(boolean state) {
-        Activator.debug("state: " + state);
+        LOGGER.fine("state: " + state);
         if (editorTracker != null) {
             editorTracker.setNotificationsEnabled(state);
         }
@@ -161,7 +165,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
 
     @Override
     public void reload() {
-        Activator.debug("");
+        LOGGER.fine("");
         if (editorTracker != null) {
             editorTracker.notifyMarkdownListenerAlways();
         }

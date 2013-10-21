@@ -1,6 +1,7 @@
 package code.satyagraha.gfm.viewer.commands;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -12,15 +13,16 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import code.satyagraha.gfm.ui.impl.ViewLocator;
-import code.satyagraha.gfm.viewer.plugin.Activator;
 import code.satyagraha.gfm.viewer.views.api.MarkdownListener;
 import code.satyagraha.gfm.viewer.views.impl.MarkdownView;
 
 public class ShowMarkdownFile extends AbstractHandler {
 
+    private static Logger LOGGER = Logger.getLogger(ShowMarkdownFile.class.getPackage().getName());
+
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
-        Activator.debug("");
+        LOGGER.fine("");
         
         IStructuredSelection structuredSelection = (IStructuredSelection) HandlerUtil.getActiveMenuSelection(event);
         Object firstElement = structuredSelection.getFirstElement();
@@ -38,7 +40,7 @@ public class ShowMarkdownFile extends AbstractHandler {
                 throw new ExecutionException("could not show file", e);
             }
         } else {
-            Activator.debug("unexpected selection: " + firstElement);
+            LOGGER.fine("unexpected selection: " + firstElement);
         }
         return null;
     }
