@@ -25,4 +25,8 @@ public interface Config {
 
     public boolean useEclipseConsole();
     
+    public interface Changed {
+        
+    }
+    
 }

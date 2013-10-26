@@ -1,5 +1,7 @@
 package code.satyagraha.gfm.ui.impl;
 
+import java.util.logging.Logger;
+
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartReference;
@@ -9,11 +11,14 @@ import code.satyagraha.gfm.ui.api.PageEditorTracker;
 
 public class PageEditorTrackerDefault implements PageEditorTracker {
 
+    private static Logger LOGGER = Logger.getLogger(PageEditorTrackerDefault.class.getPackage().getName());
+
     private final IWorkbenchPage workbenchPage;
     private EditorPartListener listener;
 
     public PageEditorTrackerDefault(IWorkbenchPage workbenchPage) {
         this.workbenchPage = workbenchPage;
+        LOGGER.fine("");
     }
 
     /* (non-Javadoc)
@@ -21,6 +26,7 @@ public class PageEditorTrackerDefault implements PageEditorTracker {
      */
     @Override
     public void subscribe(EditorPartListener listener) {
+        LOGGER.fine("listener: " + listener);
         if (listener == null) {
             throw new NullPointerException();
         } else if (this.listener != null) {
@@ -36,6 +42,7 @@ public class PageEditorTrackerDefault implements PageEditorTracker {
      */
     @Override
     public void unsubscribe(EditorPartListener listener) {
+        LOGGER.fine("listener: " + listener);
         if (this.listener != null) {
             if (this.listener != listener) {
                 throw new IllegalStateException();
@@ -48,41 +55,49 @@ public class PageEditorTrackerDefault implements PageEditorTracker {
 
     @Override
     public void partActivated(IWorkbenchPartReference partRef) {
+        LOGGER.fine("");
         checkShown(partRef);
     }
 
     @Override
     public void partBroughtToTop(IWorkbenchPartReference partRef) {
+        LOGGER.fine("");
         checkShown(partRef);
     }
 
     @Override
     public void partClosed(IWorkbenchPartReference partRef) {
+        LOGGER.fine("");
         checkClosed(partRef);
     }
 
     @Override
     public void partDeactivated(IWorkbenchPartReference partRef) {
+        LOGGER.fine("");
         // no-op
     }
 
     @Override
     public void partHidden(IWorkbenchPartReference partRef) {
+        LOGGER.fine("");
         // no-op
     }
 
     @Override
     public void partInputChanged(IWorkbenchPartReference partRef) {
+        LOGGER.fine("");
         // no-op
     }
 
     @Override
     public void partOpened(IWorkbenchPartReference partRef) {
+        LOGGER.fine("");
         checkShown(partRef);
     }
 
     @Override
     public void partVisible(IWorkbenchPartReference partRef) {
+        LOGGER.fine("");
         checkShown(partRef);
     }
 

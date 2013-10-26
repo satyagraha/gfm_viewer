@@ -79,5 +79,9 @@ public class ConfigDefault implements Config {
         IOUtils.closeQuietly(templateStream);
         return htmlTemplateText;
     }
+
+    public static class ConfigChangedDefault implements Config.Changed {
+        
+    }
     
 }

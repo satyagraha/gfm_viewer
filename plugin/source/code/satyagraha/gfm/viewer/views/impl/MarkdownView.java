@@ -45,7 +45,6 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
     public MarkdownView() {
         instances++;
         instance = instances;
-//        logger = DIManager.getDefault().getInjector().getInstance(Logger.class);
         LOGGER.fine("instance: " + instance);
     }
     
@@ -65,7 +64,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
             @Override
             public void completed(ProgressEvent event) {
                 super.completed(event);
-                showBusy(false);
+                MarkdownView.this.completed(event);
             }
         };
 
@@ -116,7 +115,6 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
     }
 
     protected void showFile(File mdFile) {
-        showBusy(true);
         scheduler.scheduleTransformation(mdFile, new Callback<File>() {
 
             @Override
@@ -171,4 +169,20 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
         }
     }
 
+    private void completed(ProgressEvent event) {
+        LOGGER.fine("");
+//        Control focusControl = Display.getDefault().getFocusControl();
+//        focusControl.setRedraw(true);
+//        focusControl.setFocus();
+//        focusControl.redraw();
+//        focusControl.setCursor(focusControl.getCursor());
+//        Composite parent = focusControl.getParent();  
+//        while (parent != null && parent is not what I want)  
+//        {  
+//            parent = parent.getParent();  
+//        }
+//        parent.getParent().setFocus();
+        
+    }
+    
 }

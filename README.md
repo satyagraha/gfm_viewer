@@ -16,7 +16,7 @@ It is also new way to create Eclipse plugin help contents.
 Check project sources and developer instructions at GitHub
 <https://github.com/satyagraha/gfm_viewer> .
 
-## Usage
+## Usage 
 
 **Note: Usage & Configuration were copied into built-in Help. When changing please delete here
  and add links into `plugin/src/site/markdown`**
@@ -77,8 +77,6 @@ limit raised, see [here](http://developer.github.com/v3/#rate-limiting) for back
 * _CSS URL 1-3_: an alternate CSS presentation to the default may be provided
 * _JS URL 1-3_: an alternate JS implementation to the default may be provided
 * _Use Eclipse Console_: shows debugging output in Console view
-
-Some preference changes will require Eclipse to be restarted to take effect.
 
 Regarding the temporary formatted HTML files, when stored in the original markdown file directory note:
 
@@ -215,10 +213,7 @@ Areas possibly meriting further attention include:
 * It appears that GitHub may use some kind of dynamic CSS generation: the consequence is that the coverage
 provided by this plugin's simple static CSS may well not include some important entries (simply because they
 were not apparent on the test content used in development)
-* The `tests` module provides a first cut set of BDD tests; further coverage is desirable,
-however this would appear to require the
-[dependency injection facilities available in Eclipse 4](http://wiki.eclipse.org/Eclipse4/RCP/Dependency_Injection)
-and mandating that version would be premature at present 
+* The `tests` module provides a first cut set of BDD tests; further coverage is desirable.
 
 ## Markdown Editors
 
@@ -232,8 +227,11 @@ Eclipse Public License 1.0
 ## Acknowledgements
 
 * Thanks to [Paul Verest](https://github.com/PaulVI) for sustained input into this project
+* Thanks to [Olivier Laviale](https://github.com/olvlvl) for CSS contributions
 * The [Picocontainer](http://picocontainer.com/) dependency injection framework works well inside
 the Eclipse 3.x environment, and makes object management far easier than otherwise
+* The [EventBus](http://eventbus.org/) library provides a neat loosely coupled publish/subscribe
+framework
 * The [ObjectAid](http://www.objectaid.com/) Eclipse plugin allows one easily to create UML class 
 diagrams as an aid to understanding the relationships between the entities
 * The [ispace](http://www.stribor.de/) Eclipse plugin creates a dependency graph of packages and
@@ -241,7 +239,7 @@ classes in a project, highlighting circular dependencies which typically indicat
 
 ## History
 
-* 1.5.DEV - Help page how to add Help to an Eclipse plugin
+* 1.5.0 - Help page how to add Help to an Eclipse plugin, console logging
 * 1.4.0 - hierarchical project structure, dependency injection, built-in Help, fix NPE when changing perspective
 * 1.3.0 - filtered links, batch mode, and bintray update site
 * 1.2.1 - fix update site link
