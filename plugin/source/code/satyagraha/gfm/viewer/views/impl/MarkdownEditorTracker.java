@@ -64,7 +64,7 @@ public class MarkdownEditorTracker implements EditorPartListener {
     public void editorShown(final IEditorPart editorPart) {
         LOGGER.fine("instance: " + instance);
         IEditorInput editorInput = editorPart.getEditorInput();
-        final IFile editorFile = ResourceUtil.getFile(editorInput);
+        IFile editorFile = ResourceUtil.getFile(editorInput);
         if (fileNature.isTrackableFile(editorFile) && isNewFile(editorFile)) {
             LOGGER.fine("opening markdown editor found; instance: " + instance);
             markupFile = editorFile;
@@ -86,7 +86,7 @@ public class MarkdownEditorTracker implements EditorPartListener {
     public void editorClosed(final IEditorPart editorPart) {
         LOGGER.fine("");
         IEditorInput editorInput = editorPart.getEditorInput();
-        final IFile editorFile = ResourceUtil.getFile(editorInput);
+        IFile editorFile = ResourceUtil.getFile(editorInput);
         if (fileNature.isTrackableFile(editorFile) && isSameFile(editorFile)) {
             LOGGER.fine("closing markdown editor found");
             markupFile = null;

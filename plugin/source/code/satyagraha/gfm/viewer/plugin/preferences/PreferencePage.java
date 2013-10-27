@@ -53,7 +53,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
     public void createFieldEditors() {
         Composite parent = getFieldEditorParent();
         
-        addField(new BooleanFieldEditor(P_USE_TEMP_DIR, "Use temp dir:", parent));
+        addField(new BooleanFieldEditor(P_USE_TEMP_DIR, "Use temp dir", parent));
         
         addField(new StringFieldEditor(P_API_URL, "API URL:", parent));
         
@@ -75,7 +75,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
         addField(new StringFieldEditor(P_JS_URL_2, "JS URL 2:", parent));
         addField(new StringFieldEditor(P_JS_URL_3, "JS URL 3:", parent));
         
-        addField(new BooleanFieldEditor(P_USE_ECLIPSE_CONSOLE, "Use Eclipse Console:", parent));
+        addField(new BooleanFieldEditor(P_USE_ECLIPSE_CONSOLE, "Use Eclipse Console", parent));
     }
 
     /*

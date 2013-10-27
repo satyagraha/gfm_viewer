@@ -9,9 +9,14 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.browser.ProgressEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 
 import code.satyagraha.gfm.di.DIManager;
 import code.satyagraha.gfm.support.api.FileNature;
@@ -41,13 +46,12 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
     private ViewerSupport viewSupport;
     private MarkdownEditorTracker editorTracker;
 
-
     public MarkdownView() {
         instances++;
         instance = instances;
         LOGGER.fine("instance: " + instance);
     }
-    
+
     @Override
     public void createPartControl(Composite parent) {
         LOGGER.fine("");
@@ -69,9 +73,9 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
         };
 
         transformer = DIManager.getDefault().getInjector().getInstance(Transformer.class);
-        
+
         scheduler = DIManager.getDefault().getInjector().getInstance(Scheduler.class);
-        
+
         viewSupport = DIManager.getDefault().getInjector().getInstance(ViewerSupport.class);
 
         FileNature markdownFileNature = new FileNature() {
@@ -97,10 +101,10 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
     public void dispose() {
         LOGGER.fine("");
         editorTracker.close();
-//        editorTracker = null;
-//        transformer = null;
-//        browser.dispose();
-//        browser = null;
+        // editorTracker = null;
+        // transformer = null;
+        // browser.dispose();
+        // browser = null;
         super.dispose();
     }
 
@@ -136,7 +140,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
             }
         }
     }
-    
+
     @Override
     public void goForward() {
         LOGGER.fine("");
@@ -171,18 +175,16 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
 
     private void completed(ProgressEvent event) {
         LOGGER.fine("");
-//        Control focusControl = Display.getDefault().getFocusControl();
-//        focusControl.setRedraw(true);
-//        focusControl.setFocus();
-//        focusControl.redraw();
-//        focusControl.setCursor(focusControl.getCursor());
-//        Composite parent = focusControl.getParent();  
-//        while (parent != null && parent is not what I want)  
-//        {  
-//            parent = parent.getParent();  
-//        }
-//        parent.getParent().setFocus();
-        
+        // the following code is a work-around for the problem of disappearing cursor on Windows
+        IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+        if (editor instanceof ITextEditor) {
+            ITextEditor textEditor = (ITextEditor) editor;
+            IAction action = textEditor.getAction(ITextEditorActionDefinitionIds.TOGGLE_OVERWRITE);
+            if (action != null) {
+                action.run();
+                action.run();
+            }
+        }
     }
-    
+
 }

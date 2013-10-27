@@ -21,6 +21,7 @@ public abstract class MarkdownBrowser implements ProgressListener {
 
     public MarkdownBrowser(Composite parent) {
         browser = new Browser(parent, SWT.NONE);
+        LOGGER.fine("browser type: " + browser.getBrowserType());
         browser.addProgressListener(this);
 //        setDropTarget();
     }
