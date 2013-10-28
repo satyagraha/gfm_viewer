@@ -38,6 +38,7 @@ regenerate all associated markdown preview files (via background jobs recursivel
 the directory trees): this is effectively a batch mode update facility.     
 
 * The GFM plugin view provides on its toolbar the following icons which may be clicked:
+	* ![settings16.png](plugin/icons/etool16/settings16.png) - show preferences page
 	* ![nav_backward.gif](plugin/icons/nav_backward.gif) - navigate backwards in the browsing history
 	* ![nav_forward.gif](plugin/icons/nav_forward.gif) - navigate forwards in the browsing history
 	* ![linked.gif](plugin/icons/linked.gif) - link GFM View to editor to automatically update on save
@@ -90,7 +91,7 @@ top right of view), then select the _Filters..._ entry, and then set or clear th
 In Eclipse, do the following:
 * Go to menu _Help_ -> _Install New Software..._ and in the resulting dialog click the _Add..._
 button to present a further dialog, and here enter `GFM Viewer` as the _Name_ and 
-this [link](http://dl.bintray.com/satyagraha/generic/1.4.0-SNAPSHOT) as the _Location_ and press _OK_
+this [link](http://dl.bintray.com/satyagraha/generic/1.5.0) as the _Location_ and press _OK_
 * Select the _GFM Viewer_ category in the install view, and alter the checkbox settings
 there as necessary 
 * Proceed to install the software in the usual manner accepting all defaults

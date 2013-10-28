@@ -145,6 +145,7 @@ body {
     -o-box-sizing: border-box;
     box-sizing: border-box;
     max-width: 100%;
+    border: 0px;
 }
 .markdown-body span.frame {
     display: block;
