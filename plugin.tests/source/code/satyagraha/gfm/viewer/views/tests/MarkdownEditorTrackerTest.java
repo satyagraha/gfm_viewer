@@ -20,7 +20,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import code.satyagraha.gfm.support.api.FileNature;
+import code.satyagraha.gfm.support.api.MarkdownFileNature;
 import code.satyagraha.gfm.ui.api.PageEditorTracker;
 import code.satyagraha.gfm.ui.impl.PageEditorTrackerDefault;
 import code.satyagraha.gfm.viewer.views.api.MarkdownListener;
@@ -51,7 +51,7 @@ public class MarkdownEditorTrackerTest {
     private IPath editorPath;
 
     @Mock
-    private FileNature fileNature;
+    private MarkdownFileNature fileNature;
 
     private PageEditorTracker pageEditorTracker;
     

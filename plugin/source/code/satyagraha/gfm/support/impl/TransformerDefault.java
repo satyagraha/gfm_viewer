@@ -55,7 +55,7 @@ public class TransformerDefault implements Transformer {
     
     @Override
     public boolean isMarkdownFile(File file) {
-        return file.isFile() && isMarkdownFileExtension(file.getName());
+        return file != null && file.isFile() && isMarkdownFileExtension(file.getName());
     }
 
     private boolean isMarkdownFileExtension(String path) {

@@ -9,7 +9,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.ide.ResourceUtil;
 
-import code.satyagraha.gfm.support.api.FileNature;
+import code.satyagraha.gfm.support.api.MarkdownFileNature;
 import code.satyagraha.gfm.ui.api.EditorPartListener;
 import code.satyagraha.gfm.ui.api.PageEditorTracker;
 import code.satyagraha.gfm.viewer.views.api.MarkdownListener;
@@ -21,16 +21,16 @@ public class MarkdownEditorTracker implements EditorPartListener {
 
     private final int instance;
     private MarkdownListener markdownListener;
-    private FileNature fileNature;
+    private MarkdownFileNature markdownFileNature;
     private PageEditorTracker pageEditorTracker;
     private boolean notificationsEnabled;
-    private IFile markupFile;
+    private IFile markdownFile;
 
-    public MarkdownEditorTracker(PageEditorTracker pageEditorTracker, MarkdownListener markdownListener, FileNature fileNature) {
+    public MarkdownEditorTracker(PageEditorTracker pageEditorTracker, MarkdownListener markdownListener, MarkdownFileNature markdownFileNature) {
         instances++;
         instance = instances;
         this.markdownListener = markdownListener;
-        this.fileNature = fileNature;
+        this.markdownFileNature = markdownFileNature;
         this.pageEditorTracker = pageEditorTracker;
         notificationsEnabled = true;
         LOGGER.fine("instance: " + instance);
@@ -46,7 +46,7 @@ public class MarkdownEditorTracker implements EditorPartListener {
         LOGGER.fine("");
         if (markdownListener != null) {
             try {
-                markdownListener.showIFile(markupFile);
+                markdownListener.showIFile(markdownFile);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -65,9 +65,9 @@ public class MarkdownEditorTracker implements EditorPartListener {
         LOGGER.fine("instance: " + instance);
         IEditorInput editorInput = editorPart.getEditorInput();
         IFile editorFile = ResourceUtil.getFile(editorInput);
-        if (fileNature.isTrackableFile(editorFile) && isNewFile(editorFile)) {
+        if (markdownFileNature.isTrackableFile(editorFile) && isNewFile(editorFile)) {
             LOGGER.fine("opening markdown editor found; instance: " + instance);
-            markupFile = editorFile;
+            markdownFile = editorFile;
             notifyMarkdownListenerIfEnabled();
             editorPart.addPropertyListener(new IPropertyListener() {
 
@@ -87,19 +87,19 @@ public class MarkdownEditorTracker implements EditorPartListener {
         LOGGER.fine("");
         IEditorInput editorInput = editorPart.getEditorInput();
         IFile editorFile = ResourceUtil.getFile(editorInput);
-        if (fileNature.isTrackableFile(editorFile) && isSameFile(editorFile)) {
+        if (markdownFileNature.isTrackableFile(editorFile) && isSameFile(editorFile)) {
             LOGGER.fine("closing markdown editor found");
-            markupFile = null;
+            markdownFile = null;
             notifyMarkdownListenerIfEnabled();
         }
     }
 
     private boolean isNewFile(IFile editorFile) {
-        return markupFile == null || !markupFile.getFullPath().equals(editorFile.getFullPath());
+        return markdownFile == null || !markdownFile.getFullPath().equals(editorFile.getFullPath());
     }
 
     private boolean isSameFile(IFile editorFile) {
-        return markupFile != null && markupFile.getFullPath().equals(editorFile.getFullPath());
+        return markdownFile != null && markdownFile.getFullPath().equals(editorFile.getFullPath());
     }
 
     private void notifyMarkdownListenerIfEnabled() {

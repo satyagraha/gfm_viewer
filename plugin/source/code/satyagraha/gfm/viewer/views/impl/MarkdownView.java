@@ -19,7 +19,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 
 import code.satyagraha.gfm.di.DIManager;
-import code.satyagraha.gfm.support.api.FileNature;
+import code.satyagraha.gfm.support.api.MarkdownFileNature;
 import code.satyagraha.gfm.support.api.Transformer;
 import code.satyagraha.gfm.ui.api.PageEditorTracker;
 import code.satyagraha.gfm.ui.api.Scheduler;
@@ -78,13 +78,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
 
         viewSupport = DIManager.getDefault().getInjector().getInstance(ViewerSupport.class);
 
-        FileNature markdownFileNature = new FileNature() {
-
-            @Override
-            public boolean isTrackableFile(IFile iFile) {
-                return iFile != null && transformer.isMarkdownFile(iFile.getLocation().toFile());
-            }
-        };
+        MarkdownFileNature markdownFileNature = DIManager.getDefault().getInjector().getInstance(MarkdownFileNature.class);
 
         PageEditorTracker pageEditorTracker = new PageEditorTrackerDefault(getSite().getPage());
         editorTracker = new MarkdownEditorTracker(pageEditorTracker, this, markdownFileNature);
