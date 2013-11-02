@@ -3,6 +3,8 @@ package code.satyagraha.gfm.viewer.commands;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -17,13 +19,16 @@ import code.satyagraha.gfm.ui.api.Scheduler;
 public class GenerateMarkdownPreview extends AbstractHandler {
 
     private static Logger LOGGER = Logger.getLogger(GenerateMarkdownPreview.class.getPackage().getName());
+    
+    @Inject private Scheduler scheduler;
 
+    public GenerateMarkdownPreview() {
+        DIManager.getDefault().getInjector().inject(this);
+    }
+    
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
         LOGGER.fine("");
-        
-        Scheduler scheduler = DIManager.getDefault().getInjector().getInstance(Scheduler.class);
-        
         IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getActiveMenuSelection(event);
         for (@SuppressWarnings("rawtypes") Iterator items = selection.iterator(); items.hasNext(); ) {
             Object item = items.next();

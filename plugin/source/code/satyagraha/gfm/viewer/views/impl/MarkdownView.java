@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -40,16 +42,20 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
     private static Logger LOGGER = Logger.getLogger(MarkdownView.class.getPackage().getName());
 
     private final int instance;
+    
+    @Inject private Transformer transformer;
+    @Inject private Scheduler scheduler;
+    @Inject private ViewerSupport viewSupport;
+    @Inject private MarkdownFileNature markdownFileNature;
+    
     private MarkdownBrowser browser;
-    private Transformer transformer;
-    private Scheduler scheduler;
-    private ViewerSupport viewSupport;
     private MarkdownEditorTracker editorTracker;
 
     public MarkdownView() {
         instances++;
         instance = instances;
         LOGGER.fine("instance: " + instance);
+        DIManager.getDefault().getInjector().inject(this);
     }
 
     @Override
@@ -72,18 +78,9 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
             }
         };
 
-        transformer = DIManager.getDefault().getInjector().getInstance(Transformer.class);
-
-        scheduler = DIManager.getDefault().getInjector().getInstance(Scheduler.class);
-
-        viewSupport = DIManager.getDefault().getInjector().getInstance(ViewerSupport.class);
-
-        MarkdownFileNature markdownFileNature = DIManager.getDefault().getInjector().getInstance(MarkdownFileNature.class);
-
         PageEditorTracker pageEditorTracker = new PageEditorTrackerDefault(getSite().getPage());
         editorTracker = new MarkdownEditorTracker(pageEditorTracker, this, markdownFileNature);
         editorTracker.setNotificationsEnabled(viewSupport.isLinked());
-
     }
 
     @Override
