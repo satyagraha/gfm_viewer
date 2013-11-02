@@ -17,5 +17,7 @@ public interface Transformer {
     public String htFilename(String mdFilename);
 
     public File createHtmlFile(File mdFile);
-    
+
+    public boolean canSkipTransformation(File mdFile, File htFile);
+
 }

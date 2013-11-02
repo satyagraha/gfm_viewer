@@ -11,7 +11,7 @@ public interface Scheduler {
         void onComplete(T t);
     }
 
-    void scheduleTransformation(File mdFile, Callback<File> onDone);
+    void scheduleTransformation(File mdFile, File htFile, Callback<File> onDone);
 
     void generateIFile(IFile iFile);
 

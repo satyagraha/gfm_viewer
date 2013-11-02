@@ -14,7 +14,8 @@ import org.eclipse.swt.widgets.Composite;
 public abstract class MarkdownBrowser implements ProgressListener {
 
     private Browser browser;
-    private File lastHtFile;
+    private File mdFile;
+    private File htFile;
     private Integer lastScroll;
 
     private static Logger LOGGER = Logger.getLogger(MarkdownBrowser.class.getPackage().getName());
@@ -53,14 +54,24 @@ public abstract class MarkdownBrowser implements ProgressListener {
 //        dropTarget.addDropListener(dropListener);
 //    }
 
-    public void showHtmlFile(File htFile) {
-        LOGGER.fine("htFile: " + htFile.getPath());
-        lastScroll = htFile.equals(lastHtFile) ? getScrollTop() : null;
+    public void showHtmlFile(File mdFileNew, File htFileNew) {
+        LOGGER.fine("mdFileNew: " + mdFileNew.getPath());
+        LOGGER.fine("htFileNew: " + htFileNew.getPath());
+        lastScroll = htFileNew.equals(htFile) ? getScrollTop() : null;
         LOGGER.fine("lastScroll: "  + lastScroll);
-        lastHtFile = htFile;
+        mdFile = mdFileNew;
+        htFile = htFileNew;
         browser.setUrl(htFile.toURI().toString());
     }
 
+    public File getMdFile() {
+        return mdFile;
+    }
+
+    public File getHtFile() {
+        return htFile;
+    }
+    
     @Override
     public void changed(ProgressEvent event) {
         // no-op

@@ -70,6 +70,11 @@ public class ConfigDefault implements Config {
         return false;
     }
     
+    @Override
+    public boolean alwaysGenerateHtml() {
+        return false;
+    }
+    
     private String getResourceAsString(String resourcePath) throws IOException {
         InputStream templateStream = ConfigDefault.class.getResourceAsStream(resourcePath);
         if (templateStream == null) {

@@ -50,9 +50,8 @@ public class SchedulerDefault implements Scheduler {
     }
     
     @Override
-    public void scheduleTransformation(final File mdFile, final Callback<File> onDone) {
+    public void scheduleTransformation(final File mdFile, final File htFile, final Callback<File> onDone) {
         final String jobName = "Transforming: " + mdFile.getName();
-        final File htFile = transformer.createHtmlFile(mdFile);
         Job job = new Job(jobName) {
 
             @Override
@@ -112,7 +111,8 @@ public class SchedulerDefault implements Scheduler {
 
     private void generateFile(File mdFile) {
         LOGGER.fine("mdFile: " + mdFile);
-        scheduleTransformation(mdFile, null);
+        final File htFile = transformer.createHtmlFile(mdFile);
+        scheduleTransformation(mdFile, htFile, null);
     }
     
 }

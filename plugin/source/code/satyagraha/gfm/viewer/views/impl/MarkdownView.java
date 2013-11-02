@@ -112,12 +112,22 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
         }
     }
 
-    protected void showFile(File mdFile) {
-        scheduler.scheduleTransformation(mdFile, new Callback<File>() {
+    private void showFile(File mdFile) {
+        LOGGER.fine("mdFile: " + mdFile);
+        final File htFile = transformer.createHtmlFile(mdFile);
+        if (transformer.canSkipTransformation(mdFile, htFile)) {
+            browser.showHtmlFile(mdFile, htFile);
+        } else {
+            scheduleTransformation(mdFile, htFile);
+        }
+    }
+
+    private void scheduleTransformation(final File mdFile, final File htFile) {
+        scheduler.scheduleTransformation(mdFile, htFile, new Callback<File>() {
 
             @Override
             public void onComplete(File htFile) {
-                browser.showHtmlFile(htFile);
+                browser.showHtmlFile(mdFile, htFile);
             }
         });
     }
@@ -162,14 +172,17 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
     @Override
     public void reload() {
         LOGGER.fine("");
-        if (editorTracker != null) {
-            editorTracker.notifyMarkdownListenerAlways();
+        File mdFile = browser.getMdFile();
+        File htFile = browser.getHtFile();
+        if (mdFile != null && mdFile.exists() && htFile != null) {
+            scheduleTransformation(mdFile, htFile);
         }
     }
 
     private void completed(ProgressEvent event) {
         LOGGER.fine("");
-        // the following code is a work-around for the problem of disappearing cursor on Windows
+        // the following code is a work-around for the problem of disappearing
+        // cursor on Windows
         IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
         if (editor instanceof ITextEditor) {
             ITextEditor textEditor = (ITextEditor) editor;

@@ -16,7 +16,7 @@ It is also new way to create Eclipse plugin help contents.
 Check project sources and developer instructions at GitHub
 <https://github.com/satyagraha/gfm_viewer> .
 
-## Usage 
+## Usage
 
 **Note: Usage & Configuration were copied into built-in Help. When changing please delete here
  and add links into `plugin/src/site/markdown`**
@@ -78,6 +78,8 @@ limit raised, see [here](http://developer.github.com/v3/#rate-limiting) for back
 * _CSS URL 1-3_: an alternate CSS presentation to the default may be provided
 * _JS URL 1-3_: an alternate JS implementation to the default may be provided
 * _Use Eclipse Console_: shows debugging output in Console view
+* _Always generate HTML_ : by default the formatted HTML files are not regenerated
+if they are newer than the markdown file; select this option to force this to happen
 
 Regarding the temporary formatted HTML files, when stored in the original markdown file directory note:
 

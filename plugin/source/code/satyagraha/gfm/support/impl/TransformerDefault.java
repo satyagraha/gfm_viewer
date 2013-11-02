@@ -100,7 +100,14 @@ public class TransformerDefault implements Transformer {
         String htDir = config.useTempDir() ? System.getProperty("java.io.tmpdir") : mdFile.getParent();
         return new File(htDir, htFilename(mdFile.getName()));
     }
-
+    
+    @Override
+    public boolean canSkipTransformation(File mdFile, File htFile) {
+        long mdFileTimestamp = mdFile.lastModified();
+        long htFileTimestamp = htFile.exists() ? htFile.lastModified() : 0;
+        return !config.alwaysGenerateHtml() && mdFileTimestamp < htFileTimestamp;
+    }
+    
     private boolean useFilteredLinks() {
         return !config.useTempDir();
     }

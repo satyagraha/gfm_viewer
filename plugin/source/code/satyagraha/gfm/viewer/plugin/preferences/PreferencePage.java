@@ -1,5 +1,6 @@
 package code.satyagraha.gfm.viewer.plugin.preferences;
 
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_ALWAYS_GENERATE_HTML;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_API_URL;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_CSS_URL_1;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_CSS_URL_2;
@@ -76,6 +77,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
         addField(new StringFieldEditor(P_JS_URL_3, "JS URL 3:", parent));
         
         addField(new BooleanFieldEditor(P_USE_ECLIPSE_CONSOLE, "Use Eclipse Console", parent));
+        
+        addField(new BooleanFieldEditor(P_ALWAYS_GENERATE_HTML, "Always generate HTML", parent));
     }
 
     /*
