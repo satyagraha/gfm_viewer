@@ -93,7 +93,7 @@ top right of view), then select the _Filters..._ entry, and then set or clear th
 In Eclipse, do the following:
 * Go to menu _Help_ -> _Install New Software..._ and in the resulting dialog click the _Add..._
 button to present a further dialog, and here enter `GFM Viewer` as the _Name_ and 
-this [link](http://dl.bintray.com/satyagraha/generic/1.5.0) as the _Location_ and press _OK_
+this [link](http://dl.bintray.com/satyagraha/generic/1.6.0) as the _Location_ and press _OK_
 * Select the _GFM Viewer_ category in the install view, and alter the checkbox settings
 there as necessary 
 * Proceed to install the software in the usual manner accepting all defaults
@@ -202,7 +202,7 @@ site as an alternative to the other one.
 
 In order to update version:
 
-	mvn -Dtycho.mode=maven org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=1.5.0
+	mvn -Dtycho.mode=maven org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=1.6.0
 	
 Make sure to do a search through all files to find any occurrences of the old version, as they will be present
 in some Eclipse plugin manifest and build properties files.
@@ -242,7 +242,7 @@ classes in a project, highlighting circular dependencies which typically indicat
 
 ## History
 
-* 1.5.0 - Help page how to add Help to an Eclipse plugin, console logging
+* 1.6.0 - Help page how to add Help to an Eclipse plugin, console logging
 * 1.4.0 - hierarchical project structure, dependency injection, built-in Help, fix NPE when changing perspective
 * 1.3.0 - filtered links, batch mode, and bintray update site
 * 1.2.1 - fix update site link
