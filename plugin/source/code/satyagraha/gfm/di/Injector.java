@@ -20,6 +20,16 @@ public class Injector {
     public Injector(Collection<Class<?>> components) {
         componentMonitor = new NullComponentMonitor();
         container = new PicoBuilder().withMonitor(componentMonitor).withCaching().build();
+        addComponents(components);
+    }
+    
+    public Injector(Injector parent, Collection<Class<?>> components) {
+        componentMonitor = parent.componentMonitor;
+        container = parent.container.makeChildContainer();
+        addComponents(components);
+    }
+    
+    private void addComponents(Collection<Class<?>> components) {
         for (Class<?> component : components) {
             container.addComponent(component);
         }

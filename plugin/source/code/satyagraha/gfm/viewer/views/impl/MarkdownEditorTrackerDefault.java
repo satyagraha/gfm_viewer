@@ -11,12 +11,16 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.ide.ResourceUtil;
 
+import code.satyagraha.gfm.di.Component;
+import code.satyagraha.gfm.di.Component.Scope;
 import code.satyagraha.gfm.support.api.MarkdownFileNature;
 import code.satyagraha.gfm.ui.api.EditorPartListener;
 import code.satyagraha.gfm.ui.api.PageEditorTracker;
+import code.satyagraha.gfm.viewer.views.api.MarkdownEditorTracker;
 import code.satyagraha.gfm.viewer.views.api.MarkdownListener;
 
-public class MarkdownEditorTracker implements EditorPartListener {
+@Component(Scope.PAGE)
+public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, EditorPartListener {
 
     private class MarkdownEditorSubscription implements IPropertyListener {
 
@@ -76,7 +80,7 @@ public class MarkdownEditorTracker implements EditorPartListener {
     }
 
     private static int instances = 0;
-    private static Logger LOGGER = Logger.getLogger(MarkdownEditorTracker.class.getPackage().getName());
+    private static Logger LOGGER = Logger.getLogger(MarkdownEditorTrackerDefault.class.getPackage().getName());
 
     private final int instance;
     private MarkdownListener markdownListener;
@@ -86,10 +90,10 @@ public class MarkdownEditorTracker implements EditorPartListener {
     private MarkdownEditorSubscription currentSubscription;
     private boolean notificationsEnabled;
 
-    public MarkdownEditorTracker(PageEditorTracker pageEditorTracker, MarkdownListener markdownListener, MarkdownFileNature markdownFileNature) {
+    public MarkdownEditorTrackerDefault(PageEditorTracker pageEditorTracker, MarkdownFileNature markdownFileNature) {
         instances++;
         instance = instances;
-        this.markdownListener = markdownListener;
+        this.markdownListener = null;
         this.markdownFileNature = markdownFileNature;
         this.pageEditorTracker = pageEditorTracker;
         subscriptions = new MarkdownEditorSubscriptions();
@@ -99,6 +103,18 @@ public class MarkdownEditorTracker implements EditorPartListener {
         pageEditorTracker.subscribe(this);
     }
 
+    /* (non-Javadoc)
+     * @see code.satyagraha.gfm.viewer.views.impl.MarkdownEditorTracker#addListener(code.satyagraha.gfm.viewer.views.api.MarkdownListener)
+     */
+    @Override
+    public void addListener(MarkdownListener markdownListener) {
+        this.markdownListener = markdownListener;
+    }
+    
+    /* (non-Javadoc)
+     * @see code.satyagraha.gfm.viewer.views.impl.MarkdownEditorTracker#setNotificationsEnabled(boolean)
+     */
+    @Override
     public void setNotificationsEnabled(boolean notificationsEnabled) {
         LOGGER.fine("notificationsEnabled: " + notificationsEnabled);
         this.notificationsEnabled = notificationsEnabled;
@@ -115,6 +131,10 @@ public class MarkdownEditorTracker implements EditorPartListener {
         }
     }
 
+    /* (non-Javadoc)
+     * @see code.satyagraha.gfm.viewer.views.impl.MarkdownEditorTracker#close()
+     */
+    @Override
     public void close() {
         LOGGER.fine("");
         subscriptions.close();
