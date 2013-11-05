@@ -7,13 +7,18 @@ import static org.osgi.framework.wiring.BundleWiring.LISTRESOURCES_RECURSE;
 
 import java.util.Collection;
 
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.wiring.BundleWiring;
 
+import code.satyagraha.gfm.di.Component.Scope;
+
 import ch.lambdaj.function.convert.Converter;
+import ch.lambdaj.group.GroupCondition;
 
 public class DIUtils {
-    
+
     public static Collection<Class<?>> getBundleClasses(final Bundle bundle, String packagePrefix) {
         String resourcePrefix = "/" + packagePrefix.replace('.', '/') + "/";
         Collection<String> resources = bundle.adapt(BundleWiring.class).listResources(resourcePrefix, "*.class", LISTRESOURCES_RECURSE);
@@ -33,4 +38,42 @@ public class DIUtils {
         });
     }
     
+    static class ComponentMatcher extends BaseMatcher<Class<?>> {
+
+        @Override
+        public boolean matches(Object object) {
+            return object != null && object.getClass() == Class.class && ((Class<?>) object).isAnnotationPresent(Component.class);
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("not annotated as Component");
+        }
+
+        public final static ComponentMatcher isComponent = new ComponentMatcher();
+
+    }
+
+    static class ScopeGroupCondition extends GroupCondition<Class<?>> {
+
+        @Override
+        protected String getAdditionalPropertyValue(String property, Object object) {
+            return null;
+        }
+
+        @Override
+        protected String getGroupName() {
+            return "scope";
+        }
+
+        @Override
+        protected Object getGroupValue(Object object) {
+            Class<?> component = (Class<?>) object;
+            Component annotation = component.getAnnotation(Component.class);
+            Scope scope = annotation.value();
+            return scope;
+        }
+
+    }
+
 }

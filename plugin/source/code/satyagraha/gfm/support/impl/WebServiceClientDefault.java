@@ -6,6 +6,7 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import code.satyagraha.gfm.di.Component;
+import code.satyagraha.gfm.di.Component.Scope;
 import code.satyagraha.gfm.support.api.Config;
 import code.satyagraha.gfm.support.api.WebServiceClient;
 
@@ -18,7 +19,7 @@ import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.core.impl.provider.entity.StringProvider;
 
-@Component
+@Component(Scope.PLUGIN)
 public class WebServiceClientDefault implements WebServiceClient {
 
     private static Logger LOGGER = Logger.getLogger(WebServiceClientDefault.class.getPackage().getName());

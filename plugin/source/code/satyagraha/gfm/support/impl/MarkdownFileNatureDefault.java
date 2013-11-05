@@ -4,15 +4,16 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 
 import code.satyagraha.gfm.di.Component;
+import code.satyagraha.gfm.di.Component.Scope;
 import code.satyagraha.gfm.support.api.MarkdownFileNature;
 import code.satyagraha.gfm.support.api.Transformer;
 
-@Component
-public class MarkdownFileNatureImpl implements MarkdownFileNature {
+@Component(Scope.PLUGIN)
+public class MarkdownFileNatureDefault implements MarkdownFileNature {
 
     private final Transformer transformer;
 
-    public MarkdownFileNatureImpl(Transformer transformer) {
+    public MarkdownFileNatureDefault(Transformer transformer) {
         this.transformer = transformer;
     }
     

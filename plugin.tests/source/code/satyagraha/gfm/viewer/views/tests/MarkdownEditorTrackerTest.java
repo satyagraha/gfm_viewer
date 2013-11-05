@@ -24,7 +24,7 @@ import code.satyagraha.gfm.support.api.MarkdownFileNature;
 import code.satyagraha.gfm.ui.api.PageEditorTracker;
 import code.satyagraha.gfm.ui.impl.PageEditorTrackerDefault;
 import code.satyagraha.gfm.viewer.views.api.MarkdownListener;
-import code.satyagraha.gfm.viewer.views.impl.MarkdownEditorTracker;
+import code.satyagraha.gfm.viewer.views.impl.MarkdownEditorTrackerDefault;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MarkdownEditorTrackerTest {
@@ -55,7 +55,7 @@ public class MarkdownEditorTrackerTest {
 
     private PageEditorTracker pageEditorTracker;
 
-    private MarkdownEditorTracker editorTracker;
+    private MarkdownEditorTrackerDefault editorTracker;
 
     private ArgumentCaptor<IPropertyListener> propertyListenerCaptor;
 
@@ -72,7 +72,8 @@ public class MarkdownEditorTrackerTest {
         given(fileNature.isTrackableFile(editorIFile)).willReturn(true);
 
         pageEditorTracker = new PageEditorTrackerDefault(workbenchPage);
-        editorTracker = new MarkdownEditorTracker(pageEditorTracker, listener, fileNature);
+        editorTracker = new MarkdownEditorTrackerDefault(pageEditorTracker, fileNature);
+        editorTracker.addListener(listener);
 
         // when
         pageEditorTracker.partOpened(editorRef);
@@ -105,7 +106,8 @@ public class MarkdownEditorTrackerTest {
         given(fileNature.isTrackableFile(editorIFile)).willReturn(false);
 
         pageEditorTracker = new PageEditorTrackerDefault(workbenchPage);
-        editorTracker = new MarkdownEditorTracker(pageEditorTracker, listener, fileNature);
+        editorTracker = new MarkdownEditorTrackerDefault(pageEditorTracker, fileNature);
+        editorTracker.addListener(listener);
 
         // when
         pageEditorTracker.partOpened(editorRef);

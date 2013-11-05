@@ -13,6 +13,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import code.satyagraha.gfm.di.Component.Scope;
 import code.satyagraha.gfm.di.DIManager;
 import code.satyagraha.gfm.ui.api.Scheduler;
 
@@ -23,7 +24,7 @@ public class GenerateMarkdownPreview extends AbstractHandler {
     @Inject private Scheduler scheduler;
 
     public GenerateMarkdownPreview() {
-        DIManager.getDefault().getInjector().inject(this);
+        DIManager.getDefault().getInjector(Scope.PLUGIN).inject(this);
     }
     
     @Override
