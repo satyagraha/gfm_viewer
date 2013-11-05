@@ -40,7 +40,7 @@ public class Activator extends AbstractUIPlugin {
         super.start(bundleContext);
         plugin = this;
 
-        DIManager.start(bundleContext, PACKAGE_PREFIX);
+        DIManager.start(bundleContext, PACKAGE_PREFIX, isDebugging());
         EventBusManager.start();
         LogManager.start(PACKAGE_PREFIX);
     }
