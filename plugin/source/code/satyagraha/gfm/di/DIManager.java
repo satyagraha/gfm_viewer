@@ -11,9 +11,9 @@ import java.util.Map;
 
 import org.eclipse.ui.IPageListener;
 import org.eclipse.ui.IWindowListener;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleContext;
 
 import ch.lambdaj.collection.LambdaGroup;
@@ -24,6 +24,7 @@ public class DIManager {
 
     private static DIManager instance;
 
+    private final IWorkbench workbench;
     private final boolean debugging;
     private final LambdaGroup<Class<?>> scopeComponentsGroup;
     private final Injector pluginInjector;
@@ -116,7 +117,8 @@ public class DIManager {
     // class implementation
     // /////////////////////////////////////////////////////////////////////////
 
-    private DIManager(BundleContext bundleContext, String packagePrefix, boolean debugging) {
+    private DIManager(IWorkbench workbench, BundleContext bundleContext, String packagePrefix, boolean debugging) {
+        this.workbench = workbench;
         this.debugging = debugging;
 
         Collection<Class<?>> components = with(getBundleClasses(bundleContext.getBundle(), packagePrefix)).retain(isComponent);
@@ -132,33 +134,33 @@ public class DIManager {
         pageInjectorMap = Collections.synchronizedMap(new IdentityHashMap<IWorkbenchPage, Injector>());
 
         windowListener = new WindowListener();
-        PlatformUI.getWorkbench().addWindowListener(windowListener);
-        for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
+        workbench.addWindowListener(windowListener);
+        for (IWorkbenchWindow window : workbench.getWorkbenchWindows()) {
             windowListener.observing(window);
         }
     }
 
     public Injector getInjector(Component.Scope scope) {
         switch (scope) {
-        
+
         case PLUGIN:
             return pluginInjector;
-            
+
         case PAGE:
-            IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+            IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
             Injector pageInjector = pageInjectorMap.get(page);
             if (pageInjector == null) {
                 throw new IllegalStateException("unable to locate pageInjector for page: " + page);
             }
             return pageInjector;
-            
+
         default:
             throw new IllegalArgumentException("unexpected scope: " + scope);
         }
     }
 
     private void close() {
-        PlatformUI.getWorkbench().removeWindowListener(windowListener);
+        workbench.removeWindowListener(windowListener);
     }
 
     private void debug(String message) {
@@ -171,8 +173,8 @@ public class DIManager {
     // static methods
     // /////////////////////////////////////////////////////////////////////////
 
-    public static void start(BundleContext bundleContext, String packagePrefix, boolean debugging) {
-        instance = new DIManager(bundleContext, packagePrefix, debugging);
+    public static void start(IWorkbench workbench, BundleContext bundleContext, String packagePrefix, boolean debugging) {
+        instance = new DIManager(workbench, bundleContext, packagePrefix, debugging);
     }
 
     public static void stop() {
