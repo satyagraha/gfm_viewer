@@ -13,31 +13,32 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.wiring.BundleWiring;
 
 import code.satyagraha.gfm.di.Component.Scope;
-
 import ch.lambdaj.function.convert.Converter;
 import ch.lambdaj.group.GroupCondition;
 
 public class DIUtils {
 
     public static Collection<Class<?>> getBundleClasses(final Bundle bundle, String packagePrefix) {
+        BundleWiring bundleWiring = bundle.adapt(BundleWiring.class);
+        if (bundleWiring == null) {
+            throw new IllegalArgumentException("cannot adapt to BundleWiring: " + bundle);
+        }
         String resourcePrefix = "/" + packagePrefix.replace('.', '/') + "/";
-        Collection<String> resources = bundle.adapt(BundleWiring.class).listResources(resourcePrefix, "*.class", LISTRESOURCES_RECURSE);
+        Collection<String> resources = bundleWiring.listResources(resourcePrefix, "*.class", LISTRESOURCES_RECURSE);
         return with(resources).convert(new Converter<String, Class<?>>() {
 
             @Override
             public Class<?> convert(String resource) {
-                String className = getFullPath(resource).replace('/', '.') + getBaseName(resource);
-                Class<?> resourceClass;
                 try {
-                    resourceClass = bundle.loadClass(className);
+                    String className = getFullPath(resource).replace('/', '.') + getBaseName(resource);
+                    return bundle.loadClass(className);
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
-                return resourceClass;
             }
         });
     }
-    
+
     static class ComponentMatcher extends BaseMatcher<Class<?>> {
 
         @Override

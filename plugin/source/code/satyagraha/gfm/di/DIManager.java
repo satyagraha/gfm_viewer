@@ -27,7 +27,7 @@ public class DIManager {
     private final IWorkbench workbench;
     private final boolean debugging;
     private final LambdaGroup<Class<?>> scopeComponentsGroup;
-    private final Injector pluginInjector;
+    private final InjectorImpl pluginInjector;
     private final Map<IWorkbenchPage, Injector> pageInjectorMap;
     private final WindowListener windowListener;
 
@@ -46,7 +46,7 @@ public class DIManager {
         public void pageOpened(IWorkbenchPage page) {
             debug("PageListener.pageOpened: " + page);
             if (!pageInjectorMap.containsKey(page)) {
-                Injector pageInjector = new Injector(pluginInjector, scopeComponentsGroup.find(Scope.PAGE));
+                Injector pageInjector = new InjectorImpl(pluginInjector, scopeComponentsGroup.find(Scope.PAGE));
                 pageInjector.addInstance(page);
                 pageInjectorMap.put(page, pageInjector);
             }
@@ -129,7 +129,9 @@ public class DIManager {
             debug("scope: " + scope + " scopeComponents: " + scopeComponents);
         }
 
-        pluginInjector = new Injector(scopeComponentsGroup.find(Scope.PLUGIN));
+        pluginInjector = new InjectorImpl(scopeComponentsGroup.find(Scope.PLUGIN));
+        pluginInjector.addInstance(workbench);
+        pluginInjector.addInstance(bundleContext);
 
         pageInjectorMap = Collections.synchronizedMap(new IdentityHashMap<IWorkbenchPage, Injector>());
 
