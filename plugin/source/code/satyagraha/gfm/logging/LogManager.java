@@ -65,6 +65,8 @@ public class LogManager {
     private void close() {
         if (logConsoleHandler != null) {
             LogConsole.stop();
+            logger.removeHandler(logConsoleHandler);
+            logConsoleHandler = null;
         }
     }
 
