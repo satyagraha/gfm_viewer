@@ -242,7 +242,7 @@ classes in a project, highlighting circular dependencies which typically indicat
 
 ## History
 
-* 1.7.0 - TBD
+* 1.7.0 - Various fixes
 * 1.6.0 - Skip HTML regeneration by default, fixes
 * 1.5.0 - Help page how to add Help to an Eclipse plugin, console logging
 * 1.4.0 - hierarchical project structure, dependency injection, built-in Help, fix NPE when changing perspective
