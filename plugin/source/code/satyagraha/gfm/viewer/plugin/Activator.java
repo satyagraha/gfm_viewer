@@ -1,6 +1,7 @@
 package code.satyagraha.gfm.viewer.plugin;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -40,9 +41,11 @@ public class Activator extends AbstractUIPlugin {
         super.start(bundleContext);
         plugin = this;
 
-        DIManager.start(bundleContext, PACKAGE_PREFIX);
-        EventBusManager.start();
-        LogManager.start(PACKAGE_PREFIX);
+        if (PlatformUI.isWorkbenchRunning()) {
+            DIManager.start(PlatformUI.getWorkbench(), bundleContext, PACKAGE_PREFIX, isDebugging());
+            EventBusManager.start();
+            LogManager.start(PACKAGE_PREFIX);
+        }
     }
 
     /*
@@ -54,9 +57,12 @@ public class Activator extends AbstractUIPlugin {
      */
     @Override
     public void stop(BundleContext context) throws Exception {
-        LogManager.stop();
-        EventBusManager.stop();
-        DIManager.stop();
+        if (PlatformUI.isWorkbenchRunning()) {
+            LogManager.stop();
+            EventBusManager.stop();
+            DIManager.stop();
+        }
+        
         plugin = null;
         super.stop(context);
     }

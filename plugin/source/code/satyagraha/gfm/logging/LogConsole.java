@@ -6,6 +6,9 @@ import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 import java.util.logging.StreamHandler;
 
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchListener;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.MessageConsole;
@@ -50,6 +53,22 @@ public class LogConsole {
     
     public static void start(String name) {
         instance = new LogConsole(name);
+        
+        // due to JobManager shutting down we need to stop early
+        PlatformUI.getWorkbench().addWorkbenchListener(new IWorkbenchListener() {
+            
+            @Override
+            public boolean preShutdown(IWorkbench workbench, boolean forced) {
+                stop();
+                return true;
+            }
+
+            @Override
+            public void postShutdown(IWorkbench workbench) {
+                // no-op
+            }
+        });
+
     }
     
     public static void stop() {

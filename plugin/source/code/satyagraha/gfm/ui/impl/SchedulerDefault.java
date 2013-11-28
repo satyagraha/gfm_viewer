@@ -20,10 +20,11 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.swt.widgets.Display;
 
 import code.satyagraha.gfm.di.Component;
+import code.satyagraha.gfm.di.Component.Scope;
 import code.satyagraha.gfm.support.api.Transformer;
 import code.satyagraha.gfm.ui.api.Scheduler;
 
-@Component
+@Component(Scope.PLUGIN)
 public class SchedulerDefault implements Scheduler {
 
     private static Logger LOGGER = Logger.getLogger(SchedulerDefault.class.getPackage().getName());

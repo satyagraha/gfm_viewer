@@ -20,13 +20,12 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 
+import code.satyagraha.gfm.di.Component.Scope;
 import code.satyagraha.gfm.di.DIManager;
-import code.satyagraha.gfm.support.api.MarkdownFileNature;
 import code.satyagraha.gfm.support.api.Transformer;
-import code.satyagraha.gfm.ui.api.PageEditorTracker;
 import code.satyagraha.gfm.ui.api.Scheduler;
 import code.satyagraha.gfm.ui.api.Scheduler.Callback;
-import code.satyagraha.gfm.ui.impl.PageEditorTrackerDefault;
+import code.satyagraha.gfm.viewer.views.api.MarkdownEditorTracker;
 import code.satyagraha.gfm.viewer.views.api.MarkdownListener;
 import code.satyagraha.gfm.viewer.views.api.ViewerActions;
 import code.satyagraha.gfm.viewer.views.api.ViewerSupport;
@@ -46,16 +45,15 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
     @Inject private Transformer transformer;
     @Inject private Scheduler scheduler;
     @Inject private ViewerSupport viewSupport;
-    @Inject private MarkdownFileNature markdownFileNature;
+    @Inject private MarkdownEditorTracker editorTracker;
     
     private MarkdownBrowser browser;
-    private MarkdownEditorTracker editorTracker;
 
     public MarkdownView() {
         instances++;
         instance = instances;
         LOGGER.fine("instance: " + instance);
-        DIManager.getDefault().getInjector().inject(this);
+        DIManager.getDefault().getInjector(Scope.PAGE).inject(this);
     }
 
     @Override
@@ -78,8 +76,7 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
             }
         };
 
-        PageEditorTracker pageEditorTracker = new PageEditorTrackerDefault(getSite().getPage());
-        editorTracker = new MarkdownEditorTracker(pageEditorTracker, this, markdownFileNature);
+        editorTracker.addListener(this);
         editorTracker.setNotificationsEnabled(viewSupport.isLinked());
     }
 

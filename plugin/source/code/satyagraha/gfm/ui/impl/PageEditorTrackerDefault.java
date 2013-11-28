@@ -6,9 +6,12 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartReference;
 
+import code.satyagraha.gfm.di.Component;
+import code.satyagraha.gfm.di.Component.Scope;
 import code.satyagraha.gfm.ui.api.EditorPartListener;
 import code.satyagraha.gfm.ui.api.PageEditorTracker;
 
+@Component(Scope.PAGE)
 public class PageEditorTrackerDefault implements PageEditorTracker {
 
     private static Logger LOGGER = Logger.getLogger(PageEditorTrackerDefault.class.getPackage().getName());

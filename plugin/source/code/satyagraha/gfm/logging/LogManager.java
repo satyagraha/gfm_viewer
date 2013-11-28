@@ -10,10 +10,11 @@ import org.bushe.swing.event.annotation.AnnotationProcessor;
 import org.bushe.swing.event.annotation.EventSubscriber;
 
 import code.satyagraha.gfm.di.Component;
+import code.satyagraha.gfm.di.Component.Scope;
 import code.satyagraha.gfm.di.DIManager;
 import code.satyagraha.gfm.support.api.Config;
 
-@Component
+@Component(Scope.PLUGIN)
 public class LogManager {
 
     // Console name
@@ -64,11 +65,13 @@ public class LogManager {
     private void close() {
         if (logConsoleHandler != null) {
             LogConsole.stop();
+            logger.removeHandler(logConsoleHandler);
+            logConsoleHandler = null;
         }
     }
 
     public static void start(String packagePrefix) {
-        logManager = DIManager.getDefault().getInjector().getInstance(LogManager.class);
+        logManager = DIManager.getDefault().getInjector(Scope.PLUGIN).getInstance(LogManager.class);
         logManager.setup(packagePrefix);
     }
 

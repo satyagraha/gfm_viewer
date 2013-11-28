@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/code.satyagraha.gfm.viewer.feature_1.6.0.qualifier.jar" id="code.satyagraha.gfm.viewer.feature" version="1.6.0.qualifier">
+   <feature url="features/code.satyagraha.gfm.viewer.feature_1.7.0.qualifier.jar" id="code.satyagraha.gfm.viewer.feature" version="1.7.0.qualifier">
       <category name="Viewers"/>
    </feature>
    <category-def name="Viewers" label="Viewers"/>

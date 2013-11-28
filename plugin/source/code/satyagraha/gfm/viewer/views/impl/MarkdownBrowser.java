@@ -1,6 +1,8 @@
 package code.satyagraha.gfm.viewer.views.impl;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,11 +59,29 @@ public abstract class MarkdownBrowser implements ProgressListener {
     public void showHtmlFile(File mdFileNew, File htFileNew) {
         LOGGER.fine("mdFileNew: " + mdFileNew.getPath());
         LOGGER.fine("htFileNew: " + htFileNew.getPath());
-        lastScroll = htFileNew.equals(htFile) ? getScrollTop() : null;
-        LOGGER.fine("lastScroll: "  + lastScroll);
         mdFile = mdFileNew;
         htFile = htFileNew;
-        browser.setUrl(htFile.toURI().toString());
+        
+        // determine whether to refresh or load (user may have navigated away)
+        URI currentUri;
+        try {
+            currentUri = new URI(browser.getUrl());
+        } catch (URISyntaxException e) {
+            currentUri = null;
+        }
+        URI newUri = htFile.toURI();
+        boolean sameUri = currentUri != null && currentUri.equals(newUri);
+        
+        if (sameUri) {
+            LOGGER.fine("refreshing: "  + currentUri);
+            lastScroll = getScrollTop();
+            browser.refresh();
+        } else {
+            LOGGER.fine("currentUri: "  + currentUri);
+            LOGGER.fine("loading: "  + newUri);
+            lastScroll = null;
+            browser.setUrl(newUri.toString());
+        }
     }
 
     public File getMdFile() {

@@ -27,11 +27,12 @@ import org.mvel2.templates.TemplateCompiler;
 import org.mvel2.templates.TemplateRuntime;
 
 import code.satyagraha.gfm.di.Component;
+import code.satyagraha.gfm.di.Component.Scope;
 import code.satyagraha.gfm.support.api.Config;
 import code.satyagraha.gfm.support.api.Transformer;
 import code.satyagraha.gfm.support.api.WebServiceClient;
 
-@Component
+@Component(Scope.PLUGIN)
 public class TransformerDefault implements Transformer {
 
     private static Logger LOGGER = Logger.getLogger(TransformerDefault.class.getPackage().getName());

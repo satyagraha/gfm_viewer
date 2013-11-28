@@ -32,11 +32,12 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.framework.FrameworkUtil;
 
 import code.satyagraha.gfm.di.Component;
+import code.satyagraha.gfm.di.Component.Scope;
 import code.satyagraha.gfm.support.api.Config;
 import code.satyagraha.gfm.support.impl.ConfigDefault;
 import code.satyagraha.gfm.viewer.plugin.Activator;
 
-@Component
+@Component(Scope.PLUGIN)
 public class PreferenceAdapter implements Config {
     
     private static Logger LOGGER = Logger.getLogger(PreferenceAdapter.class.getPackage().getName());
