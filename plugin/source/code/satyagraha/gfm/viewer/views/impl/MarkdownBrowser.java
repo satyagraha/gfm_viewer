@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Composite;
 public abstract class MarkdownBrowser implements ProgressListener {
 
     private Browser browser;
-    private File mdFile;
     private File htFile;
     private Integer lastScroll;
 
@@ -56,10 +55,8 @@ public abstract class MarkdownBrowser implements ProgressListener {
 //        dropTarget.addDropListener(dropListener);
 //    }
 
-    public void showHtmlFile(File mdFileNew, File htFileNew) {
-        LOGGER.fine("mdFileNew: " + mdFileNew.getPath());
+    public void showHtmlFile(File htFileNew) {
         LOGGER.fine("htFileNew: " + htFileNew.getPath());
-        mdFile = mdFileNew;
         htFile = htFileNew;
         
         // determine whether to refresh or load (user may have navigated away)
@@ -82,10 +79,6 @@ public abstract class MarkdownBrowser implements ProgressListener {
             lastScroll = null;
             browser.setUrl(newUri.toString());
         }
-    }
-
-    public File getMdFile() {
-        return mdFile;
     }
 
     public File getHtFile() {

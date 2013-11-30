@@ -1,13 +1,17 @@
 package code.satyagraha.gfm.viewer.views.api;
 
+import java.io.IOException;
+
+import org.eclipse.core.resources.IFile;
+
 public interface ViewerActions {
 
-    public void goForward();
+    void showMarkdownFile(IFile editorFile) throws IOException;
 
-    public void goBackward();
+    void goForward();
 
-    public void setLinkedState(boolean state);
+    void goBackward();
 
-    public void reload();
+    void reload();
 
 }

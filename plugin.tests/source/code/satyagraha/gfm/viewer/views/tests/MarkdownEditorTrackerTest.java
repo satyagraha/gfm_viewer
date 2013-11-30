@@ -79,7 +79,7 @@ public class MarkdownEditorTrackerTest {
         pageEditorTracker.partOpened(editorRef);
 
         // then
-        verify(listener).showIFile(editorIFile);
+        verify(listener).notifyEditorFile(editorIFile);
         verifyNoMoreInteractions(listener);
     }
 
@@ -130,38 +130,7 @@ public class MarkdownEditorTrackerTest {
         propertyListener.propertyChanged(editorPart, IEditorPart.PROP_DIRTY);
 
         // then
-        verify(listener, times(2)).showIFile(editorIFile);
-    }
-
-    @Test
-    public void shouldNotNotifyOnEditorPartSavedWhenNotEnabled() throws Exception {
-        // given
-        shouldNotifyOnEditorPartOpenedTrackableFile();
-
-        IPropertyListener propertyListener = propertyListenerCaptor.getValue();
-        assertNotNull(propertyListener);
-
-        given(editorPart.isDirty()).willReturn(false);
-
-        // when
-        editorTracker.setNotificationsEnabled(false);
-        propertyListener.propertyChanged(editorPart, IEditorPart.PROP_DIRTY);
-
-        // then
-        verify(listener, times(1)).showIFile(editorIFile);
-    }
-
-    @Test
-    public void shouldNotifyOnNotifyAlwaysWhenNotEnabled() throws Exception {
-        // given
-        shouldNotifyOnEditorPartOpenedTrackableFile();
-
-        // when
-        editorTracker.setNotificationsEnabled(false);
-        editorTracker.notifyMarkdownListenerAlways(editorIFile);
-
-        // then
-        verify(listener, times(2)).showIFile(editorIFile);
+        verify(listener, times(2)).notifyEditorFile(editorIFile);
     }
 
 }

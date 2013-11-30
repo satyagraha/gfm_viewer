@@ -1,6 +1,7 @@
 package code.satyagraha.gfm.viewer.views.impl;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,6 +11,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.browser.ProgressEvent;
@@ -37,22 +39,18 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
      */
     public static final String ID = "code.satyagraha.gfm.viewer.views.GfmView";
 
-    private static int instances = 0;
     private static Logger LOGGER = Logger.getLogger(MarkdownView.class.getPackage().getName());
 
-    private final int instance;
-    
     @Inject private Transformer transformer;
     @Inject private Scheduler scheduler;
     @Inject private ViewerSupport viewSupport;
     @Inject private MarkdownEditorTracker editorTracker;
     
     private MarkdownBrowser browser;
+    private File mdFileNotified;
+    private File mdFileShown;
 
     public MarkdownView() {
-        instances++;
-        instance = instances;
-        LOGGER.fine("instance: " + instance);
         DIManager.getDefault().getInjector(Scope.PAGE).inject(this);
     }
 
@@ -75,9 +73,10 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
                 MarkdownView.this.completed(event);
             }
         };
+        mdFileNotified = null;
+        mdFileShown = null;
 
         editorTracker.addListener(this);
-        editorTracker.setNotificationsEnabled(viewSupport.isLinked());
     }
 
     @Override
@@ -97,48 +96,28 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
     }
 
     @Override
-    public void showIFile(IFile iFile) {
-        if (iFile != null) {
-            LOGGER.fine("instance: " + instance + " " + iFile.getFullPath().toString());
-            showFile(iFile.getRawLocation().toFile());
-        } else {
-            LOGGER.fine("instance: " + instance + " (null)");
+    public void notifyEditorFile(IFile iFile) {
+        LOGGER.fine("iFile: " + iFile);
+        IPath rawLocation = iFile.getRawLocation();
+        if (rawLocation == null) {
+            return;
         }
-    }
-
-    private void showFile(File mdFile) {
-        LOGGER.fine("mdFile: " + mdFile);
-        final File htFile = transformer.createHtmlFile(mdFile);
-        if (transformer.canSkipTransformation(mdFile, htFile)) {
-            browser.showHtmlFile(mdFile, htFile);
-        } else {
-            scheduleTransformation(mdFile, htFile);
+        mdFileNotified = rawLocation.toFile();
+        if (!viewSupport.isLinked()) {
+            return;
         }
+        showFile(mdFileNotified);
     }
 
-    private void scheduleTransformation(final File mdFile, final File htFile) {
-        scheduler.scheduleTransformation(mdFile, htFile, new Callback<File>() {
-
-            @Override
-            public void onComplete(File htFile) {
-                browser.showHtmlFile(mdFile, htFile);
-            }
-        });
-    }
-
-    @SuppressWarnings("unused")
-    private void refreshFile(final File htFile) {
-        Path htPath = new Path(htFile.getAbsolutePath());
-        IFile htIFile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(htPath);
-        if (htIFile != null) {
-            try {
-                htIFile.refreshLocal(IResource.DEPTH_ZERO, null);
-            } catch (CoreException e) {
-                LOGGER.log(Level.WARNING, "unable to locate file", e);
-            }
+    @Override
+    public void showMarkdownFile(IFile iFile) throws IOException {
+        IPath rawLocation = iFile.getRawLocation();
+        if (rawLocation == null) {
+            return;
         }
+        showFile(rawLocation.toFile());
     }
-
+    
     @Override
     public void goForward() {
         LOGGER.fine("");
@@ -156,20 +135,53 @@ public class MarkdownView extends ViewPart implements MarkdownListener, ViewerAc
     }
 
     @Override
-    public void setLinkedState(boolean state) {
-        LOGGER.fine("state: " + state);
-        if (editorTracker != null) {
-            editorTracker.setNotificationsEnabled(state);
+    public void reload() {
+        LOGGER.fine("");
+        File mdFile = mdFileShown != null ? mdFileShown : mdFileNotified;
+        if (mdFile != null && mdFile.exists()) {
+            File htFile = transformer.createHtmlFile(mdFile);
+            scheduleTransformation(mdFile, htFile);
         }
     }
 
-    @Override
-    public void reload() {
-        LOGGER.fine("");
-        File mdFile = browser.getMdFile();
-        File htFile = browser.getHtFile();
-        if (mdFile != null && mdFile.exists() && htFile != null) {
+    private void showFile(File mdFile) {
+        LOGGER.fine("mdFile: " + mdFile);
+        if (mdFile == null) {
+            return;
+        }
+        final File htFile = transformer.createHtmlFile(mdFile);
+        if (transformer.canSkipTransformation(mdFile, htFile)) {
+            updateBrowser(mdFile, htFile);
+        } else {
             scheduleTransformation(mdFile, htFile);
+        }
+    }
+
+    private void scheduleTransformation(final File mdFile, final File htFile) {
+        scheduler.scheduleTransformation(mdFile, htFile, new Callback<File>() {
+
+            @Override
+            public void onComplete(File htFile) {
+                updateBrowser(mdFile, htFile);
+            }
+        });
+    }
+
+    private void updateBrowser(File mdFile, File htFile) {
+        mdFileShown = mdFile;
+        browser.showHtmlFile(htFile);
+    }
+    
+    @SuppressWarnings("unused")
+    private void refreshFile(final File htFile) {
+        Path htPath = new Path(htFile.getAbsolutePath());
+        IFile htIFile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(htPath);
+        if (htIFile != null) {
+            try {
+                htIFile.refreshLocal(IResource.DEPTH_ZERO, null);
+            } catch (CoreException e) {
+                LOGGER.log(Level.WARNING, "unable to locate file", e);
+            }
         }
     }
 

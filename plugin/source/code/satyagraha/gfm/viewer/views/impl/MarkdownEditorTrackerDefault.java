@@ -34,7 +34,7 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
 
         void open() {
             editorPart.addPropertyListener(this);
-            notifyMarkdownListenerIfEnabled(editorFile);
+            notifyMarkdownListener(editorFile);
         }
 
         void close() {
@@ -46,7 +46,7 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
         public void propertyChanged(Object source, int propId) {
             LOGGER.fine(String.format("%s => %d", source, propId));
             if (propId == IEditorPart.PROP_DIRTY && !editorPart.isDirty()) {
-                notifyMarkdownListenerIfEnabled(editorFile);
+                notifyMarkdownListener(editorFile);
             }
         }
     }
@@ -79,27 +79,20 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
         }
     }
 
-    private static int instances = 0;
     private static Logger LOGGER = Logger.getLogger(MarkdownEditorTrackerDefault.class.getPackage().getName());
 
-    private final int instance;
     private MarkdownListener markdownListener;
     private MarkdownFileNature markdownFileNature;
     private PageEditorTracker pageEditorTracker;
     private MarkdownEditorSubscriptions subscriptions;
     private MarkdownEditorSubscription currentSubscription;
-    private boolean notificationsEnabled;
 
     public MarkdownEditorTrackerDefault(PageEditorTracker pageEditorTracker, MarkdownFileNature markdownFileNature) {
-        instances++;
-        instance = instances;
         this.markdownListener = null;
         this.markdownFileNature = markdownFileNature;
         this.pageEditorTracker = pageEditorTracker;
         subscriptions = new MarkdownEditorSubscriptions();
         currentSubscription = null;
-        notificationsEnabled = true;
-        LOGGER.fine("instance: " + instance);
         pageEditorTracker.subscribe(this);
     }
 
@@ -111,20 +104,11 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
         this.markdownListener = markdownListener;
     }
     
-    /* (non-Javadoc)
-     * @see code.satyagraha.gfm.viewer.views.impl.MarkdownEditorTracker#setNotificationsEnabled(boolean)
-     */
-    @Override
-    public void setNotificationsEnabled(boolean notificationsEnabled) {
-        LOGGER.fine("notificationsEnabled: " + notificationsEnabled);
-        this.notificationsEnabled = notificationsEnabled;
-    }
-
-    public void notifyMarkdownListenerAlways(IFile markdownFile) {
-        LOGGER.fine("");
+    private void notifyMarkdownListener(IFile markdownFile) {
+        LOGGER.fine("markdownFile: " + markdownFile);
         if (markdownListener != null) {
             try {
-                markdownListener.showIFile(markdownFile);
+                markdownListener.notifyEditorFile(markdownFile);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -140,7 +124,6 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
         subscriptions.close();
         pageEditorTracker.unsubscribe(this);
         currentSubscription = null;
-        notificationsEnabled = false;
         
         markdownListener = null;
         pageEditorTracker = null;
@@ -148,18 +131,24 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
 
     @Override
     public void editorShown(final IEditorPart editorPart) {
-        LOGGER.fine("instance: " + instance);
+        LOGGER.fine("editorPart: " + editorPart);
         IEditorInput editorInput = editorPart.getEditorInput();
+        if (editorInput == null) {
+            return;
+        }
         IFile editorFile = ResourceUtil.getFile(editorInput);
+        if (editorFile == null) {
+            return;
+        }
         if (markdownFileNature.isTrackableFile(editorFile)) {
-            LOGGER.fine("opening markdown editor found; instance: " + instance);
+            LOGGER.fine("editorFile: " + editorFile);
             MarkdownEditorSubscription subscription = subscriptions.get(editorFile);
             if (subscription == null) {
                 subscription = new MarkdownEditorSubscription(editorPart, editorFile);
                 subscriptions.add(subscription);
                 subscription.open();
             } else if (currentSubscription != subscription) {
-                notifyMarkdownListenerIfEnabled(editorFile);
+                notifyMarkdownListener(editorFile);
             }
             currentSubscription = subscription;
         }
@@ -178,13 +167,6 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
                 subscriptions.remove(subscription);
             }
             currentSubscription = null;
-        }
-    }
-
-    private void notifyMarkdownListenerIfEnabled(IFile editorFile) {
-        LOGGER.fine("");
-        if (notificationsEnabled) {
-            notifyMarkdownListenerAlways(editorFile);
         }
     }
 
