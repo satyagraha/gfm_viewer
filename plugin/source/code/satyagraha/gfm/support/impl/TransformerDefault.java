@@ -105,7 +105,7 @@ public class TransformerDefault implements Transformer {
     @Override
     public boolean canSkipTransformation(File mdFile, File htFile) {
         long mdFileTimestamp = mdFile.lastModified();
-        long htFileTimestamp = htFile.exists() ? htFile.lastModified() : 0;
+        long htFileTimestamp = htFile.canRead() ? htFile.lastModified() : 0;
         return !config.alwaysGenerateHtml() && mdFileTimestamp < htFileTimestamp;
     }
     

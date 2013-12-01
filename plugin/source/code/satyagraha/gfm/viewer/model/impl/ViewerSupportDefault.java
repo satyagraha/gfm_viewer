@@ -1,4 +1,4 @@
-package code.satyagraha.gfm.viewer.views.impl;
+package code.satyagraha.gfm.viewer.model.impl;
 
 import java.util.logging.Logger;
 
@@ -10,10 +10,13 @@ import org.eclipse.ui.handlers.RegistryToggleState;
 
 import code.satyagraha.gfm.di.Component;
 import code.satyagraha.gfm.di.Component.Scope;
-import code.satyagraha.gfm.viewer.views.api.ViewerSupport;
+import code.satyagraha.gfm.viewer.model.api.ViewerSupport;
 
 @Component(Scope.PAGE)
 public class ViewerSupportDefault implements ViewerSupport {
+
+    private static final String GFM_VIEWER_PLUGIN_LINKED = "GFM Viewer plugin.Linked";
+    private static final String GFM_VIEWER_PLUGIN_ONLINE = "GFM Viewer plugin.Online";
 
     private static Logger LOGGER = Logger.getLogger(ViewerSupportDefault.class.getPackage().getName());
     
@@ -26,9 +29,17 @@ public class ViewerSupportDefault implements ViewerSupport {
     @Override
     public boolean isLinked() {
         LOGGER.fine("");
-        Command command = commandService.getCommand("GFM Viewer plugin.Linked");
+        Command command = commandService.getCommand(GFM_VIEWER_PLUGIN_LINKED);
         State state = command.getState(RegistryToggleState.STATE_ID);
         return (Boolean) state.getValue();
     }
 
+    @Override
+    public boolean isOnline() {
+        LOGGER.fine("");
+        Command command = commandService.getCommand(GFM_VIEWER_PLUGIN_ONLINE);
+        State state = command.getState(RegistryToggleState.STATE_ID);
+        return (Boolean) state.getValue();
+    }
+    
 }

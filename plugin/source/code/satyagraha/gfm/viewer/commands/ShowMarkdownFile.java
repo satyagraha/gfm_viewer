@@ -8,13 +8,13 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import code.satyagraha.gfm.ui.impl.ViewLocator;
-import code.satyagraha.gfm.viewer.views.api.ViewerActions;
-import code.satyagraha.gfm.viewer.views.impl.MarkdownView;
+import code.satyagraha.gfm.di.Component.Scope;
+import code.satyagraha.gfm.di.DIManager;
+import code.satyagraha.gfm.ui.impl.ViewManager;
+import code.satyagraha.gfm.viewer.model.api.MarkdownView;
+import code.satyagraha.gfm.viewer.model.api.ViewerActions;
 
 public class ShowMarkdownFile extends AbstractHandler {
 
@@ -27,15 +27,10 @@ public class ShowMarkdownFile extends AbstractHandler {
         IStructuredSelection structuredSelection = (IStructuredSelection) HandlerUtil.getActiveMenuSelection(event);
         Object firstElement = structuredSelection.getFirstElement();
         if (firstElement instanceof IFile) {
+            ViewManager.activateView(event, MarkdownView.ID);
             IFile iFile = (IFile) firstElement;
             try {
-                IViewPart view = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().showView(MarkdownView.ID);
-                HandlerUtil.getActiveWorkbenchWindow(event).getActivePage().activate(view);
-            } catch (PartInitException e) {
-                throw new ExecutionException("failed to show view", e);
-            }
-            try {
-                ViewLocator.findViewImplementing(ViewerActions.class).showMarkdownFile(iFile);
+                DIManager.getDefault().getInjector(Scope.PAGE).getInstance(ViewerActions.class).showMarkdownFile(iFile);
             } catch (IOException e) {
                 throw new ExecutionException("could not show file", e);
             }

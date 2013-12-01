@@ -8,9 +8,9 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class Linked extends AbstractHandler {
+public class Online extends AbstractHandler {
 
-    private static Logger LOGGER = Logger.getLogger(Linked.class.getPackage().getName());
+    private static Logger LOGGER = Logger.getLogger(Online.class.getPackage().getName());
 
     @Override
     public Object execute(final ExecutionEvent event) throws ExecutionException {

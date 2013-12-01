@@ -20,18 +20,20 @@ import code.satyagraha.gfm.ui.api.Scheduler;
 public class GenerateMarkdownPreview extends AbstractHandler {
 
     private static Logger LOGGER = Logger.getLogger(GenerateMarkdownPreview.class.getPackage().getName());
-    
-    @Inject private Scheduler scheduler;
+
+    @Inject
+    private Scheduler scheduler;
 
     public GenerateMarkdownPreview() {
         DIManager.getDefault().getInjector(Scope.PLUGIN).inject(this);
     }
-    
+
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
         LOGGER.fine("");
         IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getActiveMenuSelection(event);
-        for (@SuppressWarnings("rawtypes") Iterator items = selection.iterator(); items.hasNext(); ) {
+        for (@SuppressWarnings("rawtypes")
+        Iterator items = selection.iterator(); items.hasNext();) {
             Object item = items.next();
             if (item instanceof IFile) {
                 scheduler.generateIFile((IFile) item);

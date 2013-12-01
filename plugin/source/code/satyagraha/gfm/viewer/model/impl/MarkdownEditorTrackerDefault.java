@@ -1,4 +1,4 @@
-package code.satyagraha.gfm.viewer.views.impl;
+package code.satyagraha.gfm.viewer.model.impl;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,8 +16,8 @@ import code.satyagraha.gfm.di.Component.Scope;
 import code.satyagraha.gfm.support.api.MarkdownFileNature;
 import code.satyagraha.gfm.ui.api.EditorPartListener;
 import code.satyagraha.gfm.ui.api.PageEditorTracker;
-import code.satyagraha.gfm.viewer.views.api.MarkdownEditorTracker;
-import code.satyagraha.gfm.viewer.views.api.MarkdownListener;
+import code.satyagraha.gfm.viewer.model.api.MarkdownEditorTracker;
+import code.satyagraha.gfm.viewer.model.api.MarkdownListener;
 
 @Component(Scope.PAGE)
 public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, EditorPartListener {
@@ -93,7 +93,28 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
         this.pageEditorTracker = pageEditorTracker;
         subscriptions = new MarkdownEditorSubscriptions();
         currentSubscription = null;
+    }
+
+    /* (non-Javadoc)
+     * @see code.satyagraha.gfm.viewer.model.api.MarkdownEditorTracker#start()
+     */
+    @Override
+    public void start() {
         pageEditorTracker.subscribe(this);
+    }
+    
+    /* (non-Javadoc)
+     * @see code.satyagraha.gfm.viewer.views.impl.MarkdownEditorTracker#close()
+     */
+    @Override
+    public void stop() {
+        LOGGER.fine("");
+        subscriptions.close();
+        pageEditorTracker.unsubscribe(this);
+        currentSubscription = null;
+        
+        markdownListener = null;
+        pageEditorTracker = null;
     }
 
     /* (non-Javadoc)
@@ -113,20 +134,6 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    /* (non-Javadoc)
-     * @see code.satyagraha.gfm.viewer.views.impl.MarkdownEditorTracker#close()
-     */
-    @Override
-    public void close() {
-        LOGGER.fine("");
-        subscriptions.close();
-        pageEditorTracker.unsubscribe(this);
-        currentSubscription = null;
-        
-        markdownListener = null;
-        pageEditorTracker = null;
     }
 
     @Override

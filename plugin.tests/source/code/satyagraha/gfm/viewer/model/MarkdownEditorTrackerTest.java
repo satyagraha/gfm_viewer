@@ -1,4 +1,4 @@
-package code.satyagraha.gfm.viewer.views.tests;
+package code.satyagraha.gfm.viewer.model;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.BDDMockito.given;
@@ -23,8 +23,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import code.satyagraha.gfm.support.api.MarkdownFileNature;
 import code.satyagraha.gfm.ui.api.PageEditorTracker;
 import code.satyagraha.gfm.ui.impl.PageEditorTrackerDefault;
-import code.satyagraha.gfm.viewer.views.api.MarkdownListener;
-import code.satyagraha.gfm.viewer.views.impl.MarkdownEditorTrackerDefault;
+import code.satyagraha.gfm.viewer.model.api.MarkdownListener;
+import code.satyagraha.gfm.viewer.model.impl.MarkdownEditorTrackerDefault;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MarkdownEditorTrackerTest {
@@ -73,6 +73,7 @@ public class MarkdownEditorTrackerTest {
 
         pageEditorTracker = new PageEditorTrackerDefault(workbenchPage);
         editorTracker = new MarkdownEditorTrackerDefault(pageEditorTracker, fileNature);
+        editorTracker.start();
         editorTracker.addListener(listener);
 
         // when
@@ -107,6 +108,7 @@ public class MarkdownEditorTrackerTest {
 
         pageEditorTracker = new PageEditorTrackerDefault(workbenchPage);
         editorTracker = new MarkdownEditorTrackerDefault(pageEditorTracker, fileNature);
+        editorTracker.start();
         editorTracker.addListener(listener);
 
         // when

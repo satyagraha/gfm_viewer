@@ -1,4 +1,4 @@
-package code.satyagraha.gfm.viewer.views.impl;
+package code.satyagraha.gfm.viewer.views;
 
 import java.io.File;
 import java.net.URI;
@@ -6,22 +6,29 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.ProgressEvent;
 import org.eclipse.swt.browser.ProgressListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 
-public abstract class MarkdownBrowser implements ProgressListener {
+import code.satyagraha.gfm.viewer.model.api.MarkdownBrowser;
+
+public class MarkdownBrowserDefault implements MarkdownBrowser, ProgressListener {
 
     private Browser browser;
     private File htFile;
     private Integer lastScroll;
 
-    private static Logger LOGGER = Logger.getLogger(MarkdownBrowser.class.getPackage().getName());
+    private static Logger LOGGER = Logger.getLogger(MarkdownBrowserDefault.class.getPackage().getName());
 
-    public MarkdownBrowser(Composite parent) {
+    public MarkdownBrowserDefault(Composite parent) {
         browser = new Browser(parent, SWT.NONE);
         LOGGER.fine("browser type: " + browser.getBrowserType());
         browser.addProgressListener(this);
@@ -55,6 +62,7 @@ public abstract class MarkdownBrowser implements ProgressListener {
 //        dropTarget.addDropListener(dropListener);
 //    }
 
+    @Override
     public void showHtmlFile(File htFileNew) {
         LOGGER.fine("htFileNew: " + htFileNew.getPath());
         htFile = htFileNew;
@@ -81,6 +89,7 @@ public abstract class MarkdownBrowser implements ProgressListener {
         }
     }
 
+    @Override
     public File getHtFile() {
         return htFile;
     }
@@ -96,6 +105,7 @@ public abstract class MarkdownBrowser implements ProgressListener {
         if (lastScroll != null) {
             browser.execute(String.format("setDocumentScrollTop(%d);", lastScroll));
         }
+        restoreCursor();
     }
 
     private Integer getScrollTop() {
@@ -110,19 +120,37 @@ public abstract class MarkdownBrowser implements ProgressListener {
         return position != null ? ((Double) position).intValue() : null;
     }
 
+    @Override
     public void forward() {
         browser.forward();
     }
 
+    @Override
     public void back() {
         browser.back();
     }
 
+    @Override
     public void dispose() {
         browser.dispose();
         browser = null;
     }
 
-    public abstract void handleDrop(File file);
+//    public abstract void handleDrop(File file);
+
+    private void restoreCursor() {
+        LOGGER.fine("");
+        // the following code is a work-around for the problem of disappearing
+        // cursor on Windows
+        IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+        if (editor instanceof ITextEditor) {
+            ITextEditor textEditor = (ITextEditor) editor;
+            IAction action = textEditor.getAction(ITextEditorActionDefinitionIds.TOGGLE_OVERWRITE);
+            if (action != null) {
+                action.run();
+                action.run();
+            }
+        }
+    }
 
 }
