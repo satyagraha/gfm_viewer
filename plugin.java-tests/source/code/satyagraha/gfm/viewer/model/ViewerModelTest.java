@@ -56,12 +56,14 @@ public class ViewerModelTest {
 
     @BeforeClass
     public static void setupLogging() {
-        Logger rootLogger = Logger.getLogger("");
-        for (Handler handler : rootLogger.getHandlers()) {
-            handler.setLevel(Level.FINE);
+        if (System.getProperty("verbose") != null) {
+            Logger rootLogger = Logger.getLogger("");
+            for (Handler handler : rootLogger.getHandlers()) {
+                handler.setLevel(Level.FINE);
+            }
+            // Set root logger level
+            rootLogger.setLevel(Level.FINE);
         }
-        // Set root logger level
-        rootLogger.setLevel(Level.FINE);
     }
 
     @Test
@@ -411,7 +413,7 @@ public class ViewerModelTest {
         model.start();
         model.reload();
         model.stop();
-        
+
         // then
         verifyZeroInteractions(transformer, scheduler, browser);
     }
@@ -420,18 +422,18 @@ public class ViewerModelTest {
     public void reloadShouldAlwaysRegenerateWhenOnline() throws Exception {
         reloadScenario(true, true, 1, 2);
     }
-    
+
     @Test
     public void reloadShouldNotRegenerateWhenOffline() throws Exception {
         reloadScenario(false, true, 0, 2);
     }
-    
+
     @Test
     public void reloadShouldUseExistingHTMLWhenOffline() throws Exception {
         // this is a bit dubious
         reloadScenario(false, false, 0, 1);
     }
-    
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void reloadScenario(boolean isOnline, boolean htFileReadable, int scheduleCount, int showCount) throws IOException {
         // given
@@ -446,7 +448,7 @@ public class ViewerModelTest {
 
         File htFile = mock(File.class);
         given(htFile.canRead()).willReturn(htFileReadable);
-        
+
         given(transformer.createHtmlFile(mdFile)).willReturn(htFile);
         given(transformer.canSkipTransformation(mdFile, htFile)).willReturn(true);
 

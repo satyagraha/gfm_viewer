@@ -6,7 +6,6 @@
 	<version>1.7.0</version>
 	<packaging>pom</packaging>
 	
-	
 	<organization>
 		<name>Satyagraha</name>
 		<url>https://github.com/satyagraha/gfm_viewer</url>
@@ -54,10 +53,22 @@
 
 	<repositories>
 		<repository>
-			<id>eclipse-juno</id>
+			<id>eclipse-kepler</id>
 			<layout>p2</layout>
 			<url>http://download.eclipse.org/releases/kepler</url>
 		</repository>
+		<!-- 
+		<repository>
+			<id>eclipse-scala-ide</id>
+			<layout>p2</layout>
+			<url>http://download.scala-ide.org/sdk/e38/scala210/stable/site</url>
+		</repository>
+		<repository>
+			<id>maven-central</id>
+			<layout>maven</layout>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+		 -->
 	</repositories>
 
 	<build>
@@ -101,6 +112,7 @@
 							<arch>x86_64</arch>
 						</environment>
 					</environments>
+					<pomDependencies>consider</pomDependencies>
 				</configuration>
 			</plugin>
 		</plugins>

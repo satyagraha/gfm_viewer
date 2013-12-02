@@ -5,6 +5,5 @@ Bundle-SymbolicName: code.satyagraha.gfm.viewer.plugin.tests
 Bundle-Version: 1.7.0
 Fragment-Host: code.satyagraha.gfm.viewer.plugin;bundle-version="1.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.junit
-Bundle-ClassPath: lib/scalatest_2.10-2.0.jar,
- .
+Require-Bundle: org.junit,
+ org.scala-ide.scala.library

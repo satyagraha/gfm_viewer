@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>code.satyagraha.gfm.viewer.plugin.tests</artifactId>
-    <packaging>eclipse-test-plugin</packaging>
+	<packaging>eclipse-test-plugin</packaging>
 
 	<repositories>
 		<repository>
@@ -25,6 +25,10 @@
 	</repositories>
 
 	<build>
+	<!-- 
+		<sourceDirectory>source</sourceDirectory>
+		<sourceDirectory>source_scala</sourceDirectory>
+	 -->
 		<testSourceDirectory>source_scala</testSourceDirectory>
 		<plugins>
 		<!-- 
@@ -57,30 +61,11 @@
 				<version>3.1.6</version>
 				<executions>
 					<execution>
-						<id>scala-compile-first</id>
-						<phase>process-resources</phase>
-						<goals>
-						    <goal>add-source</goal>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>scala-test-compile</id>
-						<phase>process-test-resources</phase>
 						<goals>
 							<goal>testCompile</goal>
 						</goals>
 					</execution>
 				</executions>
-				<!-- 
-				<executions>
-					<execution>
-						<goals>
-							<goal>testCompile</goal>
-						</goals>
-					</execution>
-				</executions>
-				 -->
 			</plugin>
 			<plugin>
 				<groupId>org.scalatest</groupId>
@@ -102,17 +87,11 @@
 		</plugins>
 	</build>
 	<dependencies>
-	<!-- 
-	    <dependency>
-	    	<groupId>org.scala-lang</groupId>
-	    	<artifactId>scala-library</artifactId>
-	    	<version>2.10.0</version>
-	    </dependency>
-	 -->
 		<dependency>
 			<groupId>org.scalatest</groupId>
 			<artifactId>scalatest_2.10</artifactId>
 			<version>2.0</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
