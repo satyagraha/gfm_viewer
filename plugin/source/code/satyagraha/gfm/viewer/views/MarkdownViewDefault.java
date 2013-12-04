@@ -1,7 +1,11 @@
 package code.satyagraha.gfm.viewer.views;
 
+import java.io.File;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
@@ -15,6 +19,7 @@ public class MarkdownViewDefault extends ViewPart implements MarkdownView {
 
     private static Logger LOGGER = Logger.getLogger(MarkdownViewDefault.class.getPackage().getName());
 
+    @Inject
     private ViewerModel model;
 
     @Override
@@ -25,7 +30,8 @@ public class MarkdownViewDefault extends ViewPart implements MarkdownView {
         
         MarkdownBrowserDefault browser = new MarkdownBrowserDefault(parent);
         injector.addInstance(browser);
-        model = injector.getInstance(ViewerModel.class);
+        injector.addInstance(this);
+        injector.inject(this);
         model.start();
     }
 
@@ -42,4 +48,9 @@ public class MarkdownViewDefault extends ViewPart implements MarkdownView {
         super.dispose();
     }
 
+    @Override
+    public void nowShowing(File mdFile, boolean upToDate) {
+        String displayName = (upToDate ? "" : "* ") + FilenameUtils.getBaseName(mdFile.getName());
+        setPartName(displayName);
+    }
 }

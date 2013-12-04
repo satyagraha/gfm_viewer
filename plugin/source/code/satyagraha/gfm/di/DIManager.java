@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.ui.IPageListener;
 import org.eclipse.ui.IWindowListener;
@@ -60,7 +61,11 @@ public class DIManager {
         @Override
         public void pageClosed(IWorkbenchPage page) {
             debug("PageListener.pageClosed: " + page);
-            pageInjectorMap.remove(page);
+            Injector pageInjector = pageInjectorMap.get(page);
+            if (pageInjector != null) {
+                pageInjector.close();
+                pageInjectorMap.remove(page);
+            }
         }
 
     }
@@ -111,6 +116,15 @@ public class DIManager {
             }
         }
 
+        void close() {
+            for (Entry<IWorkbenchWindow, PageListener> entry : pageListeners.entrySet()) {
+                IWorkbenchWindow workbenchWindow = entry.getKey();
+                PageListener pageListener = entry.getValue();
+                workbenchWindow.removePageListener(pageListener);
+            }
+            pageListeners.clear();
+        }
+
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -143,16 +157,25 @@ public class DIManager {
     }
 
     public Injector getInjector(Component.Scope scope) {
+        if (scope == null) {
+            throw new IllegalArgumentException("null scope");
+        }
         switch (scope) {
-
         case PLUGIN:
             return pluginInjector;
 
         case PAGE:
-            IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
-            Injector pageInjector = pageInjectorMap.get(page);
+            IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
+            if (workbenchWindow == null) {
+                throw new IllegalStateException("no active workbench window");
+            }
+            IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
+            if (workbenchPage == null) {
+                throw new IllegalStateException("no active workbench page");
+            }
+            Injector pageInjector = pageInjectorMap.get(workbenchPage);
             if (pageInjector == null) {
-                throw new IllegalStateException("unable to locate pageInjector for page: " + page);
+                throw new IllegalStateException("unable to locate pageInjector for page: " + workbenchPage);
             }
             return pageInjector;
 
@@ -162,7 +185,17 @@ public class DIManager {
     }
 
     private void close() {
-        workbench.removeWindowListener(windowListener);
+        if (windowListener != null) {
+            windowListener.close();
+            workbench.removeWindowListener(windowListener);
+        }
+        if (pluginInjector != null) {
+            pluginInjector.close();
+        }
+        for (Injector pageInjector: pageInjectorMap.values()) {
+            pageInjector.close();
+        }
+        pageInjectorMap.clear();
     }
 
     private void debug(String message) {

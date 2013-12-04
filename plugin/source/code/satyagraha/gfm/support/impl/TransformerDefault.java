@@ -104,9 +104,13 @@ public class TransformerDefault implements Transformer {
     
     @Override
     public boolean canSkipTransformation(File mdFile, File htFile) {
+        return isUpToDate(mdFile, htFile) && !config.alwaysGenerateHtml();
+    }
+    
+    private boolean isUpToDate(File mdFile, File htFile) {
         long mdFileTimestamp = mdFile.lastModified();
         long htFileTimestamp = htFile.canRead() ? htFile.lastModified() : 0;
-        return !config.alwaysGenerateHtml() && mdFileTimestamp < htFileTimestamp;
+        return mdFileTimestamp < htFileTimestamp;
     }
     
     private boolean useFilteredLinks() {

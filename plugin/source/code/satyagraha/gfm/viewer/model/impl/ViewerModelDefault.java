@@ -16,6 +16,7 @@ import code.satyagraha.gfm.ui.api.Scheduler.Callback;
 import code.satyagraha.gfm.viewer.model.api.MarkdownBrowser;
 import code.satyagraha.gfm.viewer.model.api.MarkdownEditorTracker;
 import code.satyagraha.gfm.viewer.model.api.MarkdownListener;
+import code.satyagraha.gfm.viewer.model.api.MarkdownView;
 import code.satyagraha.gfm.viewer.model.api.ViewerModel;
 import code.satyagraha.gfm.viewer.model.api.ViewerSupport;
 
@@ -28,17 +29,20 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
     private Scheduler scheduler;
     private ViewerSupport viewSupport;
     private MarkdownEditorTracker editorTracker;
-    private MarkdownBrowser browser;
+    private MarkdownView markdownView;
+    private MarkdownBrowser markdownBrowser;
 
     private File mdFileShown;
 
+
     public ViewerModelDefault(Transformer transformer, Scheduler scheduler, ViewerSupport viewSupport, MarkdownEditorTracker editorTracker,
-            MarkdownBrowser browser) {
+            MarkdownView markdownView, MarkdownBrowser markdownBrowser) {
         this.transformer = transformer;
         this.scheduler = scheduler;
         this.viewSupport = viewSupport;
         this.editorTracker = editorTracker;
-        this.browser = browser;
+        this.markdownView = markdownView;
+        this.markdownBrowser = markdownBrowser;
     }
 
     @Override
@@ -65,13 +69,13 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
     @Override
     public void goForward() {
         LOGGER.fine("");
-        browser.forward();
+        markdownBrowser.forward();
     }
 
     @Override
     public void goBackward() {
         LOGGER.fine("");
-        browser.back();
+        markdownBrowser.back();
     }
 
     @Override
@@ -85,14 +89,14 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
         if (viewSupport.isOnline()) {
             scheduleTransformation(mdFile, htFile);
         } else if (htFile.canRead()) {
-            updateBrowser(mdFile, htFile); // may or may not be out-of-date
+            updateBrowser(mdFile, htFile, transformer.canSkipTransformation(mdFile, htFile));
         } else {
             // unable to display
         }   
     }
 
     @Override
-    public void notifyEditorFile(IFile editorFile) throws IOException {
+    public void notifyEditorFile(IFile editorFile) {
         LOGGER.fine("editorFile: " + editorFile);
         if (!viewSupport.isLinked()) {
             return;
@@ -111,11 +115,11 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
         }
         final File htFile = transformer.createHtmlFile(mdFile);
         if (transformer.canSkipTransformation(mdFile, htFile)) {
-            updateBrowser(mdFile, htFile);
+            updateBrowser(mdFile, htFile, true);
         } else if (viewSupport.isOnline()) {
             scheduleTransformation(mdFile, htFile);
         } else if (htFile.canRead()) {
-            updateBrowser(mdFile, htFile); // out-of-date
+            updateBrowser(mdFile, htFile, false); // out-of-date
         } else {
             // unable to display
         }
@@ -127,15 +131,16 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
 
             @Override
             public void onComplete(File htFile) {
-                updateBrowser(mdFile, htFile);
+                updateBrowser(mdFile, htFile, true);
             }
         });
     }
 
-    private void updateBrowser(File mdFile, File htFile) {
+    private void updateBrowser(File mdFile, File htFile, boolean upToDate) {
         LOGGER.fine("mdFile: " + mdFile);
         mdFileShown = mdFile;
-        browser.showHtmlFile(htFile);
+        markdownView.nowShowing(mdFile, upToDate);
+        markdownBrowser.showHtmlFile(htFile);
     }
 
 }

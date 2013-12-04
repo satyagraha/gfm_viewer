@@ -15,7 +15,7 @@ import org.picocontainer.monitors.NullComponentMonitor;
 class InjectorImpl implements Injector {
 
     private final ComponentMonitor componentMonitor;
-    private final MutablePicoContainer container;
+    private MutablePicoContainer container;
     
     InjectorImpl(Collection<Class<?>> components) {
         componentMonitor = new NullComponentMonitor();
@@ -37,6 +37,10 @@ class InjectorImpl implements Injector {
     
     @Override
     public <T> T getInstance(Class<T> componentType) {
+        checkContainer();
+        if (componentType == null) {
+            throw new IllegalArgumentException(new NullPointerException());
+        }
         T result = container.getComponent(componentType);
         if (result == null) {
             throw new IllegalArgumentException(new ClassNotFoundException(componentType.getCanonicalName()));
@@ -46,6 +50,7 @@ class InjectorImpl implements Injector {
 
     @Override
     public void addInstance(Object object) {
+        checkContainer();
         container.addComponent(object);
     }
     
@@ -56,6 +61,7 @@ class InjectorImpl implements Injector {
      */
     @Override
     public void inject(Object instance) {
+        checkContainer();
         Object key = instance.getClass().getCanonicalName();
         Class<?> impl = instance.getClass();
         Parameter[] parameters = null;
@@ -65,4 +71,14 @@ class InjectorImpl implements Injector {
         annotatedFieldInjector.decorateComponentInstance(container, null, instance);
     }
     
+    @Override
+    public void close() {
+        container = null;
+    }
+    
+    private void checkContainer() {
+        if (container == null) {
+            throw new IllegalStateException("injector is closed");
+        }
+    }
 }

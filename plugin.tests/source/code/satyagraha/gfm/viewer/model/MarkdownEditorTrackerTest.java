@@ -1,8 +1,8 @@
 package code.satyagraha.gfm.viewer.model;
 
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -17,12 +17,13 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import code.satyagraha.gfm.support.api.MarkdownFileNature;
 import code.satyagraha.gfm.ui.api.PageEditorTracker;
-import code.satyagraha.gfm.ui.impl.PageEditorTrackerDefault;
 import code.satyagraha.gfm.viewer.model.api.MarkdownListener;
 import code.satyagraha.gfm.viewer.model.impl.MarkdownEditorTrackerDefault;
 
@@ -33,7 +34,7 @@ public class MarkdownEditorTrackerTest {
     private IWorkbenchPage workbenchPage;
 
     @Mock
-    private MarkdownListener listener;
+    private MarkdownListener markdownListener;
 
     @Mock
     private IEditorReference editorRef;
@@ -53,86 +54,268 @@ public class MarkdownEditorTrackerTest {
     @Mock
     private MarkdownFileNature fileNature;
 
+    @Mock
     private PageEditorTracker pageEditorTracker;
 
+    @InjectMocks
     private MarkdownEditorTrackerDefault editorTracker;
 
+    @Captor
     private ArgumentCaptor<IPropertyListener> propertyListenerCaptor;
+
+    @Test
+    public void shouldStartCorrectly() {
+        // given
+
+        // when
+        editorTracker.start();
+
+        // then
+        verify(pageEditorTracker, times(1)).subscribe(editorTracker);
+    }
+
+    @Test
+    public void shouldStopCorrectly() {
+        // given
+
+        // when
+        editorTracker.start();
+        editorTracker.stop();
+
+        // then
+        verify(pageEditorTracker, times(1)).unsubscribe(editorTracker);
+    }
 
     @Test
     public void shouldNotifyOnEditorPartOpenedTrackableFile() throws Exception {
         // given
-        given(editorRef.getPage()).willReturn(workbenchPage);
-        given(editorRef.getEditor(true)).willReturn(editorPart);
         given(editorPart.getEditorInput()).willReturn(editorInput);
-        propertyListenerCaptor = ArgumentCaptor.forClass(IPropertyListener.class);
-        willDoNothing().given(editorPart).addPropertyListener(propertyListenerCaptor.capture());
         given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
-        given(editorIFile.getFullPath()).willReturn(editorPath);
         given(fileNature.isTrackableFile(editorIFile)).willReturn(true);
 
-        pageEditorTracker = new PageEditorTrackerDefault(workbenchPage);
-        editorTracker = new MarkdownEditorTrackerDefault(pageEditorTracker, fileNature);
-        editorTracker.start();
-        editorTracker.addListener(listener);
-
         // when
-        pageEditorTracker.partOpened(editorRef);
+        editorTracker.start();
+        editorTracker.addListener(markdownListener);
+        editorTracker.editorShown(editorPart);
 
         // then
-        verify(listener).notifyEditorFile(editorIFile);
-        verifyNoMoreInteractions(listener);
+        verify(markdownListener, times(1)).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener);
     }
 
     @Test
-    public void shouldNotifyOnEditorPartClosed() throws Exception {
+    public void shouldNotNotifyOnEditorPartOpenedNoEditorInput() throws Exception {
         // given
-        shouldNotifyOnEditorPartOpenedTrackableFile();
+        given(editorPart.getEditorInput()).willReturn(null);
 
         // when
-        pageEditorTracker.partClosed(editorRef);
+        editorTracker.start();
+        editorTracker.addListener(markdownListener);
+        editorTracker.editorShown(editorPart);
 
         // then
-        // verify(listener).showIFile(null);
-        verifyNoMoreInteractions(listener);
+        verify(markdownListener, never()).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener);
+    }
+
+    @Test
+    public void shouldNotNotifyOnEditorPartOpenedNoEditorFile() throws Exception {
+        // given
+        given(editorPart.getEditorInput()).willReturn(editorInput);
+        given(editorInput.getAdapter(IFile.class)).willReturn(null);
+
+        // when
+        editorTracker.start();
+        editorTracker.addListener(markdownListener);
+        editorTracker.editorShown(editorPart);
+
+        // then
+        verify(markdownListener, never()).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener);
     }
 
     @Test
     public void shouldNotNotifyOnEditorPartOpenedNonTrackableFile() throws Exception {
         // given
-        given(editorRef.getPart(true)).willReturn(editorPart);
         given(editorPart.getEditorInput()).willReturn(editorInput);
         given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
-        given(editorIFile.getFullPath()).willReturn(editorPath);
         given(fileNature.isTrackableFile(editorIFile)).willReturn(false);
 
-        pageEditorTracker = new PageEditorTrackerDefault(workbenchPage);
-        editorTracker = new MarkdownEditorTrackerDefault(pageEditorTracker, fileNature);
-        editorTracker.start();
-        editorTracker.addListener(listener);
-
         // when
-        pageEditorTracker.partOpened(editorRef);
+        editorTracker.start();
+        editorTracker.addListener(markdownListener);
+        editorTracker.editorShown(editorPart);
 
         // then
-        verifyNoMoreInteractions(listener);
+        verify(markdownListener, never()).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener);
+    }
+
+    @Test
+    public void shouldNotNotifyOnOnceStopped() throws Exception {
+        // given
+        given(editorPart.getEditorInput()).willReturn(editorInput);
+        given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
+        given(fileNature.isTrackableFile(editorIFile)).willReturn(true);
+
+        // when
+        editorTracker.start();
+        editorTracker.addListener(markdownListener);
+        editorTracker.editorShown(editorPart);
+        editorTracker.stop();
+        editorTracker.editorShown(editorPart);
+
+        // then
+        verify(markdownListener, times(1)).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener);
+    }
+
+    @Test
+    public void shouldNotifyOnceOnlyOnEditorPartReOpened() throws Exception {
+        // given
+        given(editorPart.getEditorInput()).willReturn(editorInput);
+        given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
+        given(fileNature.isTrackableFile(editorIFile)).willReturn(true);
+
+        // when
+        editorTracker.start();
+        editorTracker.addListener(markdownListener);
+        editorTracker.editorShown(editorPart);
+        editorTracker.editorShown(editorPart);
+
+        // then
+        verify(markdownListener, times(1)).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener);
+    }
+
+    @Test
+    public void shouldNotifyOnceOnlyOnEditorPartClosed() throws Exception {
+        // given
+        given(editorPart.getEditorInput()).willReturn(editorInput);
+        given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
+        given(fileNature.isTrackableFile(editorIFile)).willReturn(true);
+
+        // when
+        editorTracker.start();
+        editorTracker.addListener(markdownListener);
+        editorTracker.editorShown(editorPart);
+        editorTracker.editorClosed(editorPart);
+
+        // then
+        verify(markdownListener, times(1)).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener);
+    }
+
+    @Test
+    public void shouldNotNotifyOnEditorPartClosedNoEditorFile() throws Exception {
+        // given
+        given(editorPart.getEditorInput()).willReturn(null);
+
+        // when
+        editorTracker.start();
+        editorTracker.addListener(markdownListener);
+        editorTracker.editorShown(editorPart);
+        editorTracker.editorClosed(editorPart);
+
+        // then
+        verify(markdownListener, never()).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener);
+    }
+
+    @Test
+    public void shouldNotNotifyOnEditorPartClosedNeverOpened() throws Exception {
+        // given
+        given(editorPart.getEditorInput()).willReturn(editorInput);
+        given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
+        given(fileNature.isTrackableFile(editorIFile)).willReturn(true);
+
+        // when
+        editorTracker.start();
+        editorTracker.addListener(markdownListener);
+        editorTracker.editorClosed(editorPart);
+
+        // then
+        verify(markdownListener, never()).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener);
+    }
+
+    @Test
+    public void shouldNotNotifyOnEditorPartNeverOpened() throws Exception {
+        // given
+        given(editorPart.getEditorInput()).willReturn(editorInput);
+        given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
+        given(fileNature.isTrackableFile(editorIFile)).willReturn(true);
+
+        // when
+        editorTracker.start();
+        editorTracker.editorShown(editorPart);
+
+        // then
+        verify(markdownListener, never()).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener);
     }
 
     @Test
     public void shouldNotifyOnEditorPartSaved() throws Exception {
         // given
-        shouldNotifyOnEditorPartOpenedTrackableFile();
-
-        IPropertyListener propertyListener = propertyListenerCaptor.getValue();
-        assertNotNull(propertyListener);
-
-        given(editorPart.isDirty()).willReturn(false);
+        given(editorPart.getEditorInput()).willReturn(editorInput);
+        willDoNothing().given(editorPart).addPropertyListener(propertyListenerCaptor.capture());
+        given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
+        given(fileNature.isTrackableFile(editorIFile)).willReturn(true);
 
         // when
+        editorTracker.start();
+        editorTracker.addListener(markdownListener);
+        editorTracker.editorShown(editorPart);
+        IPropertyListener propertyListener = propertyListenerCaptor.getValue();
+        given(editorPart.isDirty()).willReturn(false);
         propertyListener.propertyChanged(editorPart, IEditorPart.PROP_DIRTY);
 
         // then
-        verify(listener, times(2)).notifyEditorFile(editorIFile);
+        verify(markdownListener, times(2)).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener);
+    }
+
+    @Test
+    public void shouldNotNotifyOnEditorPartInput() throws Exception {
+        // given
+        given(editorPart.getEditorInput()).willReturn(editorInput);
+        willDoNothing().given(editorPart).addPropertyListener(propertyListenerCaptor.capture());
+        given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
+        given(fileNature.isTrackableFile(editorIFile)).willReturn(true);
+
+        // when
+        editorTracker.start();
+        editorTracker.addListener(markdownListener);
+        editorTracker.editorShown(editorPart);
+        IPropertyListener propertyListener = propertyListenerCaptor.getValue();
+        given(editorPart.isDirty()).willReturn(false);
+        propertyListener.propertyChanged(editorPart, IEditorPart.PROP_INPUT);
+
+        // then
+        verify(markdownListener, times(1)).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener);
+    }
+
+    @Test
+    public void shouldNotNotifyOnEditorPartialSave() throws Exception {
+        // given
+        given(editorPart.getEditorInput()).willReturn(editorInput);
+        willDoNothing().given(editorPart).addPropertyListener(propertyListenerCaptor.capture());
+        given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
+        given(fileNature.isTrackableFile(editorIFile)).willReturn(true);
+
+        // when
+        editorTracker.start();
+        editorTracker.addListener(markdownListener);
+        editorTracker.editorShown(editorPart);
+        IPropertyListener propertyListener = propertyListenerCaptor.getValue();
+        given(editorPart.isDirty()).willReturn(true);
+        propertyListener.propertyChanged(editorPart, IEditorPart.PROP_DIRTY);
+
+        // then
+        verify(markdownListener, times(1)).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener);
     }
 
 }

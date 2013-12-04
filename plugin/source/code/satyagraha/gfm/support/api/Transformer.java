@@ -6,18 +6,18 @@ import java.util.List;
 
 public interface Transformer {
 
-    public List<String> markdownExtensions();
+    List<String> markdownExtensions();
     
-    public boolean isMarkdownFile(File file);
+    boolean isMarkdownFile(File file);
     
-    public String transformMarkdownText(String mdText);
+    String transformMarkdownText(String mdText);
 
-    public void transformMarkdownFile(File mdFile, File htFile) throws IOException;
+    void transformMarkdownFile(File mdFile, File htFile) throws IOException;
     
-    public String htFilename(String mdFilename);
+    String htFilename(String mdFilename);
 
-    public File createHtmlFile(File mdFile);
+    File createHtmlFile(File mdFile);
 
-    public boolean canSkipTransformation(File mdFile, File htFile);
+    boolean canSkipTransformation(File mdFile, File htFile);
 
 }

@@ -1,5 +1,6 @@
 .settings
 .classpath
+.cache
 *.class
 *.jar
 bin

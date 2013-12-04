@@ -28,10 +28,10 @@ import code.satyagraha.gfm.ui.api.Scheduler;
 import code.satyagraha.gfm.ui.api.Scheduler.Callback;
 import code.satyagraha.gfm.viewer.model.api.MarkdownBrowser;
 import code.satyagraha.gfm.viewer.model.api.MarkdownEditorTracker;
+import code.satyagraha.gfm.viewer.model.api.MarkdownView;
 import code.satyagraha.gfm.viewer.model.api.ViewerSupport;
 import code.satyagraha.gfm.viewer.model.impl.ViewerModelDefault;
-
-import java.util.logging.*;
+import code.satyagraha.test.support.SimpleLogging;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ViewerModelTest {
@@ -49,19 +49,17 @@ public class ViewerModelTest {
     private MarkdownEditorTracker editorTracker;
 
     @Mock
-    private MarkdownBrowser browser;
+    private MarkdownView markdownView;
 
+    @Mock
+    private MarkdownBrowser browser;
+    
     @InjectMocks
     private ViewerModelDefault model;
 
     @BeforeClass
-    public static void setupLogging() {
-        Logger rootLogger = Logger.getLogger("");
-        for (Handler handler : rootLogger.getHandlers()) {
-            handler.setLevel(Level.FINE);
-        }
-        // Set root logger level
-        rootLogger.setLevel(Level.FINE);
+    public static void setupClass() {
+        SimpleLogging.setupLogging();
     }
 
     @Test
@@ -119,7 +117,7 @@ public class ViewerModelTest {
         model.stop();
 
         // then
-        verifyZeroInteractions(transformer, scheduler, browser);
+        verifyZeroInteractions(transformer, scheduler, markdownView, browser);
     }
 
     @Test
@@ -138,7 +136,7 @@ public class ViewerModelTest {
         model.stop();
 
         // then
-        verifyZeroInteractions(transformer, scheduler, browser);
+        verifyZeroInteractions(transformer, scheduler, markdownView, browser);
     }
 
     @Test
@@ -157,41 +155,41 @@ public class ViewerModelTest {
         model.stop();
 
         // then
-        verifyZeroInteractions(transformer, scheduler, browser);
+        verifyZeroInteractions(transformer, scheduler, markdownView, browser);
     }
 
     @Test
     public void showMarkdownFileShouldNotGenerateIfUpToDateWhenOnline() throws Exception {
-        showMarkdownFileScenario(true, true, true, 0, 1);
+        showMarkdownFileScenario(true, true, true, 0, 1, true);
     }
 
     @Test
     public void showMarkdownFileShouldGenerateIfNotUpToDateWhenOnline() throws Exception {
-        showMarkdownFileScenario(true, true, false, 1, 1);
+        showMarkdownFileScenario(true, true, false, 1, 1, true);
     }
 
     @Test
     public void showMarkdownFileShouldGenerateIfNoHtmlFileWhenOnline() throws Exception {
-        showMarkdownFileScenario(true, false, false, 1, 1);
+        showMarkdownFileScenario(true, false, false, 1, 1, true);
     }
 
     @Test
     public void showMarkdownFileShouldNotGenerateIfUpToDateWhenOffine() throws Exception {
-        showMarkdownFileScenario(false, true, true, 0, 1);
+        showMarkdownFileScenario(false, true, true, 0, 1, true);
     }
 
     @Test
     public void showMarkdownFileShouldNotGenerateIfNotUpToDateWhenOffline() throws Exception {
-        showMarkdownFileScenario(false, true, false, 0, 1);
+        showMarkdownFileScenario(false, true, false, 0, 1, false);
     }
 
     @Test
     public void showMarkdownFileShouldNotGenerateIfNoHtmlFileWhenOffline() throws Exception {
-        showMarkdownFileScenario(false, false, false, 0, 0);
+        showMarkdownFileScenario(false, false, false, 0, 0, false);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void showMarkdownFileScenario(boolean isOnline, boolean htFileReadable, boolean canSkipTransformation, int scheduleCount, int showCount)
+    private void showMarkdownFileScenario(boolean isOnline, boolean htFileReadable, boolean canSkipTransformation, int scheduleCount, int showCount, boolean isUpToDate)
             throws IOException {
         // given
         given(viewSupport.isOnline()).willReturn(isOnline);
@@ -224,6 +222,7 @@ public class ViewerModelTest {
         // then
         verify(viewSupport, never()).isLinked();
         verify(scheduler, times(scheduleCount)).scheduleTransformation(eq(mdFile), eq(htFile), any(Scheduler.Callback.class));
+        verify(markdownView, times(showCount)).nowShowing(mdFile, isUpToDate);
         verify(browser, times(showCount)).showHtmlFile(htFile);
     }
 
@@ -284,67 +283,67 @@ public class ViewerModelTest {
 
     @Test
     public void notifyEditorFileShouldNotGenerateIfUpToDateWhenLinkedAndOnline() throws Exception {
-        notifyEditorFileScenario(true, true, true, true, 0, 1);
+        notifyEditorFileScenario(true, true, true, true, 0, 1, true);
     }
 
     @Test
     public void notifyEditorFileShouldGenerateIfNotUpToDateWhenLinkedAndOnline() throws Exception {
-        notifyEditorFileScenario(true, true, true, false, 1, 1);
+        notifyEditorFileScenario(true, true, true, false, 1, 1, true);
     }
 
     @Test
     public void notifyEditorFileShouldGenerateIfNoHtmlFileWhenLinkedAndOnline() throws Exception {
-        notifyEditorFileScenario(true, true, false, false, 1, 1);
+        notifyEditorFileScenario(true, true, false, false, 1, 1, true);
     }
 
     @Test
     public void notifyEditorFileShouldNotGenerateIfUpToDateWhenLinkedAndOffine() throws Exception {
-        notifyEditorFileScenario(true, false, true, true, 0, 1);
+        notifyEditorFileScenario(true, false, true, true, 0, 1, true);
     }
 
     @Test
     public void notifyEditorFileShouldNotGenerateIfNotUpToDateWhenLinkedAndOffline() throws Exception {
-        notifyEditorFileScenario(true, false, true, false, 0, 1);
+        notifyEditorFileScenario(true, false, true, false, 0, 1, false);
     }
 
     @Test
     public void notifyEditorFileShouldNotGenerateIfNoHtmlFileWhenLinkedAndOffline() throws Exception {
-        notifyEditorFileScenario(true, false, false, false, 0, 0);
+        notifyEditorFileScenario(true, false, false, false, 0, 0, false);
     }
 
     @Test
     public void notifyEditorFileShouldNotGenerateIfUpToDateWhenUnlinkedAndOnline() throws Exception {
-        notifyEditorFileScenario(false, true, true, true, 0, 0);
+        notifyEditorFileScenario(false, true, true, true, 0, 0, false);
     }
 
     @Test
     public void notifyEditorFileShouldNotGenerateIfNotUpToDateWhenUnlinkedAndOnline() throws Exception {
-        notifyEditorFileScenario(false, true, true, false, 0, 0);
+        notifyEditorFileScenario(false, true, true, false, 0, 0, false);
     }
 
     @Test
     public void notifyEditorFileShouldNotGenerateIfNoHtmlFileWhenUnlinkedAndOnline() throws Exception {
-        notifyEditorFileScenario(false, true, false, false, 0, 0);
+        notifyEditorFileScenario(false, true, false, false, 0, 0, false);
     }
 
     @Test
     public void notifyEditorFileShouldNotGenerateIfUpToDateWhenUnlinkedAndOffine() throws Exception {
-        notifyEditorFileScenario(false, false, true, true, 0, 0);
+        notifyEditorFileScenario(false, false, true, true, 0, 0, false);
     }
 
     @Test
     public void notifyEditorFileShouldNotGenerateIfNotUpToDateWhenUnlinkedAndOffline() throws Exception {
-        notifyEditorFileScenario(false, false, true, false, 0, 0);
+        notifyEditorFileScenario(false, false, true, false, 0, 0, false);
     }
 
     @Test
     public void notifyEditorFileShouldNotGenerateIfNoHtmlFileWhenUnlinkedAndOffline() throws Exception {
-        notifyEditorFileScenario(false, false, false, false, 0, 0);
+        notifyEditorFileScenario(false, false, false, false, 0, 0, false);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void notifyEditorFileScenario(boolean isLinked, boolean isOnline, boolean htFileReadable, boolean canSkipTransformation, int scheduleCount,
-            int showCount) throws IOException {
+            int showCount, boolean isUpToDate) throws IOException {
         // given
         given(viewSupport.isOnline()).willReturn(isOnline);
         given(viewSupport.isLinked()).willReturn(isLinked);
@@ -418,22 +417,22 @@ public class ViewerModelTest {
 
     @Test
     public void reloadShouldAlwaysRegenerateWhenOnline() throws Exception {
-        reloadScenario(true, true, 1, 2);
+        reloadScenario(true, true, 1, 2, true);
     }
     
     @Test
     public void reloadShouldNotRegenerateWhenOffline() throws Exception {
-        reloadScenario(false, true, 0, 2);
+        reloadScenario(false, true, 0, 2, false);
     }
     
     @Test
     public void reloadShouldUseExistingHTMLWhenOffline() throws Exception {
         // this is a bit dubious
-        reloadScenario(false, false, 0, 1);
+        reloadScenario(false, false, 0, 1, false);
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void reloadScenario(boolean isOnline, boolean htFileReadable, int scheduleCount, int showCount) throws IOException {
+    private void reloadScenario(boolean isOnline, boolean htFileReadable, int scheduleCount, int showCount, boolean isUpToDate) throws IOException {
         // given
         given(viewSupport.isOnline()).willReturn(isOnline);
 

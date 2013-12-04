@@ -1,6 +1,5 @@
 package code.satyagraha.gfm.viewer.model.impl;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -34,11 +33,9 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
 
         void open() {
             editorPart.addPropertyListener(this);
-            notifyMarkdownListener(editorFile);
         }
 
         void close() {
-            // notifyMarkdownListenerIfEnabled(null);
             editorPart.removePropertyListener(this);
         }
 
@@ -50,27 +47,27 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
             }
         }
     }
-    
+
     private class MarkdownEditorSubscriptions {
-        
+
         private final Map<IFile, MarkdownEditorSubscription> subscriptions;
-        
+
         MarkdownEditorSubscriptions() {
             subscriptions = new HashMap<IFile, MarkdownEditorSubscription>();
         }
-        
+
         void add(MarkdownEditorSubscription subscription) {
             subscriptions.put(subscription.editorFile, subscription);
         }
-        
+
         void remove(MarkdownEditorSubscription subscription) {
             subscriptions.remove(subscription.editorFile);
         }
-        
+
         MarkdownEditorSubscription get(IFile iFile) {
             return subscriptions.get(iFile);
         }
-        
+
         void close() {
             for (MarkdownEditorSubscription subscription : subscriptions.values()) {
                 subscription.close();
@@ -95,15 +92,19 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
         currentSubscription = null;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see code.satyagraha.gfm.viewer.model.api.MarkdownEditorTracker#start()
      */
     @Override
     public void start() {
         pageEditorTracker.subscribe(this);
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see code.satyagraha.gfm.viewer.views.impl.MarkdownEditorTracker#close()
      */
     @Override
@@ -112,69 +113,78 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
         subscriptions.close();
         pageEditorTracker.unsubscribe(this);
         currentSubscription = null;
-        
+
         markdownListener = null;
         pageEditorTracker = null;
     }
 
-    /* (non-Javadoc)
-     * @see code.satyagraha.gfm.viewer.views.impl.MarkdownEditorTracker#addListener(code.satyagraha.gfm.viewer.views.api.MarkdownListener)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * code.satyagraha.gfm.viewer.views.impl.MarkdownEditorTracker#addListener
+     * (code.satyagraha.gfm.viewer.views.api.MarkdownListener)
      */
     @Override
     public void addListener(MarkdownListener markdownListener) {
         this.markdownListener = markdownListener;
     }
-    
+
     private void notifyMarkdownListener(IFile markdownFile) {
         LOGGER.fine("markdownFile: " + markdownFile);
         if (markdownListener != null) {
-            try {
-                markdownListener.notifyEditorFile(markdownFile);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            markdownListener.notifyEditorFile(markdownFile);
         }
     }
 
     @Override
     public void editorShown(final IEditorPart editorPart) {
         LOGGER.fine("editorPart: " + editorPart);
-        IEditorInput editorInput = editorPart.getEditorInput();
-        if (editorInput == null) {
-            return;
-        }
-        IFile editorFile = ResourceUtil.getFile(editorInput);
+        IFile editorFile = getTrackableFile(editorPart);
         if (editorFile == null) {
             return;
         }
-        if (markdownFileNature.isTrackableFile(editorFile)) {
-            LOGGER.fine("editorFile: " + editorFile);
-            MarkdownEditorSubscription subscription = subscriptions.get(editorFile);
-            if (subscription == null) {
-                subscription = new MarkdownEditorSubscription(editorPart, editorFile);
-                subscriptions.add(subscription);
-                subscription.open();
-            } else if (currentSubscription != subscription) {
-                notifyMarkdownListener(editorFile);
-            }
+        LOGGER.fine("editorFile: " + editorFile);
+        MarkdownEditorSubscription subscription = subscriptions.get(editorFile);
+        if (subscription == null) {
+            subscription = new MarkdownEditorSubscription(editorPart, editorFile);
+            subscriptions.add(subscription);
+            subscription.open();
+        }
+        if (subscription != currentSubscription) {
+            notifyMarkdownListener(editorFile);
             currentSubscription = subscription;
         }
     }
 
     @Override
     public void editorClosed(final IEditorPart editorPart) {
-        LOGGER.fine("");
-        IEditorInput editorInput = editorPart.getEditorInput();
-        IFile editorFile = ResourceUtil.getFile(editorInput);
-        if (markdownFileNature.isTrackableFile(editorFile)) {
-            LOGGER.fine("closing markdown editor found");
-            MarkdownEditorSubscription subscription = subscriptions.get(editorFile);
-            if (subscription != null) {
-                subscription.close();
-                subscriptions.remove(subscription);
-            }
-            currentSubscription = null;
+        LOGGER.fine("editorPart: " + editorPart);
+        IFile editorFile = getTrackableFile(editorPart);
+        if (editorFile == null) {
+            return;
         }
+        LOGGER.fine("editorFile: " + editorFile);
+        MarkdownEditorSubscription subscription = subscriptions.get(editorFile);
+        if (subscription != null) {
+            subscription.close();
+            subscriptions.remove(subscription);
+        }
+        currentSubscription = null;
+    }
+
+    private IFile getTrackableFile(IEditorPart editorPart) {
+        IFile result = null;
+        IEditorInput editorInput = editorPart.getEditorInput();
+        if (editorInput != null) {
+            IFile editorFile = ResourceUtil.getFile(editorInput);
+            if (editorFile != null) {
+                if (markdownFileNature.isTrackableFile(editorFile)) {
+                    result = editorFile;
+                }
+            }
+        }
+        return result;
     }
 
 }
