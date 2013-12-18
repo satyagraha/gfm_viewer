@@ -104,7 +104,7 @@ public class TransformerDefault implements Transformer {
     
     @Override
     public boolean canSkipTransformation(File mdFile, File htFile) {
-        return isUpToDate(mdFile, htFile) && !config.alwaysGenerateHtml();
+        return isUpToDate(mdFile, htFile);
     }
     
     private boolean isUpToDate(File mdFile, File htFile) {

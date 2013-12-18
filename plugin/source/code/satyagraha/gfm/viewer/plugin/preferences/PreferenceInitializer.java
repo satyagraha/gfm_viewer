@@ -1,6 +1,5 @@
 package code.satyagraha.gfm.viewer.plugin.preferences;
 
-import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_ALWAYS_GENERATE_HTML;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_API_URL;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_CSS_URL_1;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_CSS_URL_2;
@@ -53,7 +52,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(P_JS_URL_2, "");
 		store.setDefault(P_JS_URL_3, "");
 		store.setDefault(P_USE_ECLIPSE_CONSOLE, false);
-		store.setDefault(P_ALWAYS_GENERATE_HTML, false);
 	}
 
 }

@@ -2,7 +2,7 @@
 <feature
       id="code.satyagraha.gfm.viewer.feature"
       label="GFM Viewer feature"
-      version="1.7.0"
+      version="1.8.0"
       provider-name="Satyagraha">
 
    <license url="">

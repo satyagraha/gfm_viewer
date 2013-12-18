@@ -39,20 +39,21 @@ the directory trees): this is effectively a batch mode update facility.
 
 * The GFM plugin view provides on its toolbar the following icons which may be clicked:
 	* ![settings16.png](plugin/icons/etool16/settings16.png) - show preferences page
+	* ![linked.gif](plugin/icons/online.gif) - on/off-line mode, switch off when not connected to internet
+	* ![linked.gif](plugin/icons/linked.gif) - linked mode, use to keep GFM View aligned with active editor
+	* ![realod.gif](plugin/icons/reload.gif) - reload, to manually update GFM View from last linked file
 	* ![nav_backward.gif](plugin/icons/nav_backward.gif) - navigate backwards in the browsing history
 	* ![nav_forward.gif](plugin/icons/nav_forward.gif) - navigate forwards in the browsing history
-	* ![linked.gif](plugin/icons/linked.gif) - link GFM View to editor to automatically update on save
-	* ![realod.gif](plugin/icons/reload.gif) - manually update GFM View from last linked file
 
-The GFM View-editor linked state is by default on, but if set off its state will be automatically
-saved and preserved in the Eclipse workspace provided the GFM view is not closed.
+The On/Off-line and Editor linked modes are by default on, but if set off their state
+will be automatically saved and preserved in the Eclipse workspace provided the GFM view is not closed.
 
-If non-ASCII characters are used in the markdown file, the current implementation assumes
-[UTF-8](http://en.wikipedia.org/wiki/UTF-8) character encoding, see also
-[here](http://www.martinahrer.at/2007/06/03/eclipse-encoding-settings/).
+When operating in Off-line mode, if the local cached HTML version of the markup file is
+out-of-date with respect to the markdown file, then the title bar of the browser has
+a '*' character preceding the file name, similar to the "dirty" indicator in editors.
 
 The plugin uses Eclipse's default browser, e.g. Internet Explorer on Windows; if you use
-Linux, you will need to set up Mozilla Firefox as follows:
+Ubuntu or other Linux distros, we recommend the WebKit browser; see:
 * http://www.eclipse.org/swt/faq.php#browserlinuxrcp
 * http://www.eclipse.org/swt/faq.php#browserlinux
 
@@ -60,6 +61,10 @@ If you want to view two (or more) markdown files simultaneously, simply open a n
 _Window_ -> _New Window_ and there open another instance of the viewer: then any markdown files edited
 in that window will display in that window's viewer, independently of the original window and its 
 editors and viewer.
+
+If non-ASCII characters are used in the markdown file, the current implementation assumes
+[UTF-8](http://en.wikipedia.org/wiki/UTF-8) character encoding, see also
+[here](http://www.martinahrer.at/2007/06/03/eclipse-encoding-settings/).
 
 ## Configuration
 
@@ -93,7 +98,7 @@ top right of view), then select the _Filters..._ entry, and then set or clear th
 In Eclipse, do the following:
 * Go to menu _Help_ -> _Install New Software..._ and in the resulting dialog click the _Add..._
 button to present a further dialog, and here enter `GFM Viewer` as the _Name_ and 
-this [link](http://dl.bintray.com/satyagraha/generic/1.7.0) as the _Location_ and press _OK_
+this [link](http://dl.bintray.com/satyagraha/generic/1.8.0) as the _Location_ and press _OK_
 * Select the _GFM Viewer_ category in the install view, and alter the checkbox settings
 there as necessary 
 * Proceed to install the software in the usual manner accepting all defaults
@@ -202,7 +207,7 @@ site as an alternative to the other one.
 
 In order to update version:
 
-	mvn -Dtycho.mode=maven org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=1.7.0
+	mvn -Dtycho.mode=maven org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=1.X.0
 	
 Make sure to do a search through all files to find any occurrences of the old version, as they will be present
 in some Eclipse plugin manifest and build properties files.
@@ -242,7 +247,8 @@ classes in a project, highlighting circular dependencies which typically indicat
 
 ## History
 
-* 1.7.0 - Various fixes
+* 1.8.0 - On/Off-line mode
+* 1.7.0 - Various fixes, Ubuntu supported via Webkit browser
 * 1.6.0 - Skip HTML regeneration by default, fixes
 * 1.5.0 - Help page how to add Help to an Eclipse plugin, console logging
 * 1.4.0 - hierarchical project structure, dependency injection, built-in Help, fix NPE when changing perspective

@@ -1,6 +1,5 @@
 package code.satyagraha.gfm.viewer.plugin.preferences;
 
-import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_ALWAYS_GENERATE_HTML;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_API_URL;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_CSS_URL_1;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_CSS_URL_2;
@@ -127,11 +126,6 @@ public class PreferenceAdapter implements Config {
     @Override
     public boolean useEclipseConsole() {
         return getBooleanPreference(P_USE_ECLIPSE_CONSOLE);
-    }
-    
-    @Override
-    public boolean alwaysGenerateHtml() {
-        return getBooleanPreference(P_ALWAYS_GENERATE_HTML);
     }
     
     private String getStringPreference(String preferenceId) {
