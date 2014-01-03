@@ -54,7 +54,7 @@
 
 	<repositories>
 		<repository>
-			<id>eclipse-juno</id>
+			<id>eclipse-kepler</id>
 			<layout>p2</layout>
 			<url>http://download.eclipse.org/releases/kepler</url>
 		</repository>
@@ -110,6 +110,7 @@
 		<module>ext-deps</module>
 		<module>plugin</module>
 		<module>plugin.tests</module>
+		<module>plugin.ui.tests</module>
 		<module>feature</module>
 		<module>update-site</module>
 		<module>p2-repo</module>

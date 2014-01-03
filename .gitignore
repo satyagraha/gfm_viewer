@@ -11,3 +11,4 @@ $*
 !site/.*.md.html
 .ispace
 *.ucls
+plugin.ui.tests/screenshots
