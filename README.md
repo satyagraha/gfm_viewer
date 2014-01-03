@@ -83,8 +83,6 @@ limit raised, see [here](http://developer.github.com/v3/#rate-limiting) for back
 * _CSS URL 1-3_: an alternate CSS presentation to the default may be provided
 * _JS URL 1-3_: an alternate JS implementation to the default may be provided
 * _Use Eclipse Console_: shows debugging output in Console view
-* _Always generate HTML_ : by default the formatted HTML files are not regenerated
-if they are newer than the markdown file; select this option to force this to happen
 
 Regarding the temporary formatted HTML files, when stored in the original markdown file directory note:
 
@@ -98,7 +96,7 @@ top right of view), then select the _Filters..._ entry, and then set or clear th
 In Eclipse, do the following:
 * Go to menu _Help_ -> _Install New Software..._ and in the resulting dialog click the _Add..._
 button to present a further dialog, and here enter `GFM Viewer` as the _Name_ and 
-this [link](http://dl.bintray.com/satyagraha/generic/1.8.0) as the _Location_ and press _OK_
+this [link](http://dl.bintray.com/satyagraha/generic/1.8.1) as the _Location_ and press _OK_
 * Select the _GFM Viewer_ category in the install view, and alter the checkbox settings
 there as necessary 
 * Proceed to install the software in the usual manner accepting all defaults
@@ -247,6 +245,7 @@ classes in a project, highlighting circular dependencies which typically indicat
 
 ## History
 
+* 1.8.1 - UI tests, fixes
 * 1.8.0 - On/Off-line mode
 * 1.7.0 - Various fixes, Ubuntu supported via Webkit browser
 * 1.6.0 - Skip HTML regeneration by default, fixes
