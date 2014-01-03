@@ -13,3 +13,5 @@ script: "mvn -B clean package"
 after_failure:
  - cat /home/travis/build/satyagraha/gfm_viewer/plugin.tests/target/work/data/.metadata/.log
  - cat /home/travis/build/satyagraha/gfm_viewer/plugin.tests/target/surefire-reports/*
+ - cat /home/travis/build/satyagraha/gfm_viewer/plugin.ui.tests/target/work/data/.metadata/.log
+ - cat /home/travis/build/satyagraha/gfm_viewer/plugin.ui.tests/target/surefire-reports/*
