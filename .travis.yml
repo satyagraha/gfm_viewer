@@ -1,14 +1,24 @@
 language: java
 
 jdk: oraclejdk7
-  
-env: DISPLAY=:99.0
- 
-before_install: "sh -e /etc/init.d/xvfb start"
-  
-install: export
 
-script: "mvn -B clean package"
+env: DISPLAY=:99.0
+
+install: true
+
+before_install:
+ - sudo apt-get update
+ - sudo apt-get install -qq metacity
+
+before_script:
+ - sh -e /etc/init.d/xvfb start
+ - sleep 5 # give xvfb some time to start
+ - metacity --sm-disable --replace &
+ - sleep 5 # give metacity some time to start
+ 
+script:
+ - set | sort
+ - mvn -B clean package
 
 after_failure:
  - cat /home/travis/build/satyagraha/gfm_viewer/plugin.tests/target/work/data/.metadata/.log
