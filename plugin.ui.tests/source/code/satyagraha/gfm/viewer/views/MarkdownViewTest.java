@@ -22,10 +22,16 @@ public class MarkdownViewTest {
     }
 
     @Test
-    public void canOpenView() throws Exception {
+    public void canOpenThenCloseViewTwice() throws Exception {
         assertThat(MarkdownViewBot.isPresent(), is(false));
-        MarkdownViewBot markdownViewBot = MarkdownViewBot.open();
+        MarkdownViewBot markdownViewBot1 = MarkdownViewBot.open();
         assertThat(MarkdownViewBot.isPresent(), is(true));
+        markdownViewBot1.close();
+        assertThat(MarkdownViewBot.isPresent(), is(false));
+        MarkdownViewBot markdownViewBot2 = MarkdownViewBot.open();
+        assertThat(MarkdownViewBot.isPresent(), is(true));
+        markdownViewBot2.close();
+        assertThat(MarkdownViewBot.isPresent(), is(false));
     }
 
     @AfterClass

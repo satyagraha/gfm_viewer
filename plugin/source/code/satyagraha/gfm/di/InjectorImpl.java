@@ -54,6 +54,12 @@ class InjectorImpl implements Injector {
         container.addComponent(object);
     }
     
+    @Override
+    public void removeInstance(Object object) {
+        checkContainer();
+        container.removeComponentByInstance(object);
+    }
+    
     /**
      * Assign JSR-330 javax.inject.Inject annotated fields for object which is not container-managed
      * 

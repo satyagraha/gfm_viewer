@@ -2,6 +2,7 @@ package code.satyagraha.gfm.viewer.model;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -152,7 +153,7 @@ public class MarkdownEditorTrackerTest {
     }
 
     @Test
-    public void shouldNotNotifyOnOnceStopped() throws Exception {
+    public void shouldStopAndStartCorrectly() throws Exception {
         // given
         given(editorPart.getEditorInput()).willReturn(editorInput);
         given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
@@ -160,14 +161,22 @@ public class MarkdownEditorTrackerTest {
 
         // when
         editorTracker.start();
-        editorTracker.addListener(markdownListener);
+        MarkdownListener markdownListener1 = mock(MarkdownListener.class);
+        editorTracker.addListener(markdownListener1);
         editorTracker.editorShown(editorPart);
         editorTracker.stop();
+        
+        editorTracker.start();
+        MarkdownListener markdownListener2 = mock(MarkdownListener.class);
+        editorTracker.addListener(markdownListener2);
         editorTracker.editorShown(editorPart);
+        editorTracker.stop();
 
         // then
-        verify(markdownListener, times(1)).notifyEditorFile(editorIFile);
-        verifyNoMoreInteractions(markdownListener);
+        verify(markdownListener1, times(1)).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener1);
+        verify(markdownListener2, times(1)).notifyEditorFile(editorIFile);
+        verifyNoMoreInteractions(markdownListener2);
     }
 
     @Test

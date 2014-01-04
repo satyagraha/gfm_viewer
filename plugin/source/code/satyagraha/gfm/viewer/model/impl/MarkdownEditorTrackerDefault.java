@@ -55,6 +55,10 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
         MarkdownEditorSubscriptions() {
             subscriptions = new HashMap<IFile, MarkdownEditorSubscription>();
         }
+        
+        void open() {
+            // no-op
+        }
 
         void add(MarkdownEditorSubscription subscription) {
             subscriptions.put(subscription.editorFile, subscription);
@@ -85,6 +89,7 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
     private MarkdownEditorSubscription currentSubscription;
 
     public MarkdownEditorTrackerDefault(PageEditorTracker pageEditorTracker, MarkdownFileNature markdownFileNature) {
+        LOGGER.fine("");
         this.markdownListener = null;
         this.markdownFileNature = markdownFileNature;
         this.pageEditorTracker = pageEditorTracker;
@@ -99,7 +104,10 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
      */
     @Override
     public void start() {
+        LOGGER.fine("");
+        subscriptions.open();
         pageEditorTracker.subscribe(this);
+        currentSubscription = null;
     }
 
     /*
@@ -113,9 +121,6 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
         subscriptions.close();
         pageEditorTracker.unsubscribe(this);
         currentSubscription = null;
-
-        markdownListener = null;
-        pageEditorTracker = null;
     }
 
     /*
@@ -127,6 +132,7 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
      */
     @Override
     public void addListener(MarkdownListener markdownListener) {
+        LOGGER.fine("");
         this.markdownListener = markdownListener;
     }
 
