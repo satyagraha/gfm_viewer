@@ -9,6 +9,7 @@ install: true
 before_install:
  - sudo apt-get update
  - sudo apt-get install -qq metacity
+ - sudo apt-get install libwebkit-1.0-2
 
 before_script:
  - sh -e /etc/init.d/xvfb start
@@ -18,7 +19,7 @@ before_script:
  
 script:
  - set | sort
- - mvn -B clean package
+ - mvn -B -Dbrowser=webkit clean package
 
 after_failure:
  - cat /home/travis/build/satyagraha/gfm_viewer/plugin.tests/target/work/data/.metadata/.log
