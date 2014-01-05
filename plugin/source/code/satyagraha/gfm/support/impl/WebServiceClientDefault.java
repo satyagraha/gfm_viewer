@@ -5,6 +5,9 @@ import java.util.logging.Logger;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import code.satyagraha.gfm.di.Component;
 import code.satyagraha.gfm.di.Component.Scope;
 import code.satyagraha.gfm.support.api.Config;
@@ -50,6 +53,11 @@ public class WebServiceClientDefault implements WebServiceClient {
 
     @Override
     public String transform(String mdText) {
+        if (StringUtils.isBlank(config.getApiUrl())) {
+            String responseText = String.format("<pre>\n%s\n</pre>", StringEscapeUtils.escapeHtml4(mdText));
+            return responseText;
+        }
+        
         Client client = Client.create(clientConfig);
         
         String username = config.getUsername();

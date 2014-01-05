@@ -1,6 +1,6 @@
 package code.satyagraha.gfm.viewer.bots;
 
-import static org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory.withPartName;
+import static org.eclipse.swtbot.eclipse.finder.matchers.WidgetMatcherFactory.withPartId;
 
 import java.util.List;
 
@@ -10,7 +10,32 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 
 public class MarkdownViewBot {
 
-    private static SWTWorkbenchBot bot;
+    private final static SWTWorkbenchBot bot = new SWTWorkbenchBot();
+    
+    private final static String gfmViewId = "code.satyagraha.gfm.viewer.views.GfmView";
+    
+    public static boolean isPresent() {
+        return !getGfmViews().isEmpty();
+    }
+    
+    public static void open() {
+        bot.menu("Window").menu("Show View").menu("Other...").click();
+        SWTBotShell shell = bot.shell("Show View");
+        shell.activate();
+        bot.tree().expandNode("GFM Support").select("GFM View");
+        bot.button("OK").click();
+    }
+
+    public static MarkdownViewBot find(String viewName) {
+        SWTBotView gfmView = bot.viewByTitle(viewName); // N.B. waits!
+        return new MarkdownViewBot(gfmView);
+    }
+    
+    private static List<SWTBotView> getGfmViews() {
+        return bot.views(withPartId(gfmViewId));
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
     
     private SWTBotView gfmView;
     
@@ -18,33 +43,13 @@ public class MarkdownViewBot {
         this.gfmView = gfmView;
     }
     
-    public static boolean isPresent() {
-        return !getGfmViews().isEmpty();
-    }
-    
-    public static MarkdownViewBot open() {
-        bot.menu("Window").menu("Show View").menu("Other...").click();
-        SWTBotShell shell = bot.shell("Show View");
-        shell.activate();
-        bot.tree().expandNode("GFM Support").select("GFM View");
-        bot.button("OK").click();
-        SWTBotView gfmView = bot.viewByTitle("GFM View"); //          getGfmViews().get(0);
-        return new MarkdownViewBot(gfmView);
+    public String getTitle() {
+        return gfmView.getReference().getPart(false).getTitle();
     }
     
     public void close() {
         gfmView.close();
-    }
-    
-    private static SWTWorkbenchBot getBot() {
-        if (bot == null) {
-            bot = new SWTWorkbenchBot();
-        }
-        return bot;
-    }
-    
-    private static List<SWTBotView> getGfmViews() {
-        return getBot().views(withPartName("GFM View"));
+        gfmView = null;
     }
     
 }

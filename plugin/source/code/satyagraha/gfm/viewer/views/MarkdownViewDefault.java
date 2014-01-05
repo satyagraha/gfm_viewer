@@ -39,10 +39,8 @@ public class MarkdownViewDefault extends ViewPart implements MarkdownView {
     public void createPartControl(Composite parent) {
         LOGGER.fine("");
         browser = new MarkdownBrowserDefault(parent);
-        injector.addInstance(browser);
-        injector.addInstance(this);
         injector.inject(this);
-        model.start();
+        model.start(this, browser);
     }
 
     @Override
@@ -55,8 +53,6 @@ public class MarkdownViewDefault extends ViewPart implements MarkdownView {
         LOGGER.fine("");
         if (model != null) {
             model.stop();
-            injector.removeInstance(this);
-            injector.removeInstance(browser);
             browser = null;
             model = null;
         };

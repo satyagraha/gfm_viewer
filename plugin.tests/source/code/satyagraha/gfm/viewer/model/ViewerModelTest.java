@@ -67,7 +67,7 @@ public class ViewerModelTest {
         // given
 
         // when
-        model.start();
+        model.start(markdownView, browser);
 
         // then
         verify(editorTracker, times(1)).start();
@@ -79,7 +79,7 @@ public class ViewerModelTest {
         // given
 
         // when
-        model.start();
+        model.start(markdownView, browser);
         model.stop();
 
         // then
@@ -95,7 +95,7 @@ public class ViewerModelTest {
         given(iFile.getRawLocation()).willReturn(null);
 
         // when
-        model.start();
+        model.start(markdownView, browser);
         model.showMarkdownFile(iFile);
         model.stop();
 
@@ -112,7 +112,7 @@ public class ViewerModelTest {
         given(iFile.getRawLocation()).willReturn(null);
 
         // when
-        model.start();
+        model.start(markdownView, browser);
         model.showMarkdownFile(iFile);
         model.stop();
 
@@ -131,7 +131,7 @@ public class ViewerModelTest {
         given(iPath.toFile()).willReturn(null);
 
         // when
-        model.start();
+        model.start(markdownView, browser);
         model.showMarkdownFile(iFile);
         model.stop();
 
@@ -150,7 +150,7 @@ public class ViewerModelTest {
         given(iPath.toFile()).willReturn(null);
 
         // when
-        model.start();
+        model.start(markdownView, browser);
         model.showMarkdownFile(iFile);
         model.stop();
 
@@ -211,7 +211,7 @@ public class ViewerModelTest {
         willDoNothing().given(scheduler).scheduleTransformation(eq(mdFile), eq(htFile), schedulerCallbackCaptor.capture());
 
         // when
-        model.start();
+        model.start(markdownView, browser);
         model.showMarkdownFile(iFile);
         if (scheduleCount > 0) {
             Callback callback = schedulerCallbackCaptor.getValue();
@@ -234,7 +234,7 @@ public class ViewerModelTest {
         IFile iFile = mock(IFile.class);
 
         // when
-        model.start();
+        model.start(markdownView, browser);
         model.notifyEditorFile(iFile);
         model.stop();
 
@@ -252,7 +252,7 @@ public class ViewerModelTest {
         given(iFile.getRawLocation()).willReturn(null);
 
         // when
-        model.start();
+        model.start(markdownView, browser);
         model.notifyEditorFile(iFile);
         model.stop();
 
@@ -272,7 +272,7 @@ public class ViewerModelTest {
         given(iPath.toFile()).willReturn(null);
 
         // when
-        model.start();
+        model.start(markdownView, browser);
         model.notifyEditorFile(iFile);
         model.stop();
 
@@ -365,7 +365,7 @@ public class ViewerModelTest {
         willDoNothing().given(scheduler).scheduleTransformation(eq(mdFile), eq(htFile), schedulerCallbackCaptor.capture());
 
         // when
-        model.start();
+        model.start(markdownView, browser);
         model.notifyEditorFile(iFile);
         if (scheduleCount > 0) {
             Callback callback = schedulerCallbackCaptor.getValue();
@@ -383,7 +383,7 @@ public class ViewerModelTest {
         // given
 
         // when
-        model.start();
+        model.start(markdownView, browser);
         model.goForward();
         model.stop();
 
@@ -396,7 +396,7 @@ public class ViewerModelTest {
         // given
 
         // when
-        model.start();
+        model.start(markdownView, browser);
         model.goBackward();
         model.stop();
 
@@ -407,7 +407,7 @@ public class ViewerModelTest {
     @Test
     public void reloadShouldDoNothingWhenNoPreviousAction() throws Exception {
         // when
-        model.start();
+        model.start(markdownView, browser);
         model.reload();
         model.stop();
         
@@ -453,7 +453,7 @@ public class ViewerModelTest {
         willDoNothing().given(scheduler).scheduleTransformation(eq(mdFile), eq(htFile), schedulerCallbackCaptor.capture());
 
         // when
-        model.start();
+        model.start(markdownView, browser);
         model.showMarkdownFile(iFile);
         model.reload();
         if (scheduleCount > 0) {

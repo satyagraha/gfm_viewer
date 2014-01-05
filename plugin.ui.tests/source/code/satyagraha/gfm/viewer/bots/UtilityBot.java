@@ -7,14 +7,20 @@ import java.util.List;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 
-public class WelcomeViewBot {
+public class UtilityBot {
     
-    public static void closeAll() {
-        SWTWorkbenchBot bot = new SWTWorkbenchBot();
+    private final static SWTWorkbenchBot bot = new SWTWorkbenchBot();
+    
+    public static void closeWelcomeViews() {
         List<SWTBotView> welcomes = bot.views(withPartName("Welcome"));
         for (SWTBotView welcome : welcomes) {
             welcome.close();
         }
+    }
+    
+    
+    public static void resetWorkbench() {
+        bot.resetWorkbench();
     }
 
 }

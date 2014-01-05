@@ -34,19 +34,19 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
 
     private File mdFileShown;
 
-
-    public ViewerModelDefault(Transformer transformer, Scheduler scheduler, ViewerSupport viewSupport, MarkdownEditorTracker editorTracker,
-            MarkdownView markdownView, MarkdownBrowser markdownBrowser) {
+    public ViewerModelDefault(Transformer transformer, Scheduler scheduler, ViewerSupport viewSupport, MarkdownEditorTracker editorTracker) {
         this.transformer = transformer;
         this.scheduler = scheduler;
         this.viewSupport = viewSupport;
         this.editorTracker = editorTracker;
-        this.markdownView = markdownView;
-        this.markdownBrowser = markdownBrowser;
+        this.markdownView = null;
+        this.markdownBrowser = null;
     }
 
     @Override
-    public void start() {
+    public void start(MarkdownView markdownView, MarkdownBrowser markdownBrowser) {
+        this.markdownView = markdownView;
+        this.markdownBrowser = markdownBrowser;
         editorTracker.start();
         editorTracker.addListener(this);
     }
@@ -54,6 +54,8 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
     @Override
     public void stop() {
         editorTracker.stop();
+        markdownView = null;
+        markdownBrowser = null;
     }
 
     @Override
@@ -92,7 +94,7 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
             updateBrowser(mdFile, htFile, transformer.canSkipTransformation(mdFile, htFile));
         } else {
             // unable to display
-        }   
+        }
     }
 
     @Override
