@@ -76,6 +76,7 @@ public class ProjectBot {
         SWTBotShell shell = bot.shell("Delete Resources");
         shell.activate();
         bot.button("OK").click();
+        projectTree = null;
     }
     
 }

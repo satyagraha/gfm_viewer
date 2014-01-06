@@ -40,7 +40,10 @@
 					</dependencies>
 					<systemProperties>
 						<org.eclipse.swt.browser.DefaultType>${browser}</org.eclipse.swt.browser.DefaultType>
+						<log4j.debug></log4j.debug>
+						<log4j.configuration>file:///${basedir}/config/log4j.xml</log4j.configuration>
 					</systemProperties>
+					<appArgLine>-debug -consoleLog</appArgLine>
 				</configuration>
 				<executions>
 					<execution>

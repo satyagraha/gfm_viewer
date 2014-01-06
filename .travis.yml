@@ -18,7 +18,7 @@ before_script:
  - sleep 5 # give metacity some time to start
  
 script:
- - set | sort
+ - export
  - mvn -B -Dbrowser=webkit clean package
 
 after_failure:
