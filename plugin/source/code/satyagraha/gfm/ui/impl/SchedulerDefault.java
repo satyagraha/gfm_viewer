@@ -113,6 +113,7 @@ public class SchedulerDefault implements Scheduler {
     private void generateFile(File mdFile) {
         LOGGER.fine("mdFile: " + mdFile);
         final File htFile = transformer.createHtmlFile(mdFile);
+        LOGGER.fine("htFile: " + htFile);
         scheduleTransformation(mdFile, htFile, null);
     }
     

@@ -44,7 +44,7 @@ public class Activator extends AbstractUIPlugin {
         if (PlatformUI.isWorkbenchRunning()) {
             DIManager.start(PlatformUI.getWorkbench(), bundleContext, PACKAGE_PREFIX, isDebugging());
             EventBusManager.start();
-            LogManager.start(PACKAGE_PREFIX);
+            LogManager.start(PACKAGE_PREFIX, isDebugging());
         }
     }
 

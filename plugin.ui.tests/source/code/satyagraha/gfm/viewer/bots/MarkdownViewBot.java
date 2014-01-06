@@ -18,18 +18,24 @@ public class MarkdownViewBot {
         return !getGfmViews().isEmpty();
     }
     
-    public static void open() {
+    public static MarkdownViewBot open() {
         bot.menu("Window").menu("Show View").menu("Other...").click();
         SWTBotShell shell = bot.shell("Show View");
         shell.activate();
         bot.tree().expandNode("GFM Support").select("GFM View");
         bot.button("OK").click();
+        return findById();
     }
 
-    public static MarkdownViewBot find(String viewName) {
-        SWTBotView gfmView = bot.viewByTitle(viewName); // N.B. waits!
+    public static MarkdownViewBot findById() {
+        SWTBotView gfmView = bot.viewById(gfmViewId); // N.B. waits!
         return new MarkdownViewBot(gfmView);
     }
+    
+//    public static MarkdownViewBot find(String viewName) {
+//        SWTBotView gfmView = bot.viewByTitle(viewName); // N.B. waits!
+//        return new MarkdownViewBot(gfmView);
+//    }
     
     private static List<SWTBotView> getGfmViews() {
         return bot.views(withPartId(gfmViewId));

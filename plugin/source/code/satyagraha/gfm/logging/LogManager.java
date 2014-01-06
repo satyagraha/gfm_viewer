@@ -21,6 +21,7 @@ public class LogManager {
     private static final String GFM_CONSOLE = "GFM Console";
 
     private final Config config;
+    private boolean debugging;
     private Logger logger;
     private Formatter formatter;
     private Handler consoleHandler;
@@ -30,10 +31,12 @@ public class LogManager {
 
     public LogManager(Config config) {
         this.config = config;
+        this.debugging = false;
         AnnotationProcessor.process(this);
     }
 
-    private void setup(String packagePrefix) {
+    private void setup(String packagePrefix, boolean debugging) {
+        this.debugging = debugging;
         logger = Logger.getLogger(packagePrefix);
         formatter = new LogFormatter();
         logger.setUseParentHandlers(false);
@@ -42,7 +45,7 @@ public class LogManager {
 
     @EventSubscriber(eventClass = Config.Changed.class)
     public void configChanged(Config.Changed configChanged) {
-        Level level = config.useEclipseConsole() ? Level.FINE : Level.INFO;
+        Level level = debugging || config.useEclipseConsole() ? Level.FINE : Level.INFO;
         logger.setLevel(level);
 
         if (consoleHandler == null) {
@@ -70,9 +73,9 @@ public class LogManager {
         }
     }
 
-    public static void start(String packagePrefix) {
+    public static void start(String packagePrefix, boolean debugging) {
         logManager = DIManager.getDefault().getInjector(Scope.PLUGIN).getInstance(LogManager.class);
-        logManager.setup(packagePrefix);
+        logManager.setup(packagePrefix, debugging);
     }
 
     public static void stop() {
