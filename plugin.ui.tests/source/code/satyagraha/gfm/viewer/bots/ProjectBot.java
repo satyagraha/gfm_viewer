@@ -5,6 +5,7 @@ import java.io.File;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.swt.SWT;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -81,6 +82,7 @@ public class ProjectBot {
         projectTree.contextMenu("Delete").click();
         SWTBotShell shell = bot.shell("Delete Resources");
         shell.activate();
+        shell.pressShortcut(SWT.ALT, 'D');
         bot.button("OK").click();
         projectTree = null;
     }

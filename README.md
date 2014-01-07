@@ -114,6 +114,8 @@ and enviroment variable `JAVA_HOME` points to an installed JDK 6+
 like space is advised)
 * In a shell or command window, change working directory to project root ( `gfm_viewer` with this README.md), 
 * Build the plugin by executing the command: `mvn clean package`
+* If building under Linux, take a look at the `.travis.yml` file in the base directory to see any
+additional browser-related requirements
 * Start your preferred Eclipse version in the normal way
 * In Eclipse, execute menu _Help_ -> _Install New Software..._ and in the resulting dialog click the _Add..._
 button to present a further dialog, and here enter `GFM Viewer (local)` as the _Name_ and click the _Local..._
@@ -219,7 +221,6 @@ Areas possibly meriting further attention include:
 * It appears that GitHub may use some kind of dynamic CSS generation: the consequence is that the coverage
 provided by this plugin's simple static CSS may well not include some important entries (simply because they
 were not apparent on the test content used in development)
-* The `tests` module provides a first cut set of BDD tests; further coverage is desirable.
 
 ## Markdown Editors
 

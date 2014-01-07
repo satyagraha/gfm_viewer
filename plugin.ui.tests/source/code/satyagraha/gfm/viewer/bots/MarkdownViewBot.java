@@ -63,6 +63,10 @@ public class MarkdownViewBot {
         return UtilityBot.getToolbarButtonWithTooltip(gfmView, "Linked");
     }
     
+    public SWTBotToolbarButton getReloadButton() {
+        return UtilityBot.getToolbarButtonWithTooltip(gfmView, "Reload");
+    }
+    
     public void close() {
         gfmView.close();
         gfmView = null;

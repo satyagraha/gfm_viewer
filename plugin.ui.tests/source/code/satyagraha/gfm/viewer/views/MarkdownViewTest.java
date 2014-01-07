@@ -239,6 +239,7 @@ public class MarkdownViewTest {
         assertThat(MarkdownViewBot.isPresent(), is(true));
 
         SWTBotToolbarButton onlineButton = markdownViewBot.getOnlineButton();
+        SWTBotToolbarButton refreshButton = markdownViewBot.getReloadButton();
 
         ProjectBot project = ProjectBot.createSimpleProject();
         ProjectFileBot fileBot = project.newFile("file1.md");
@@ -251,21 +252,37 @@ public class MarkdownViewTest {
         onlineButton.click(); // set offline
 
         String textMd2 = "sample text 2, timestamp: " + System.currentTimeMillis() + ".";
-        editorBot.typeText(textMd1 + "\r");
+        editorBot.typeText(textMd2 + "\r");
         editorBot.save();
         SWTUtils.sleep(2000);
-        assertThat(markdownViewBot.getTitle(), is("*file1"));
 
         File fileMd = fileBot.toFile();
         File fileHt = new File(fileMd.getParentFile(), ".file1.md.html");
         assertThat("not found: " + fileHt, fileHt.exists(), is(true));
 
-        String textHt = IOUtils.toString(new FileInputStream(fileHt));
-        assertThat(textHt, containsString(textMd1));
-        assertThat(textHt, not(containsString(textMd2)));
+        assertThat(markdownViewBot.getTitle(), is("*file1"));
+        String textHt1 = IOUtils.toString(new FileInputStream(fileHt));
+        assertThat(textHt1, containsString(textMd1));
+        assertThat(textHt1, not(containsString(textMd2)));
+
+        refreshButton.click();
+        SWTUtils.sleep(2000);
+
+        assertThat(markdownViewBot.getTitle(), is("*file1"));
+        String textHt2 = IOUtils.toString(new FileInputStream(fileHt));
+        assertThat(textHt2, containsString(textMd1));
+        assertThat(textHt2, not(containsString(textMd2)));
+
+        onlineButton.click(); // set online
+        refreshButton.click();
+        SWTUtils.sleep(2000);
+
+        assertThat(markdownViewBot.getTitle(), is("file1"));
+        String textHt3 = IOUtils.toString(new FileInputStream(fileHt));
+        assertThat(textHt3, containsString(textMd1));
+        assertThat(textHt3, containsString(textMd2));
 
         editorBot.close();
-        onlineButton.click();
         markdownViewBot.close();
         project.delete();
     }
@@ -283,4 +300,5 @@ public class MarkdownViewTest {
         markdownViewBot1.close();
     }
 
+    // TODO: tests for multi-window scenarios
 }

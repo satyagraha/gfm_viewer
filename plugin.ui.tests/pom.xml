@@ -40,6 +40,7 @@
 					</dependencies>
 					<systemProperties>
 						<org.eclipse.swt.browser.DefaultType>${browser}</org.eclipse.swt.browser.DefaultType>
+						<org.eclipse.swtbot.screenshots.dir>${project.build.directory}/screenshots</org.eclipse.swtbot.screenshots.dir>
 						<log4j.debug></log4j.debug>
 						<log4j.configuration>file:///${basedir}/config/log4j.xml</log4j.configuration>
 					</systemProperties>
