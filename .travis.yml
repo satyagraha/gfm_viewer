@@ -8,6 +8,7 @@ install: true
 
 before_install:
  - sudo apt-get update
+ - sudo apt-get install gnome-themes-standard
  - sudo apt-get install metacity
  - sudo apt-get install libwebkit-dev
 
