@@ -1,15 +1,28 @@
 language: java
 
 jdk: oraclejdk7
-  
-env: DISPLAY=:99.0
- 
-before_install: "sh -e /etc/init.d/xvfb start"
-  
-install: export
 
-script: "mvn -B clean package"
+env: DISPLAY=:99.0
+
+install: true
+
+before_install:
+ - sudo apt-get update
+ - sudo apt-get install metacity
+ - sudo apt-get install libwebkit-dev
+
+before_script:
+ - sh -e /etc/init.d/xvfb start
+ - sleep 5 # give xvfb some time to start
+ - metacity --sm-disable --replace &
+ - sleep 5 # give metacity some time to start
+ 
+script:
+ - export
+ - mvn -B -Dbrowser=webkit clean package
 
 after_failure:
  - cat /home/travis/build/satyagraha/gfm_viewer/plugin.tests/target/work/data/.metadata/.log
  - cat /home/travis/build/satyagraha/gfm_viewer/plugin.tests/target/surefire-reports/*
+ - cat /home/travis/build/satyagraha/gfm_viewer/plugin.ui.tests/target/work/data/.metadata/.log
+ - cat /home/travis/build/satyagraha/gfm_viewer/plugin.ui.tests/target/surefire-reports/*

@@ -1,4 +1,4 @@
-package code.satyagraha.gfm.viewer.support.tests;
+package code.satyagraha.gfm.support;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

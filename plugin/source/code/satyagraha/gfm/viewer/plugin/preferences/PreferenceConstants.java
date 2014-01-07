@@ -17,6 +17,5 @@ public class PreferenceConstants {
 	public static final String P_JS_URL_2 = "P_JS_URL_2";
 	public static final String P_JS_URL_3 = "P_JS_URL_3";
 	public static final String P_USE_ECLIPSE_CONSOLE = "P_USE_ECLIPSE_CONSOLE";
-	public static final String P_ALWAYS_GENERATE_HTML = "P_ALWAYS_GENERATE_HTML";
 	
 }

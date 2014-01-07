@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>code.satyagraha.gfm.viewer</groupId>
 		<artifactId>code.satyagraha.gfm.viewer.parent</artifactId>
-		<version>1.7.0</version>
+		<version>1.8.1</version>
 	</parent>
 
 	<artifactId>code.satyagraha.gfm.viewer.update-site</artifactId>

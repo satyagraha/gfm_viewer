@@ -1,5 +1,6 @@
 .settings
 .classpath
+.cache
 *.class
 *.jar
 bin
@@ -10,3 +11,4 @@ $*
 !site/.*.md.html
 .ispace
 *.ucls
+plugin.ui.tests/screenshots

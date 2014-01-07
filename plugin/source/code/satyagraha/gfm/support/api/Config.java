@@ -25,8 +25,6 @@ public interface Config {
 
     public boolean useEclipseConsole();
     
-    public boolean alwaysGenerateHtml();
-    
     public interface Changed {
         
     }

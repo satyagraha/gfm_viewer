@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: GFM Viewer plugin
 Bundle-SymbolicName: code.satyagraha.gfm.viewer.plugin;singleton:=true
-Bundle-Version: 1.7.0
+Bundle-Version: 1.8.1
 Bundle-Activator: code.satyagraha.gfm.viewer.plugin.Activator
 Require-Bundle: org.eclipse.core.resources,
  org.eclipse.core.runtime,
@@ -17,4 +17,4 @@ Require-Bundle: org.eclipse.core.resources,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .,
- lib/code.satyagraha.gfm.viewer.ext-deps-1.7.0.jar
+ lib/code.satyagraha.gfm.viewer.ext-deps-1.8.1.jar

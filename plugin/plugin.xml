@@ -28,6 +28,11 @@
                style="push">
          </command>
          <command
+               commandId="GFM Viewer plugin.Online"
+               icon="icons/online.gif"
+               style="toggle">
+         </command>
+         <command
                commandId="GFM Viewer plugin.Linked"
                icon="icons/linked.gif"
                style="toggle">
@@ -134,9 +139,13 @@
             name="Preferences">
       </command>
       <command
-            defaultHandler="code.satyagraha.gfm.viewer.commands.Reload"
-            id="GFM Viewer plugin.Reload"
-            name="Reload">
+            defaultHandler="code.satyagraha.gfm.viewer.commands.Online"
+            id="GFM Viewer plugin.Online"
+            name="Online">
+         <state
+               class="org.eclipse.ui.handlers.RegistryToggleState:true"
+               id="org.eclipse.ui.commands.toggleState">
+         </state>
       </command>
       <command
             defaultHandler="code.satyagraha.gfm.viewer.commands.Linked"
@@ -146,6 +155,11 @@
                class="org.eclipse.ui.handlers.RegistryToggleState:true"
                id="org.eclipse.ui.commands.toggleState">
          </state>
+      </command>
+      <command
+            defaultHandler="code.satyagraha.gfm.viewer.commands.Reload"
+            id="GFM Viewer plugin.Reload"
+            name="Reload">
       </command>
       <command
             defaultHandler="code.satyagraha.gfm.viewer.commands.GoBackward"
@@ -177,7 +191,7 @@
       </category>
       <view
             category="code.satyagraha.gfm.viewer"
-            class="code.satyagraha.gfm.viewer.views.impl.MarkdownView"
+            class="code.satyagraha.gfm.viewer.views.MarkdownViewDefault"
             icon="icons/notepad.gif"
             id="code.satyagraha.gfm.viewer.views.GfmView"
             name="GFM View">
