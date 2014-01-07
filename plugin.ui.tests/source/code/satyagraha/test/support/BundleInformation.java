@@ -1,13 +1,10 @@
-package code.satyagraha.gfm.viewer.views;
+package code.satyagraha.test.support;
 
 import java.util.List;
 
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.wiring.BundleWire;
@@ -19,11 +16,10 @@ import code.satyagraha.gfm.viewer.plugin.Activator;
  * Provides information about running environment
  *
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class InformationTest {
 
-    @Test
-    public void showSWTBotDependencies() {
+public class BundleInformation {
+
+    public static void showSWTBotDependencies() {
         log("commencing showSWTBotDependencies");
         Bundle bundle = FrameworkUtil.getBundle(SWTBot.class);
         BundleWiring wiring = bundle.adapt(BundleWiring.class);

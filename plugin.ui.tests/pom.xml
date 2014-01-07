@@ -44,6 +44,7 @@
 						<log4j.debug></log4j.debug>
 						<log4j.configuration>file:///${basedir}/config/log4j.xml</log4j.configuration>
 					</systemProperties>
+					<runOrder>alphabetical</runOrder>
 					<appArgLine>-debug -consoleLog</appArgLine>
 				</configuration>
 				<executions>
