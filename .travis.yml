@@ -14,9 +14,9 @@ before_install:
 
 before_script:
  - sh -e /etc/init.d/xvfb start
- - sleep 5 # give xvfb some time to start
+ - sleep 10 # give xvfb some time to start
  - metacity --sm-disable --replace &
- - sleep 5 # give metacity some time to start
+ - sleep 10 # give metacity some time to start
  
 script:
  - export
