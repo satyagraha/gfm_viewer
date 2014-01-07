@@ -1,5 +1,7 @@
 package code.satyagraha.gfm.viewer.bots;
 
+import java.io.File;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
@@ -50,9 +52,13 @@ public class ProjectBot {
             treeItem.contextMenu("Generate Markdown Preview").click();
         }
         
-        public IFile asIFile() {
+        public IFile toIFile() {
             Path filePath = new Path(treeItem.getText());
             return ResourcesPlugin.getWorkspace().getRoot().getProject(projectTree.getText()).getFile(filePath);
+        }
+        
+        public File toFile() {
+            return toIFile().getRawLocation().toFile();
         }
 
     }

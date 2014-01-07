@@ -7,6 +7,7 @@ import java.util.List;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotToolbarButton;
 
 public class MarkdownViewBot {
 
@@ -32,11 +33,6 @@ public class MarkdownViewBot {
         return new MarkdownViewBot(gfmView);
     }
     
-//    public static MarkdownViewBot find(String viewName) {
-//        SWTBotView gfmView = bot.viewByTitle(viewName); // N.B. waits!
-//        return new MarkdownViewBot(gfmView);
-//    }
-    
     private static List<SWTBotView> getGfmViews() {
         return bot.views(withPartId(gfmViewId));
     }
@@ -53,9 +49,23 @@ public class MarkdownViewBot {
         return gfmView.getReference().getPart(false).getTitle();
     }
     
+    public PreferencesBot showPreferences() {
+        SWTBotToolbarButton toolbarButton = UtilityBot.getToolbarButtonWithTooltip(gfmView, "Preferences");
+        toolbarButton.click();
+        return PreferencesBot.fromActivatedPreferences();
+    }
+    
+    public SWTBotToolbarButton getOnlineButton() {
+        return UtilityBot.getToolbarButtonWithTooltip(gfmView, "Online");
+    }
+    
+    public SWTBotToolbarButton getLinkedButton() {
+        return UtilityBot.getToolbarButtonWithTooltip(gfmView, "Linked");
+    }
+    
     public void close() {
         gfmView.close();
         gfmView = null;
     }
-    
+
 }

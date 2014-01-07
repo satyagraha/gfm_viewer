@@ -30,9 +30,19 @@ public class EditorBot {
         swtBotEditor.show();
         return this;
     }
+    
+    public EditorBot typeText(String text) {
+        swtBotEditor.toTextEditor().typeText(text);
+        return this;
+    }
 
+    public EditorBot save() {
+        swtBotEditor.save();
+        return this;
+    }
+    
     public void close() {
         swtBotEditor.close();
     }
-    
+
 }
