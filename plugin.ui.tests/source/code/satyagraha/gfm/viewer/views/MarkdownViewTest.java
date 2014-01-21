@@ -17,8 +17,10 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import code.satyagraha.gfm.viewer.bots.EditorBot;
 import code.satyagraha.gfm.viewer.bots.MarkdownViewBot;
@@ -26,8 +28,10 @@ import code.satyagraha.gfm.viewer.bots.PreferencesBot;
 import code.satyagraha.gfm.viewer.bots.ProjectBot;
 import code.satyagraha.gfm.viewer.bots.ProjectBot.ProjectFileBot;
 import code.satyagraha.gfm.viewer.bots.UtilityBot;
+import code.satyagraha.test.support.BundleInformation;
 
 @RunWith(SWTBotJunit4ClassRunner.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MarkdownViewTest {
 
     private final static Logger LOGGER = Logger.getLogger(MarkdownViewTest.class.getPackage().getName());
@@ -58,6 +62,8 @@ public class MarkdownViewTest {
 
     @Test
     public void shouldOpenThenCloseViewTwice() throws Exception {
+        LOGGER.info("");
+        
         assertThat(MarkdownViewBot.isPresent(), is(false));
         MarkdownViewBot markdownViewBot1 = MarkdownViewBot.open();
         assertThat(MarkdownViewBot.isPresent(), is(true));
@@ -73,6 +79,8 @@ public class MarkdownViewTest {
 
     @Test
     public void shouldUpdateViewWhenEditorOpened() throws Exception {
+        LOGGER.info("");
+        
         assertThat(MarkdownViewBot.isPresent(), is(false));
         MarkdownViewBot markdownViewBot1 = MarkdownViewBot.open();
         assertThat(MarkdownViewBot.isPresent(), is(true));
@@ -91,6 +99,8 @@ public class MarkdownViewTest {
 
     @Test
     public void shouldFollowEditorSelectedWhenLinked() throws Exception {
+        LOGGER.info("");
+        
         assertThat(MarkdownViewBot.isPresent(), is(false));
 
         ProjectBot project = ProjectBot.createSimpleProject();
@@ -122,6 +132,8 @@ public class MarkdownViewTest {
 
     @Test
     public void shouldNotFollowEditorSelectedWhenNotLinked() throws Exception {
+        LOGGER.info("");
+        
         assertThat(MarkdownViewBot.isPresent(), is(false));
 
         ProjectBot project = ProjectBot.createSimpleProject();
@@ -157,6 +169,8 @@ public class MarkdownViewTest {
 
     @Test
     public void shouldSupportMarkdownFileContextMenuToView() throws Exception {
+        LOGGER.info("");
+        
         assertThat(MarkdownViewBot.isPresent(), is(false));
 
         ProjectBot project1 = ProjectBot.createSimpleProject();
@@ -178,6 +192,8 @@ public class MarkdownViewTest {
 
     @Test
     public void shouldGenerateHTMLviaContextMenu() throws Exception {
+        LOGGER.info("");
+        
         assertThat(MarkdownViewBot.isPresent(), is(false));
 
         ProjectBot project = ProjectBot.createSimpleProject();
@@ -206,6 +222,8 @@ public class MarkdownViewTest {
 
     @Test
     public void shouldGenerateHTMLonEditorSave() throws Exception {
+        LOGGER.info("");
+        
         assertThat(MarkdownViewBot.isPresent(), is(false));
         MarkdownViewBot markdownViewBot = MarkdownViewBot.open();
         assertThat(MarkdownViewBot.isPresent(), is(true));
@@ -229,11 +247,15 @@ public class MarkdownViewTest {
 
         editorBot.close();
         markdownViewBot.close();
+        
+        SWTUtils.sleep(2000);
         project.delete();
     }
 
     @Test
     public void shouldNotGenerateHTMLonEditorSaveIfOffline() throws Exception {
+        LOGGER.info("");
+        
         assertThat(MarkdownViewBot.isPresent(), is(false));
         MarkdownViewBot markdownViewBot = MarkdownViewBot.open();
         assertThat(MarkdownViewBot.isPresent(), is(true));
@@ -289,6 +311,8 @@ public class MarkdownViewTest {
 
     @Test
     public void shouldShowPreferencesViaToolbar() throws Exception {
+        LOGGER.info("");
+        
         assertThat(MarkdownViewBot.isPresent(), is(false));
         MarkdownViewBot markdownViewBot1 = MarkdownViewBot.open();
         assertThat(MarkdownViewBot.isPresent(), is(true));
@@ -300,5 +324,12 @@ public class MarkdownViewTest {
         markdownViewBot1.close();
     }
 
+    @Test
+    public void willProvideBundleInformation() throws Exception {
+        LOGGER.info("");
+        
+        BundleInformation.showSWTBotDependencies();
+    }
+    
     // TODO: tests for multi-window scenarios
 }
