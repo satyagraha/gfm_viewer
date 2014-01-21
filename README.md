@@ -259,3 +259,5 @@ classes in a project, highlighting circular dependencies which typically indicat
 * 1.1.0 - transformation done in background job, provide context menu, temp dir option
 * 1.0.1 - use UTF-8 text encoding, e.g. 快乐  ハッピー  ευτυχισμένος
 * 1.0.0 - initial version
+
+<a href="http://with-eclipse.github.io/" target="_blank"><img alt="with-Eclipse logo" src="http://with-eclipse.github.io/with-eclipse-1.jpg" /></a>
