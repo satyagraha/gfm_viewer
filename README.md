@@ -246,6 +246,7 @@ classes in a project, highlighting circular dependencies which typically indicat
 
 ## History
 
+* 1.8.2 - TBD
 * 1.8.1 - UI tests, fixes
 * 1.8.0 - On/Off-line mode
 * 1.7.0 - Various fixes, Ubuntu supported via Webkit browser
