@@ -96,7 +96,7 @@ top right of view), then select the _Filters..._ entry, and then set or clear th
 In Eclipse, do the following:
 * Go to menu _Help_ -> _Install New Software..._ and in the resulting dialog click the _Add..._
 button to present a further dialog, and here enter `GFM Viewer` as the _Name_ and 
-this [link](http://dl.bintray.com/satyagraha/generic/1.8.1) as the _Location_ and press _OK_
+this [link](https://raw.github.com/satyagraha/gfm_viewer/master/p2-composite/) as the _Location_ and press _OK_
 * Select the _GFM Viewer_ category in the install view, and alter the checkbox settings
 there as necessary 
 * Proceed to install the software in the usual manner accepting all defaults
@@ -259,3 +259,5 @@ classes in a project, highlighting circular dependencies which typically indicat
 * 1.1.0 - transformation done in background job, provide context menu, temp dir option
 * 1.0.1 - use UTF-8 text encoding, e.g. 快乐  ハッピー  ευτυχισμένος
 * 1.0.0 - initial version
+
+<a href="http://with-eclipse.github.io/" target="_blank"><img alt="with-Eclipse logo" src="http://with-eclipse.github.io/with-eclipse-1.jpg" /></a>
