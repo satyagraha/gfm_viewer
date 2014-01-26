@@ -2,6 +2,7 @@ package code.satyagraha.gfm.ui.impl;
 
 import java.util.logging.Logger;
 
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartReference;
@@ -56,6 +57,15 @@ public class PageEditorTrackerDefault implements PageEditorTracker {
         }
     }
 
+    /* (non-Javadoc)
+     * @see code.satyagraha.gfm.ui.api.PageEditorTracker#getActiveEditor()
+     */
+    @Override
+    public IEditorPart getActiveEditor() {
+        LOGGER.fine("");
+        return workbenchPage.getActiveEditor();
+    }
+    
     @Override
     public void partActivated(IWorkbenchPartReference partRef) {
         LOGGER.fine("");

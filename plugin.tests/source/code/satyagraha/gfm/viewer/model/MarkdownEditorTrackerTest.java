@@ -1,5 +1,8 @@
 package code.satyagraha.gfm.viewer.model;
 
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.mock;
@@ -14,7 +17,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IPropertyListener;
-import org.eclipse.ui.IWorkbenchPage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -30,9 +32,6 @@ import code.satyagraha.gfm.viewer.model.impl.MarkdownEditorTrackerDefault;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MarkdownEditorTrackerTest {
-
-    @Mock
-    private IWorkbenchPage workbenchPage;
 
     @Mock
     private MarkdownListener markdownListener;
@@ -326,5 +325,75 @@ public class MarkdownEditorTrackerTest {
         verify(markdownListener, times(1)).notifyEditorFile(editorIFile);
         verifyNoMoreInteractions(markdownListener);
     }
+
+    @Test
+    public void shouldGetActiveEditorMarkdownFile() throws Exception {
+        // given
+        given(pageEditorTracker.getActiveEditor()).willReturn(editorPart);
+        given(editorPart.getEditorInput()).willReturn(editorInput);
+        given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
+        given(fileNature.isTrackableFile(editorIFile)).willReturn(true);
+        
+        // when
+        IFile activeEditorMarkdownFile = editorTracker.getActiveEditorMarkdownFile();
+        
+        // then
+        assertThat(activeEditorMarkdownFile, sameInstance(editorIFile));
+    }
+    
+    @Test
+    public void shouldNotGetActiveEditorMarkdownFileWhenNoActiveEditor() throws Exception {
+        // given
+        given(pageEditorTracker.getActiveEditor()).willReturn(null);
+        
+        // when
+        IFile activeEditorMarkdownFile = editorTracker.getActiveEditorMarkdownFile();
+        
+        // then
+        assertThat(activeEditorMarkdownFile, nullValue());
+    }
+
+    @Test
+    public void shouldNotGetActiveEditorMarkdownFileWhenNotEditing() throws Exception {
+        // given
+        given(pageEditorTracker.getActiveEditor()).willReturn(editorPart);
+        given(editorPart.getEditorInput()).willReturn(null);
+        
+        // when
+        IFile activeEditorMarkdownFile = editorTracker.getActiveEditorMarkdownFile();
+        
+        // then
+        assertThat(activeEditorMarkdownFile, nullValue());
+    }
+    
+    @Test
+    public void shouldNotGetActiveEditorMarkdownFileWhenNotEditingFile() throws Exception {
+        // given
+        given(pageEditorTracker.getActiveEditor()).willReturn(editorPart);
+        given(editorPart.getEditorInput()).willReturn(editorInput);
+        given(editorInput.getAdapter(IFile.class)).willReturn(null);
+        
+        // when
+        IFile activeEditorMarkdownFile = editorTracker.getActiveEditorMarkdownFile();
+        
+        // then
+        assertThat(activeEditorMarkdownFile, nullValue());
+    }
+    
+    @Test
+    public void shouldNotGetActiveEditorMarkdownFileWhenNotEditingMarkdownFile() throws Exception {
+        // given
+        given(pageEditorTracker.getActiveEditor()).willReturn(editorPart);
+        given(editorPart.getEditorInput()).willReturn(editorInput);
+        given(editorInput.getAdapter(IFile.class)).willReturn(editorIFile);
+        given(fileNature.isTrackableFile(editorIFile)).willReturn(false);
+        
+        // when
+        IFile activeEditorMarkdownFile = editorTracker.getActiveEditorMarkdownFile();
+        
+        // then
+        assertThat(activeEditorMarkdownFile, nullValue());
+    }
+    
 
 }
