@@ -136,6 +136,16 @@ public class MarkdownEditorTrackerDefault implements MarkdownEditorTracker, Edit
         this.markdownListener = markdownListener;
     }
 
+    @Override
+    public IFile getActiveEditorMarkdownFile() {
+        LOGGER.fine("");
+        IEditorPart activeEditor = pageEditorTracker.getActiveEditor();
+        if (activeEditor == null) {
+            return null;
+        }
+        return getTrackableFile(activeEditor);
+    }
+    
     private void notifyMarkdownListener(IFile markdownFile) {
         LOGGER.fine("markdownFile: " + markdownFile);
         if (markdownListener != null) {

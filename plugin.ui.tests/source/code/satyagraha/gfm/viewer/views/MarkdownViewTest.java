@@ -78,6 +78,33 @@ public class MarkdownViewTest {
     }
 
     @Test
+    public void shouldDisplayContentOnReload() throws Exception {
+        LOGGER.info("");
+        
+        assertThat(MarkdownViewBot.isPresent(), is(false));
+
+        ProjectBot project1 = ProjectBot.createSimpleProject();
+        project1.newFile("file1.md");
+        SWTUtils.sleep(2000);
+
+        MarkdownViewBot markdownViewBot = MarkdownViewBot.open();
+        assertThat(MarkdownViewBot.isPresent(), is(true));
+
+        assertThat(markdownViewBot.getTitle(), not(is("file1")));
+        
+        SWTBotToolbarButton reloadButton = markdownViewBot.getReloadButton();
+        reloadButton.click();
+        SWTUtils.sleep(2000);
+
+        assertThat(markdownViewBot.getTitle(), is("file1"));
+        
+        markdownViewBot.close();
+
+        EditorBot.closeAll();
+        project1.delete();
+    }
+
+    @Test
     public void shouldUpdateViewWhenEditorOpened() throws Exception {
         LOGGER.info("");
         
@@ -261,7 +288,7 @@ public class MarkdownViewTest {
         assertThat(MarkdownViewBot.isPresent(), is(true));
 
         SWTBotToolbarButton onlineButton = markdownViewBot.getOnlineButton();
-        SWTBotToolbarButton refreshButton = markdownViewBot.getReloadButton();
+        SWTBotToolbarButton reloadButton = markdownViewBot.getReloadButton();
 
         ProjectBot project = ProjectBot.createSimpleProject();
         ProjectFileBot fileBot = project.newFile("file1.md");
@@ -287,7 +314,7 @@ public class MarkdownViewTest {
         assertThat(textHt1, containsString(textMd1));
         assertThat(textHt1, not(containsString(textMd2)));
 
-        refreshButton.click();
+        reloadButton.click();
         SWTUtils.sleep(2000);
 
         assertThat(markdownViewBot.getTitle(), is("*file1"));
@@ -296,7 +323,7 @@ public class MarkdownViewTest {
         assertThat(textHt2, not(containsString(textMd2)));
 
         onlineButton.click(); // set online
-        refreshButton.click();
+        reloadButton.click();
         SWTUtils.sleep(2000);
 
         assertThat(markdownViewBot.getTitle(), is("file1"));

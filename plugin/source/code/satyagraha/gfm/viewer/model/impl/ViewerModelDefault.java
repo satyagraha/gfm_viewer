@@ -84,6 +84,9 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
     public void reload() {
         LOGGER.fine("mdFileShown: " + mdFileShown);
         File mdFile = mdFileShown;
+        if (mdFile == null) {
+            mdFile = getFile(editorTracker.getActiveEditorMarkdownFile());
+        }
         if (mdFile == null || !mdFile.canRead()) {
             return;
         }
@@ -103,13 +106,18 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
         if (!viewSupport.isLinked()) {
             return;
         }
-        IPath rawLocation = editorFile.getRawLocation();
-        if (rawLocation == null) {
-            return;
-        }
-        showFile(rawLocation.toFile());
+        showFile(getFile(editorFile));
     }
 
+    private File getFile(IFile editorFile) {
+        LOGGER.fine("editorFile: " + editorFile);
+        if (editorFile == null) {
+            return null;
+        }
+        IPath rawLocation = editorFile.getRawLocation();
+        return (rawLocation != null) ? rawLocation.toFile() : null;
+    }
+    
     private void showFile(File mdFile) {
         LOGGER.fine("mdFile: " + mdFile);
         if (mdFile == null || !mdFile.canRead()) {
