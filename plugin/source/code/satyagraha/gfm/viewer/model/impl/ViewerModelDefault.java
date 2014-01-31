@@ -96,7 +96,7 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
         } else if (htFile.canRead()) {
             updateBrowser(mdFile, htFile, transformer.canSkipTransformation(mdFile, htFile));
         } else {
-            // unable to display
+            notifyUndisplayable(mdFile);
         }
     }
 
@@ -131,10 +131,14 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
         } else if (htFile.canRead()) {
             updateBrowser(mdFile, htFile, false); // out-of-date
         } else {
-            // unable to display
+            notifyUndisplayable(mdFile);
         }
     }
 
+    private void notifyUndisplayable(File mdFile) {
+        markdownBrowser.setText("Cannot display: " + mdFile);
+    }
+    
     private void scheduleTransformation(final File mdFile, final File htFile) {
         Assert.isTrue(viewSupport.isOnline());
         scheduler.scheduleTransformation(mdFile, htFile, new Callback<File>() {

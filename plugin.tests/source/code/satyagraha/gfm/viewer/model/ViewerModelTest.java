@@ -3,11 +3,13 @@ package code.satyagraha.gfm.viewer.model;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
 import java.io.File;
@@ -160,36 +162,36 @@ public class ViewerModelTest {
 
     @Test
     public void showMarkdownFileShouldNotGenerateIfUpToDateWhenOnline() throws Exception {
-        showMarkdownFileScenario(true, true, true, 0, 1, true);
+        showMarkdownFileScenario(true, true, true, 0, 1, 0, true);
     }
 
     @Test
     public void showMarkdownFileShouldGenerateIfNotUpToDateWhenOnline() throws Exception {
-        showMarkdownFileScenario(true, true, false, 1, 1, true);
+        showMarkdownFileScenario(true, true, false, 1, 1, 0, true);
     }
 
     @Test
     public void showMarkdownFileShouldGenerateIfNoHtmlFileWhenOnline() throws Exception {
-        showMarkdownFileScenario(true, false, false, 1, 1, true);
+        showMarkdownFileScenario(true, false, false, 1, 1, 0, true);
     }
 
     @Test
     public void showMarkdownFileShouldNotGenerateIfUpToDateWhenOffine() throws Exception {
-        showMarkdownFileScenario(false, true, true, 0, 1, true);
+        showMarkdownFileScenario(false, true, true, 0, 1, 0, true);
     }
 
     @Test
     public void showMarkdownFileShouldNotGenerateIfNotUpToDateWhenOffline() throws Exception {
-        showMarkdownFileScenario(false, true, false, 0, 1, false);
+        showMarkdownFileScenario(false, true, false, 0, 1, 0, false);
     }
 
     @Test
     public void showMarkdownFileShouldNotGenerateIfNoHtmlFileWhenOffline() throws Exception {
-        showMarkdownFileScenario(false, false, false, 0, 0, false);
+        showMarkdownFileScenario(false, false, false, 0, 0, 1, false);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void showMarkdownFileScenario(boolean isOnline, boolean htFileReadable, boolean canSkipTransformation, int scheduleCount, int showCount, boolean isUpToDate)
+    private void showMarkdownFileScenario(boolean isOnline, boolean htFileReadable, boolean canSkipTransformation, int scheduleCount, int showCount, int setTextCount, boolean isUpToDate)
             throws IOException {
         // given
         given(viewSupport.isOnline()).willReturn(isOnline);
@@ -224,6 +226,7 @@ public class ViewerModelTest {
         verify(scheduler, times(scheduleCount)).scheduleTransformation(eq(mdFile), eq(htFile), any(Scheduler.Callback.class));
         verify(markdownView, times(showCount)).nowShowing(mdFile, isUpToDate);
         verify(browser, times(showCount)).showHtmlFile(htFile);
+        verify(browser, times(setTextCount)).setText(anyString());
     }
 
     @Test
@@ -429,6 +432,35 @@ public class ViewerModelTest {
     public void reloadShouldUseExistingHTMLWhenOffline() throws Exception {
         // this is a bit dubious
         reloadScenario(false, false, 0, 1, false);
+    }
+    
+    @Test
+    public void reloadWhenOfflineWithNoExistingHTMLShouldNotify() throws Exception {
+        // given
+        given(viewSupport.isOnline()).willReturn(false);
+
+        File mdFile = mock(File.class);
+        IPath iPath = mock(IPath.class);
+        IFile iFile = mock(IFile.class);
+        given(iFile.getRawLocation()).willReturn(iPath);
+        given(iPath.toFile()).willReturn(mdFile);
+        given(mdFile.canRead()).willReturn(true);
+
+        File htFile = mock(File.class);
+        given(htFile.canRead()).willReturn(false);
+        
+        given(editorTracker.getActiveEditorMarkdownFile()).willReturn(iFile);
+        given(transformer.createHtmlFile(mdFile)).willReturn(htFile);
+
+        // when
+        model.start(markdownView, browser);
+        model.reload();
+        model.stop();
+
+        // then
+        verify(viewSupport, never()).isLinked();
+        verify(browser, times(1)).setText(anyString());
+        verifyNoMoreInteractions(browser, scheduler);
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
