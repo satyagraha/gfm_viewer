@@ -59,6 +59,9 @@ public class ViewerModelTest {
     @InjectMocks
     private ViewerModelDefault model;
 
+    @Mock
+    private Exception exception;
+    
     @BeforeClass
     public static void setupClass() {
         SimpleLogging.setupLogging();
@@ -162,36 +165,46 @@ public class ViewerModelTest {
 
     @Test
     public void showMarkdownFileShouldNotGenerateIfUpToDateWhenOnline() throws Exception {
-        showMarkdownFileScenario(true, true, true, 0, 1, 0, true);
+        showMarkdownFileScenario(true, true, true, 0, 0, 1, 0, true);
     }
 
     @Test
     public void showMarkdownFileShouldGenerateIfNotUpToDateWhenOnline() throws Exception {
-        showMarkdownFileScenario(true, true, false, 1, 1, 0, true);
+        showMarkdownFileScenario(true, true, false, 1, 0, 1, 0, true);
     }
 
     @Test
     public void showMarkdownFileShouldGenerateIfNoHtmlFileWhenOnline() throws Exception {
-        showMarkdownFileScenario(true, false, false, 1, 1, 0, true);
+        showMarkdownFileScenario(true, false, false, 1, 0, 1, 0, true);
     }
 
     @Test
     public void showMarkdownFileShouldNotGenerateIfUpToDateWhenOffine() throws Exception {
-        showMarkdownFileScenario(false, true, true, 0, 1, 0, true);
+        showMarkdownFileScenario(false, true, true, 0, 0, 1, 0, true);
     }
 
     @Test
     public void showMarkdownFileShouldNotGenerateIfNotUpToDateWhenOffline() throws Exception {
-        showMarkdownFileScenario(false, true, false, 0, 1, 0, false);
+        showMarkdownFileScenario(false, true, false, 0, 0, 1, 0, false);
     }
 
     @Test
     public void showMarkdownFileShouldNotGenerateIfNoHtmlFileWhenOffline() throws Exception {
-        showMarkdownFileScenario(false, false, false, 0, 0, 1, false);
+        showMarkdownFileScenario(false, false, false, 0, 0, 0, 1, false);
     }
 
+    @Test
+    public void showMarkdownFileShouldGenerateAndDisplayOldHtmlFileOnError() throws Exception {
+        showMarkdownFileScenario(true, true, false, 1, 1, 1, 0, false);
+    }
+    
+    @Test
+    public void showMarkdownFileShouldGenerateAndNotifyOnError() throws Exception {
+        showMarkdownFileScenario(true, false, false, 1, 1, 0, 1, false);
+    }
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void showMarkdownFileScenario(boolean isOnline, boolean htFileReadable, boolean canSkipTransformation, int scheduleCount, int showCount, int setTextCount, boolean isUpToDate)
+    private void showMarkdownFileScenario(boolean isOnline, boolean htFileReadable, boolean canSkipTransformation, int scheduleCount, int errorCount, int showCount, int setTextCount, boolean isUpToDate)
             throws IOException {
         // given
         given(viewSupport.isOnline()).willReturn(isOnline);
@@ -217,7 +230,11 @@ public class ViewerModelTest {
         model.showMarkdownFile(iFile);
         if (scheduleCount > 0) {
             Callback callback = schedulerCallbackCaptor.getValue();
-            callback.onComplete(htFile);
+            if (errorCount == 0) {
+                callback.onComplete(htFile);
+            } else {
+                callback.onError(htFile, exception);
+            }
         }
         model.stop();
 
