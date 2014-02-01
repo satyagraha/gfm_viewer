@@ -12,6 +12,7 @@ import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USERNAME;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USE_ECLIPSE_CONSOLE;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USE_TEMP_DIR;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_MARKDOWN_EXTENSIONS;
 
 import java.io.File;
 
@@ -76,6 +77,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
         addField(new StringFieldEditor(P_JS_URL_3, "JS URL 3:", parent));
         
         addField(new BooleanFieldEditor(P_USE_ECLIPSE_CONSOLE, "Use Eclipse Console", parent));
+        
+        addField(new StringFieldEditor(P_MARKDOWN_EXTENSIONS, "Markdown Extensions", parent));
     }
 
     /*

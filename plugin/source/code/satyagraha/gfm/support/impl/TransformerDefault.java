@@ -1,7 +1,5 @@
 package code.satyagraha.gfm.support.impl;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.unmodifiableList;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -11,8 +9,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
@@ -38,7 +37,6 @@ public class TransformerDefault implements Transformer {
     private static Logger LOGGER = Logger.getLogger(TransformerDefault.class.getPackage().getName());
     
     private static final Charset UTF_8 = Charset.forName(CharEncoding.UTF_8);
-    private static List<String> MARKDOWN_EXTENSIONS = unmodifiableList(asList("md", "markdown"));
 
     private final Config config;
     private final WebServiceClient webServiceClient;
@@ -50,8 +48,16 @@ public class TransformerDefault implements Transformer {
     }
     
     @Override
-    public List<String> markdownExtensions() {
-        return MARKDOWN_EXTENSIONS;
+    public Set<String> markdownExtensions() {
+        Set<String> result = new HashSet<String>();
+        for (String element : config.getMarkdownExtensions().split(",")) {
+            element = element.trim();
+            if (element.startsWith(".")) {
+                element = element.substring(1);
+            }
+            result.add(element);
+        }
+        return result;
     }
     
     @Override
@@ -60,8 +66,8 @@ public class TransformerDefault implements Transformer {
     }
 
     private boolean isMarkdownFileExtension(String path) {
-        String extension = FilenameUtils.getExtension(path).toLowerCase();
-        return MARKDOWN_EXTENSIONS.contains(extension);
+        String extension = FilenameUtils.getExtension(path);
+        return markdownExtensions().contains(extension);
     }
     
     private boolean isEmptyFileExtension(String path) {
