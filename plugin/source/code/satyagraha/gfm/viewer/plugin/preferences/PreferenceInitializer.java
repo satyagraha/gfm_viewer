@@ -11,6 +11,7 @@ import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_TEMPLATE;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USERNAME;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USE_ECLIPSE_CONSOLE;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_MARKDOWN_EXTENSIONS;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USE_TEMP_DIR;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
@@ -40,7 +41,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	@Override
     public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(P_USE_TEMP_DIR, false);
+		store.setDefault(P_USE_TEMP_DIR, getConfigDefault().useTempDir());
 		store.setDefault(P_API_URL, getConfigDefault().getApiUrl());
 		store.setDefault(P_USERNAME, "");
 		store.setDefault(P_PASSWORD, "");
@@ -51,7 +52,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(P_JS_URL_1, "");
 		store.setDefault(P_JS_URL_2, "");
 		store.setDefault(P_JS_URL_3, "");
-		store.setDefault(P_USE_ECLIPSE_CONSOLE, false);
+		store.setDefault(P_USE_ECLIPSE_CONSOLE, getConfigDefault().useEclipseConsole());
+		store.setDefault(P_MARKDOWN_EXTENSIONS, getConfigDefault().getMarkdownExtensions());
 	}
 
 }

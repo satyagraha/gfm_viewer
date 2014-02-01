@@ -2,11 +2,11 @@ package code.satyagraha.gfm.support.api;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 public interface Transformer {
 
-    List<String> markdownExtensions();
+    Set<String> markdownExtensions();
     
     boolean isMarkdownFile(File file);
     

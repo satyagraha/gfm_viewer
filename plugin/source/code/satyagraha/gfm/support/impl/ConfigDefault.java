@@ -14,8 +14,9 @@ import code.satyagraha.gfm.support.api.Config;
 
 public class ConfigDefault implements Config {
 
-    private static final String API_ROOT_URL = "https://api.github.com";
     private static final Charset UTF_8 = Charset.forName(CharEncoding.UTF_8);
+    private static final String API_ROOT_URL = "https://api.github.com";
+    private static final String MARKDOWN_EXTENSIONS = ".md,.mdown,.markdown";
     
     @Override
     public String getApiUrl() {
@@ -68,6 +69,11 @@ public class ConfigDefault implements Config {
     @Override
     public boolean useEclipseConsole() {
         return false;
+    }
+
+    @Override
+    public String getMarkdownExtensions() {
+        return MARKDOWN_EXTENSIONS;
     }
     
     private String getResourceAsString(String resourcePath) throws IOException {

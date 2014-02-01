@@ -14,17 +14,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import code.satyagraha.gfm.support.api.Config;
 import code.satyagraha.gfm.support.api.WebServiceClient;
+import code.satyagraha.gfm.support.impl.ConfigDefault;
 import code.satyagraha.gfm.support.impl.TransformerDefault;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TransformerTest {
 
-    @Mock
-    private Config config;
+    @Spy
+    private Config config = new ConfigDefault();
 
     @Mock
     private WebServiceClient webServiceClient;
@@ -35,6 +37,7 @@ public class TransformerTest {
     @Test
     public void shouldRecognizeKnownExtensions() {
         assertThat(transformer.markdownExtensions().contains("md"), is(true));
+        assertThat(transformer.markdownExtensions().contains("mdown"), is(true));
         assertThat(transformer.markdownExtensions().contains("markdown"), is(true));
     }
     

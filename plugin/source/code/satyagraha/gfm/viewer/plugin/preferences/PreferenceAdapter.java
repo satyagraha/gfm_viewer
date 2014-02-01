@@ -10,8 +10,9 @@ import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_PASSWORD;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_TEMPLATE;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USERNAME;
-import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USE_ECLIPSE_CONSOLE;
 import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USE_TEMP_DIR;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_USE_ECLIPSE_CONSOLE;
+import static code.satyagraha.gfm.viewer.plugin.preferences.PreferenceConstants.P_MARKDOWN_EXTENSIONS;
 
 import java.io.File;
 import java.io.IOException;
@@ -127,7 +128,12 @@ public class PreferenceAdapter implements Config {
     public boolean useEclipseConsole() {
         return getBooleanPreference(P_USE_ECLIPSE_CONSOLE);
     }
-    
+
+    @Override
+    public String getMarkdownExtensions() {
+        return getStringPreference(P_MARKDOWN_EXTENSIONS);
+    }
+
     private String getStringPreference(String preferenceId) {
         return Activator.getDefault().getPreferenceStore().getString(preferenceId);
     }
