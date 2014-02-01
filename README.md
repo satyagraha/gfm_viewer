@@ -83,6 +83,7 @@ limit raised, see [here](http://developer.github.com/v3/#rate-limiting) for back
 * _CSS URL 1-3_: an alternate CSS presentation to the default may be provided
 * _JS URL 1-3_: an alternate JS implementation to the default may be provided
 * _Use Eclipse Console_: shows debugging output in Console view
+* _Markdown Extensions_: recognized markdown extensions
 
 Regarding the temporary formatted HTML files, when stored in the original markdown file directory note:
 
@@ -246,6 +247,7 @@ classes in a project, highlighting circular dependencies which typically indicat
 
 ## History
 
+* 1.8.2 - TBD
 * 1.8.1 - UI tests, fixes
 * 1.8.0 - On/Off-line mode
 * 1.7.0 - Various fixes, Ubuntu supported via Webkit browser

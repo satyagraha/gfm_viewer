@@ -32,10 +32,10 @@ public class SchedulerDefault implements Scheduler {
     private final Transformer transformer;
     private final IOFileFilter markdownFileFilter;
     private final String pluginId = "unknown"; // TODO
-  
+
     public SchedulerDefault(Transformer transformer) {
         this.transformer = transformer;
-        
+
         markdownFileFilter = new IOFileFilter() {
 
             @Override
@@ -49,7 +49,7 @@ public class SchedulerDefault implements Scheduler {
             }
         };
     }
-    
+
     @Override
     public void scheduleTransformation(final File mdFile, final File htFile, final Callback<File> onDone) {
         final String jobName = "Transforming: " + mdFile.getName();
@@ -73,12 +73,13 @@ public class SchedulerDefault implements Scheduler {
 
             @Override
             public void done(IJobChangeEvent event) {
-//                in principle, the following line should be enabled, but it appears to force project rebuild
-//                refreshFile(htFile);
+                // in principle, the following line should be enabled, but it
+                // appears to force project rebuild
+                // refreshFile(htFile);
                 if (event.getResult().isOK()) {
                     if (onDone != null) {
                         Display.getDefault().asyncExec(new Runnable() {
-                            
+
                             @Override
                             public void run() {
                                 onDone.onComplete(htFile);
@@ -87,6 +88,16 @@ public class SchedulerDefault implements Scheduler {
                     }
                 } else {
                     // normal reporting has occurred
+                    if (onDone != null) {
+                        final Throwable exception = event.getResult().getException();
+                        Display.getDefault().asyncExec(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                onDone.onError(htFile, exception);
+                            }
+                        });
+                    }
                 }
             }
 
@@ -116,5 +127,5 @@ public class SchedulerDefault implements Scheduler {
         LOGGER.fine("htFile: " + htFile);
         scheduleTransformation(mdFile, htFile, null);
     }
-    
+
 }

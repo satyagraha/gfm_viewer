@@ -84,6 +84,9 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
     public void reload() {
         LOGGER.fine("mdFileShown: " + mdFileShown);
         File mdFile = mdFileShown;
+        if (mdFile == null) {
+            mdFile = getFile(editorTracker.getActiveEditorMarkdownFile());
+        }
         if (mdFile == null || !mdFile.canRead()) {
             return;
         }
@@ -93,7 +96,7 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
         } else if (htFile.canRead()) {
             updateBrowser(mdFile, htFile, transformer.canSkipTransformation(mdFile, htFile));
         } else {
-            // unable to display
+            notifyUndisplayable(mdFile);
         }
     }
 
@@ -103,13 +106,18 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
         if (!viewSupport.isLinked()) {
             return;
         }
-        IPath rawLocation = editorFile.getRawLocation();
-        if (rawLocation == null) {
-            return;
-        }
-        showFile(rawLocation.toFile());
+        showFile(getFile(editorFile));
     }
 
+    private File getFile(IFile editorFile) {
+        LOGGER.fine("editorFile: " + editorFile);
+        if (editorFile == null) {
+            return null;
+        }
+        IPath rawLocation = editorFile.getRawLocation();
+        return (rawLocation != null) ? rawLocation.toFile() : null;
+    }
+    
     private void showFile(File mdFile) {
         LOGGER.fine("mdFile: " + mdFile);
         if (mdFile == null || !mdFile.canRead()) {
@@ -123,10 +131,14 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
         } else if (htFile.canRead()) {
             updateBrowser(mdFile, htFile, false); // out-of-date
         } else {
-            // unable to display
+            notifyUndisplayable(mdFile);
         }
     }
 
+    private void notifyUndisplayable(File mdFile) {
+        markdownBrowser.setText("Cannot display preview of: " + mdFile);
+    }
+    
     private void scheduleTransformation(final File mdFile, final File htFile) {
         Assert.isTrue(viewSupport.isOnline());
         scheduler.scheduleTransformation(mdFile, htFile, new Callback<File>() {
@@ -134,6 +146,15 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
             @Override
             public void onComplete(File htFile) {
                 updateBrowser(mdFile, htFile, true);
+            }
+            
+            @Override
+            public void onError(File htFile, Throwable throwable) {
+                if (htFile.canRead()) {
+                    updateBrowser(mdFile, htFile, false);
+                } else {
+                    notifyUndisplayable(mdFile);
+                }
             }
         });
     }

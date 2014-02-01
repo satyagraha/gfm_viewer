@@ -9,6 +9,8 @@ public interface Scheduler {
 
     interface Callback<T> {
         void onComplete(T t);
+
+        void onError(T t, Throwable throwable);
     }
 
     void scheduleTransformation(File mdFile, File htFile, Callback<File> onDone);

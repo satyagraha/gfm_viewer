@@ -14,4 +14,6 @@ public interface MarkdownBrowser {
 
     void dispose();
 
+    void setText(String string);
+
 }

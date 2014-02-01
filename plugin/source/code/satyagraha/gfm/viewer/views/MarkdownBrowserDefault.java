@@ -135,6 +135,11 @@ public class MarkdownBrowserDefault implements MarkdownBrowser, ProgressListener
         browser.dispose();
         browser = null;
     }
+    
+    @Override
+    public void setText(String text) {
+        browser.setText(text);
+    }
 
 //    public abstract void handleDrop(File file);
 
