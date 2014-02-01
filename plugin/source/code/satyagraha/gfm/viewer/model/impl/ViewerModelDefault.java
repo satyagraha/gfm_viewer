@@ -136,7 +136,7 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
     }
 
     private void notifyUndisplayable(File mdFile) {
-        markdownBrowser.setText("Cannot display: " + mdFile);
+        markdownBrowser.setText("Cannot display preview of: " + mdFile);
     }
     
     private void scheduleTransformation(final File mdFile, final File htFile) {
@@ -146,6 +146,15 @@ public class ViewerModelDefault implements ViewerModel, MarkdownListener {
             @Override
             public void onComplete(File htFile) {
                 updateBrowser(mdFile, htFile, true);
+            }
+            
+            @Override
+            public void onError(File htFile, Throwable throwable) {
+                if (htFile.canRead()) {
+                    updateBrowser(mdFile, htFile, false);
+                } else {
+                    notifyUndisplayable(mdFile);
+                }
             }
         });
     }
