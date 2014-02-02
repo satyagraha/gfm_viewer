@@ -3,11 +3,11 @@
 <repository name="GFM Viewer"
   type="org.eclipse.equinox.internal.p2.artifact.repository.CompositeArtifactRepository"
   version="1.0.0">
-  <!-- !!! GENERATED FILE - DO NOT EDIT !!! -->
+  <!-- ${copy.warning} -->
   <properties size="1">
-    <property name="p2.timestamp" value="1391370179112" />
+    <property name="p2.timestamp" value="${epoch.millis}" />
   </properties>
   <children size="1">
-    <child location="http://dl.bintray.com/satyagraha/generic/1.8.3/" />
+    <child location="http://dl.bintray.com/satyagraha/generic/${project.version}/" />
   </children>
 </repository>
