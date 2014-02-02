@@ -7,6 +7,6 @@
     <property name="p2.timestamp" value="1390338781" /><!-- http://www.epochconverter.com/ -->
   </properties>
   <children size="1">
-    <child location="http://dl.bintray.com/satyagraha/generic/1.8.2/" />
+    <child location="http://dl.bintray.com/satyagraha/generic/1.8.3/" />
   </children>
 </repository>
