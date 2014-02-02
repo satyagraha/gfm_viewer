@@ -1,118 +1,163 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>code.satyagraha.gfm.viewer</groupId>
-	<artifactId>code.satyagraha.gfm.viewer.parent</artifactId>
-	<version>1.8.2</version>
-	<packaging>pom</packaging>
-	
-	<organization>
-		<name>Satyagraha</name>
-		<url>https://github.com/satyagraha/gfm_viewer</url>
-	</organization>
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>code.satyagraha.gfm.viewer</groupId>
+  <artifactId>code.satyagraha.gfm.viewer.parent</artifactId>
+  <version>1.8.3</version>
+  <packaging>pom</packaging>
+
+  <organization>
+    <name>Satyagraha</name>
+    <url>https://github.com/satyagraha/gfm_viewer</url>
+  </organization>
 	<!-- http://maven.apache.org/scm/git.html -->
-	<scm>
-		<url>https://github.com/satyagraha/gfm_viewer/</url>
-		<connection>scm:git:https://github.com/satyagraha/gfm_viewer.git</connection>
-		<developerConnection>scm:git:https://github.com/satyagraha/gfm_viewer.git</developerConnection>
-	</scm>
-    <issueManagement>
-    	<system>GitHub</system>
-    	<url>https://github.com/satyagraha/gfm_viewer/issues</url>
-    </issueManagement>
-    <ciManagement>
-    	<system>Travis CI</system>
-    	<url>http://travis-ci.org/satyagraha/gfm_viewer</url>
-    </ciManagement>    
+  <scm>
+    <url>https://github.com/satyagraha/gfm_viewer/</url>
+    <connection>scm:git:https://github.com/satyagraha/gfm_viewer.git</connection>
+    <developerConnection>scm:git:https://github.com/satyagraha/gfm_viewer.git</developerConnection>
+  </scm>
+  
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/satyagraha/gfm_viewer/issues</url>
+  </issueManagement>
+  
+  <ciManagement>
+    <system>Travis CI</system>
+    <url>http://travis-ci.org/satyagraha/gfm_viewer</url>
+  </ciManagement>
 
-	<developers>
-		<developer>
-			<id>Satyagraha</id>
-			<name>Satyagraha</name>
-			<email></email>
-			<organization></organization>
-			<roles>
-				<role>Lead Developer</role>
-			</roles>
-			<timezone>0</timezone>
-		</developer>
-	</developers>
-	<contributors>
-		<contributor>
-			<name>Paul Verest</name>
-			<organization>Nodeclipse organization</organization>
-			<organizationUrl>http://www.nodeclipse.org/</organizationUrl>
-			<timezone>+8</timezone>
-		</contributor>
-	</contributors>
-	
-	<properties>
-		<tycho-version>0.19.0</tycho-version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+  <developers>
+    <developer>
+      <id>Satyagraha</id>
+      <name>Satyagraha</name>
+      <email></email>
+      <organization></organization>
+      <roles>
+        <role>Lead Developer</role>
+      </roles>
+      <timezone>0</timezone>
+    </developer>
+  </developers>
+  
+  <contributors>
+    <contributor>
+      <name>Paul Verest</name>
+      <organization>Nodeclipse organization</organization>
+      <organizationUrl>http://www.nodeclipse.org/</organizationUrl>
+      <timezone>+8</timezone>
+    </contributor>
+  </contributors>
 
-	<repositories>
-		<repository>
-			<id>eclipse-kepler</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/kepler</url>
-		</repository>
-	</repositories>
+  <properties>
+    <tycho-version>0.19.0</tycho-version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <copy.warning>!!! GENERATED FILE - DO NOT EDIT !!!</copy.warning>
+  </properties>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-maven-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<extensions>true</extensions>
-			</plugin>
-			
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<environments>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
-							<arch>x86_64</arch>
-						</environment>
-					</environments>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+  <repositories>
+    <repository>
+      <id>eclipse-kepler</id>
+      <layout>p2</layout>
+      <url>http://download.eclipse.org/releases/kepler</url>
+    </repository>
+  </repositories>
 
-	<modules>
-		<module>ext-deps</module>
-		<module>plugin</module>
-		<module>plugin.tests</module>
-		<module>plugin.ui.tests</module>
-		<module>feature</module>
-		<module>update-site</module>
-		<module>p2-repo</module>
-	</modules>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <extensions>true</extensions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>target-platform-configuration</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <environments>
+            <environment>
+              <os>linux</os>
+              <ws>gtk</ws>
+              <arch>x86</arch>
+            </environment>
+            <environment>
+              <os>linux</os>
+              <ws>gtk</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>win32</os>
+              <ws>win32</ws>
+              <arch>x86</arch>
+            </environment>
+            <environment>
+              <os>win32</os>
+              <ws>win32</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>macosx</os>
+              <ws>cocoa</ws>
+              <arch>x86_64</arch>
+            </environment>
+          </environments>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <version>1.2</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>create-timestamp</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <timestampPropertyName>epoch.millis</timestampPropertyName>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>p2-composite</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>p2-composite-template</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <modules>
+    <module>ext-deps</module>
+    <module>plugin</module>
+    <module>plugin.tests</module>
+    <module>plugin.ui.tests</module>
+    <module>feature</module>
+    <module>update-site</module>
+    <module>p2-repo</module>
+  </modules>
 
 </project>

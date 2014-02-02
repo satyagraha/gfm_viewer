@@ -244,10 +244,13 @@ framework
 diagrams as an aid to understanding the relationships between the entities
 * The [ispace](http://www.stribor.de/) Eclipse plugin creates a dependency graph of packages and
 classes in a project, highlighting circular dependencies which typically indicate poor design
+* For Java unit testing, [Mockito](https://code.google.com/p/mockito/) is superb
+* For Eclipse UI testing, [SWTBot](http://eclipse.org/swtbot/) works pretty well
 
 ## History
 
-* 1.8.2 - TBD
+* 1.8.3 - TBD
+* 1.8.2 - Minor fixes and feature improvements
 * 1.8.1 - UI tests, fixes
 * 1.8.0 - On/Off-line mode
 * 1.7.0 - Various fixes, Ubuntu supported via Webkit browser
