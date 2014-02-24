@@ -24,7 +24,7 @@
             locationURI="toolbar:code.satyagraha.gfm.viewer.views.GfmView">
          <command
                commandId="GFM Viewer plugin.Preferences"
-               icon="icons/etool16/settings16.png"
+               icon="icons/settings16_yellow.png"
                style="push">
          </command>
          <command

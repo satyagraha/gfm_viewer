@@ -38,7 +38,7 @@ regenerate all associated markdown preview files (via background jobs recursivel
 the directory trees): this is effectively a batch mode update facility.     
 
 * The GFM plugin view provides on its toolbar the following icons which may be clicked:
-	* ![settings16.png](plugin/icons/etool16/settings16.png) - show preferences page
+	* ![settings16_yellow.png](plugin/icons/settings16_yellow.png) - show preferences page
 	* ![linked.gif](plugin/icons/online.gif) - on/off-line mode, switch off when not connected to internet
 	* ![linked.gif](plugin/icons/linked.gif) - linked mode, use to keep GFM View aligned with active editor
 	* ![realod.gif](plugin/icons/reload.gif) - reload, to manually update GFM View from last linked file
