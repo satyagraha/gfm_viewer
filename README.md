@@ -249,7 +249,8 @@ classes in a project, highlighting circular dependencies which typically indicat
 
 ## History
 
-* 1.8.4 - TBD
+* 1.8.5 - TBD
+* 1.8.4 - Support Eclipse proxy settings
 * 1.8.3 - Fix broken release
 * 1.8.2 - Minor fixes and feature improvements
 * 1.8.1 - UI tests, fixes
