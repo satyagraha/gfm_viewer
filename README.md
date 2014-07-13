@@ -104,6 +104,12 @@ there as necessary
 * Eclipse will prompt for a restart, accept this, then the GFM viewer is usable as documented
 [above](#usage)
 
+## Installation of Alternate Versions
+
+The above installation mechanism will install the latest official version of the plugin. It is possible to install
+older or newer beta versions of the software by using http://dl.bintray.com/satyagraha/generic/x.y.z as the
+update site URL, where x.y.z is the desired version. You can see the available versions at http://dl.bintray.com/satyagraha/generic/.
+
 ## Installation from Source Code
 
 The following build and install process can be followed to build the plugin locally should there be an issue with the
@@ -249,7 +255,8 @@ classes in a project, highlighting circular dependencies which typically indicat
 
 ## History
 
-* 1.8.5 - TBD
+* 1.9.0 - Web proxy fixes
+* 1.8.5 - Web proxy support beta
 * 1.8.4 - Support Eclipse proxy settings
 * 1.8.3 - Fix broken release
 * 1.8.2 - Minor fixes and feature improvements
