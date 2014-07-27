@@ -255,6 +255,7 @@ classes in a project, highlighting circular dependencies which typically indicat
 
 ## History
 
+* 1.9.1 - Remove GitHub anchor name prefixes
 * 1.9.0 - Web proxy fixes
 * 1.8.5 - Web proxy support beta
 * 1.8.4 - Support Eclipse proxy settings

@@ -104,9 +104,48 @@ public class TransformerTest {
         assertThat(resultLink, not(containsString(".html")));
     }
 
-    private String getTransformedLink(String linkUri) {
+    @Test
+    public void shouldNotTransformSimpleFragmentLink() {
         // given
+
+        // when
+        String resultLink = getTransformedLink("#localref");
+
+        // then
+        assertThat(resultLink, not(containsString(".html")));
+        
+    }
+    
+    @Test
+    public void shouldTransformGitHubAnchor() {
+        // given
+        String anchorText = "<a name=\"user-content-todo\" class=\"anchor\" href=\"#TODO\">stuff</a>";
+        
+        // when
+        String resultText = getTransformedText(anchorText);
+        
+        // then
+        assertThat(resultText, is(anchorText.replace("user-content-", "")));
+    }
+    
+    @Test
+    public void shouldNotTransformNonGitHubAnchor() {
+        // given
+        String anchorText = "<a name=\"todo\" class=\"anchor\" href=\"#todo\">stuff</a>";
+        
+        // when
+        String resultText = getTransformedText(anchorText);
+        
+        // then
+        assertThat(resultText, is(anchorText));
+    }
+    
+    private String getTransformedLink(String linkUri) {
         String htText = String.format("<a href=\"%s\">click me</a>", linkUri);
+        return getTransformedText(htText);
+    }        
+    
+    private String getTransformedText(String htText) {
         given(webServiceClient.transform(anyString())).willReturn(htText);
 
         // when
