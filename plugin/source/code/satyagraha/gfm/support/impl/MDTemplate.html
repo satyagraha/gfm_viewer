@@ -6,12 +6,12 @@
 @foreach{cssUri : cssUris}
 <link href="@{cssUri}" media="all" rel="stylesheet" type="text/css"/> 
 @end{}
-@if{cssText}
+@if{cssText != empty}
 <style type="text/css">
 @{cssText}
 </style>
 @end{}
-@if{jsText}
+@if{jsText != empty}
 <script type="text/javascript">
 @{jsText}
 </script>
