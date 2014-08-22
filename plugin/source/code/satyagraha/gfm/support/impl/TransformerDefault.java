@@ -9,10 +9,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
@@ -81,13 +81,14 @@ public class TransformerDefault implements Transformer {
         String mdText = FileUtils.readFileToString(mdFile, UTF_8);
         String htText = transformMarkdownText(mdText);
         CompiledTemplate htmlTemplate = TemplateCompiler.compileTemplate(config.getHtmlTemplate());
-        Map<String, Object> vars = new HashMap<String, Object>();
+        Map<String, Object> vars = new TreeMap<String, Object>();
         vars.put("title", htFile.toString());
         vars.put("content", htText);
         vars.put("cssText", config.getCssText());
         vars.put("cssUris", config.getCssUris());
         vars.put("jsText", config.getJsText());
         vars.put("jsUris", config.getJsUris());
+//        LOGGER.fine("template vars: " + vars);
         String rendered = (String) TemplateRuntime.execute(htmlTemplate, vars);
         FileUtils.writeStringToFile(htFile, rendered, UTF_8);
     }

@@ -1,6 +1,7 @@
 body {
 	color: #333;
 	font: 13px/1.4 Helvetica,arial,freesans,clean,sans-serif;
+	font-family: sans-serif;
 }
 
 .markdown-body {

@@ -10,10 +10,12 @@ import static org.mockito.Mockito.verify;
 
 import java.io.File;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -138,6 +140,31 @@ public class TransformerTest {
         
         // then
         assertThat(resultText, is(anchorText));
+    }
+
+    @Test
+    public void shouldWorkWithEmptyCssJs() throws Exception {
+        // setup
+        transformer = new TransformerDefault(config, webServiceClient);
+
+        // given
+        File mdFile = File.createTempFile("src", ".md");
+        String message = "hello world - " + System.currentTimeMillis(); 
+        String mdText = message + "\n";
+        FileUtils.write(mdFile, mdText);
+        
+        File htFile = File.createTempFile("dst", ".md");
+        String htText = String.format("<p>%s</p>", message);
+        given(webServiceClient.transform(mdText)).willReturn(htText);
+        given(config.getCssText()).willReturn(null);
+        given(config.getJsText()).willReturn(null);
+        
+        // when
+        transformer.transformMarkdownFile(mdFile, htFile);
+        
+        // then
+        String resultText = FileUtils.readFileToString(htFile);
+        assertThat(resultText, containsString(message));
     }
     
     private String getTransformedLink(String linkUri) {
