@@ -12,9 +12,7 @@ title="Drag and drop into a running Eclipse to install GitHub Flavored Markdown 
 This project provides an Eclipse view which provides a reasonably accurate presentation of
 [GithHub Flavored Markdown](http://github.github.com/github-flavored-markdown/) files.
 
-It is also new way to create Eclipse plugin help contents.
-Check project sources and developer instructions at GitHub
-<https://github.com/satyagraha/gfm_viewer> .
+It is also [new way to create Eclipse plugin help contents](https://github.com/satyagraha/gfm_viewer/blob/master/plugin/src/site/markdown/adding-help-to-eclipse-plugin.md).
 
 ## Usage
 
