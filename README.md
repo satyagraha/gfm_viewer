@@ -14,6 +14,8 @@ This project provides an Eclipse view which provides a reasonably accurate prese
 
 It is also [new way to create Eclipse plugin help contents](https://github.com/satyagraha/gfm_viewer/blob/master/plugin/src/site/markdown/adding-help-to-eclipse-plugin.md).
 
+See [installation options](#installation-from-update-site) and [version history](#history) below.
+
 ## Usage
 
 **Note: Usage & Configuration were copied into built-in Help. When changing please delete here
