@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>code.satyagraha.gfm.viewer</groupId>
   <artifactId>code.satyagraha.gfm.viewer.parent</artifactId>
-  <version>1.9.2</version>
+  <version>1.9.3</version>
   <packaging>pom</packaging>
 
   <organization>
@@ -77,6 +77,7 @@
         <artifactId>target-platform-configuration</artifactId>
         <version>${tycho-version}</version>
         <configuration>
+          <executionEnvironment>JavaSE-1.7</executionEnvironment>
           <environments>
             <environment>
               <os>linux</os>
