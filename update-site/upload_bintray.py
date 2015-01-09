@@ -22,7 +22,7 @@ if __name__ == '__main__':
             src_path = os.path.join(root, filename)
             with open(src_path, 'rb') as src_file:
                 src_data = src_file.read()
-            dst_url = api_url + posixpath.normpath(posixpath.join('/', 'content', user_id, repository, 'v_' + version, rel_dir, filename))
+            dst_url = api_url + posixpath.normpath(posixpath.join('/', 'content', user_id, repository, version, rel_dir, filename))
             print 'uploading', src_path, 'size', len(src_data), 'to', dst_url
             sys.stdout.flush()
             response = session.put(dst_url, data=src_data, headers=headers)
