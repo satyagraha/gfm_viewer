@@ -62,32 +62,30 @@
                style="push">
             <visibleWhen
                   checkEnabled="false">
-               <and>
-                  <with
-                        variable="activeMenuSelection">
-                     <count
-                           value="1">
-                     </count>
-                  </with>
+               <with
+                     variable="activeMenuSelection">
+                  <count
+                        value="1">
+                  </count>
                   <iterate>
-                     <or>   
-                     <adapt
-                           type="org.eclipse.core.resources.IFile">
-                        <test
-                              property="org.eclipse.core.resources.extension"
-                              value="md">
-                        </test>
-                     </adapt>
-                     <adapt
-                           type="org.eclipse.core.resources.IFile">
-                        <test
-                              property="org.eclipse.core.resources.extension"
-                              value="markdown">
-                        </test>
-                     </adapt>
+                     <or>
+                        <adapt
+                              type="org.eclipse.core.resources.IFile">
+                           <test
+                                 property="org.eclipse.core.resources.extension"
+                                 value="md">
+                           </test>
+                        </adapt>
+                        <adapt
+                              type="org.eclipse.core.resources.IFile">
+                           <test
+                                 property="org.eclipse.core.resources.extension"
+                                 value="markdown">
+                           </test>
+                        </adapt>
                      </or>
                   </iterate>
-               </and>
+               </with>
             </visibleWhen>
          </command>
          <command
@@ -96,13 +94,11 @@
                style="push">
             <visibleWhen
                   checkEnabled="false">
-               <and>
-                  <with
-                        variable="activeMenuSelection">
-                     <count
-                           value="+">
-                     </count>
-                  </with>
+               <with
+                     variable="activeMenuSelection">
+                  <count
+                        value="+">
+                  </count>
                   <iterate
                         operator="and">
                      <or>
@@ -125,7 +121,7 @@
                         </adapt>
                      </or>
                   </iterate>
-               </and>
+               </with>
             </visibleWhen>
          </command>
       </menuContribution>
