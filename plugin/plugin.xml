@@ -83,6 +83,20 @@
                                  value="markdown">
                            </test>
                         </adapt>
+                        <adapt
+                              type="org.eclipse.core.resources.IFile">
+                           <test
+                                 property="org.eclipse.core.resources.extension"
+                                 value="mdown">
+                           </test>
+                        </adapt>
+                        <adapt
+                              type="org.eclipse.core.resources.IFile">
+                           <test
+                                 property="org.eclipse.core.resources.extension"
+                                 value="mdwn">
+                           </test>
+                        </adapt>
                      </or>
                   </iterate>
                </with>
@@ -117,6 +131,20 @@
                            <test
                                  property="org.eclipse.core.resources.extension"
                                  value="markdown">
+                           </test>
+                        </adapt>
+                        <adapt
+                              type="org.eclipse.core.resources.IFile">
+                           <test
+                                 property="org.eclipse.core.resources.extension"
+                                 value="mdown">
+                           </test>
+                        </adapt>
+                        <adapt
+                              type="org.eclipse.core.resources.IFile">
+                           <test
+                                 property="org.eclipse.core.resources.extension"
+                                 value="mdwn">
                            </test>
                         </adapt>
                      </or>
