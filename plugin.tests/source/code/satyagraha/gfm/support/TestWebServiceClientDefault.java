@@ -28,6 +28,7 @@ import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.NetworkConnector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -107,7 +108,7 @@ public class TestWebServiceClientDefault {
         server.start();
 
         Connector[] connectors = server.getConnectors();
-        int port = connectors[0].getLocalPort();
+        int port = ((NetworkConnector) connectors[0]).getLocalPort();
         LOGGER.info("server port: " + port);
 
         Config config = mock(Config.class);
