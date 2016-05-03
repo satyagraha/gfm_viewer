@@ -112,11 +112,11 @@ update site URL, where x.y.z is the desired version. You can see the available v
 
 ## Installation from Source Code
 
-The following build and install process can be followed to build the plugin locally should there be an issue with the
-update site:
+Should there be an issue with the update site, the following build and install process can be followed to build the plugin locally assuming
+a typical Windows 7+ environment:
 
 * Ensure you have [Maven](http://maven.apache.org/) executables installed for your OS
-and enviroment variable `JAVA_HOME` points to an installed JDK 6+
+and enviroment variable `JAVA_HOME` points to an installed **32-bit** JDK 8+ (see [Development](#development) section below 
 * Clone this project's repository to a convenient location (a path not containing special characters
 like space is advised)
 * In a shell or command window, change working directory to project root ( `gfm_viewer` with this README.md), 
