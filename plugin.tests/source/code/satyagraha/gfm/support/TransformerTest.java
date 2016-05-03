@@ -120,7 +120,7 @@ public class TransformerTest {
     @Test
     public void shouldTransformGitHubAnchor() {
         // given
-        String anchorText = "<a name=\"user-content-todo\" class=\"anchor\" href=\"#TODO\">stuff</a>";
+        String anchorText = "<a id=\"user-content-todo\" class=\"anchor\" href=\"#TODO\">stuff</a>";
         
         // when
         String resultText = getTransformedText(anchorText);

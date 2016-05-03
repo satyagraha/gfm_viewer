@@ -157,19 +157,14 @@ standards conformant HTML document
 
 ## Development
 
-If you want to do development on the plugin, proceed as follows:
+If you want to do development on the plugin, the following steps outline the process for a Windows 7+ development environment:
 
-* get fresh new Eclipse Standard from <http://www.eclipse.org/downloads/>, or
+* download and install a **32-bit** Sun Java JDK SE8uX from http://www.oracle.com/technetwork/java/javase/downloads/index.html
 
-* You will need an Eclipse instance which does *not* have the GFM viewer installed, but does have the
-following PDE-related plugins installed (check via _Help_ -> _About Eclipse Platform_ -> _Installation Details_):
- * Eclipse Plug-in Development Environment
- * Eclipse RCP Plug-in Development Resources
- * Eclipse RCP SDK
-* If any of these are absent, you must install them from the relevant main Eclipse update site, e.g. for
-[Kepler](http://download.eclipse.org/releases/kepler)
-* Ensure the _Group items by category_ checkbox is unticked in the installer _Available Software_ dialog,
-otherwise these plugins may be hard to find
+* download and unzip a **32-bit** _Eclipse for RCP and RAP Developers_ from <http://www.eclipse.org/downloads/> (Mars version 4.5.2 recommended) 
+
+* edit the `eclipse.ini` of the new Eclipse installation, setting its' `-vm` value to the installed 32-bit JDK folder path as in
+https://wiki.eclipse.org/Eclipse.ini#-vm_value:_Windows_Example 
 
 Then you can proceed as follows:
 * In the PDE Eclipse started with a new workspace, it is advisable to use the _Git Repositories_ view
@@ -181,24 +176,16 @@ and select entry _Import_ -> _Maven_ -> _Existing Maven Projects_ and navigate t
 * If necessary (e.g. before EGit 3.0), via the context menu on the new projects, select _Team_ -> _Share Project..._ -> _Git_
 and click through accepting the defaults to connect the projects to version control
 * Create an _Eclipse Maven_ run configuration for the _GFM Viewer parent_ project with
-goals `clean package` and workspace refresh, and then run it 
+goals `clean integration-test` and workspace refresh, and then run it 
 * Verify the last step created a jar file around 4Mb in size in the `lib` directory of project _GFM Viewer plugin_,
 although there will still be build errors at this point
 * Expand the _GFM Viewer plugin_ child project and open its `plugin.xml` file, select the _Overview_ tab and click the
 _Update the classpath settings_ link; the projects should now build successfully
-* Create an _Eclipse Application_ run configuration for the _GFM Viewer plugin_ project, and then run it
-* If the child Eclipse instance has memory problems, consider adding `-XX:MaxPermSize=128m` to the launch
-configuration JVM arguments
+* Create an _Eclipse Application_ run configuration for the _GFM Viewer plugin_ project, on the _Plug-ins_ tab click _Add Required Plugins_, and then run it
 * In the child instance, follow the [usage](#usage) instructions to show the GFM view 
 * Additional debug information is available by editing the plugin run configuration, and
 on the dialog select the _Tracing_ tab and then enable the entry for `code.satyagraha.gfm.viewer.plugin`
 
-You can build all GFM project components with Tycho in Eclipse by creating a Maven build configuration in project
-_GFM Viewer parent_ with goals `clean package` and workspace refresh, ensuring that on the _JRE_ tab
-an _Alternate JRE_ is specified which refers to a full JDK. However, as the directory structure for
-Maven builds differs from that in Eclipse (by the using a `target` subdirectory) this may be more
-confusing than useful. 
- 
 You can create an update site in the traditional way as follows:
 * In the project _GFM Viewer update site_, open the file `site.xml`
 * On the presented editor's _Site Map_ tab, click the _Build All_ button, and the plugin,
@@ -255,6 +242,7 @@ classes in a project, highlighting circular dependencies which typically indicat
 
 ## History
 
+* 2.0.1 - Fix GH prefix; refresh tooling versions
 * 1.9.3 - Updated CSS; require JVM 1.7
 * 1.9.2 - Add null test to HTML template
 * 1.9.1 - Remove GitHub anchor name prefixes

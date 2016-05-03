@@ -130,20 +130,21 @@ public class TransformerDefault implements Transformer {
         Document doc = Jsoup.parseBodyFragment(responseText);
         Elements links = doc.select("a[href]");
         for (Element link : links) {
-            String linkHref = link.attr("href");
-            String name = link.attr("name");
-            if (isNotBlank(name)) {
+            Elements anchor = link.select(".anchor");
+            if (!anchor.isEmpty()) {
                 // handle an anchor
+                String id = link.attr("id");
                 String gitHubPrefix = "user-content-";
-                if (name.startsWith(gitHubPrefix)) {
-                    String nameSuffix = name.substring(gitHubPrefix.length());
-                    link.attr("name", nameSuffix);
+                if (id.startsWith(gitHubPrefix)) {
+                    String idSuffix = id.substring(gitHubPrefix.length());
+                    link.attr("id", idSuffix);
                 }
 
             } else {
                 // handle a link
                 URI uri;
                 try {
+                    String linkHref = link.attr("href");
                     uri = new URI(linkHref);
                 } catch (URISyntaxException e) {
                     continue;
