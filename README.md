@@ -12,9 +12,9 @@ title="Drag and drop into a running Eclipse to install GitHub Flavored Markdown 
 This project provides an Eclipse view which provides a reasonably accurate presentation of
 [GithHub Flavored Markdown](http://github.github.com/github-flavored-markdown/) files.
 
-It is also new way to create Eclipse plugin help contents.
-Check project sources and developer instructions at GitHub
-<https://github.com/satyagraha/gfm_viewer> .
+It is also [new way to create Eclipse plugin help contents](https://github.com/satyagraha/gfm_viewer/blob/master/plugin/src/site/markdown/adding-help-to-eclipse-plugin.md).
+
+See [installation options](#installation-from-update-site) and [version history](#history) below.
 
 ## Usage
 
@@ -97,20 +97,26 @@ top right of view), then select the _Filters..._ entry, and then set or clear th
 In Eclipse, do the following:
 * Go to menu _Help_ -> _Install New Software..._ and in the resulting dialog click the _Add..._
 button to present a further dialog, and here enter `GFM Viewer` as the _Name_ and 
-this [link](https://raw.github.com/satyagraha/gfm_viewer/master/p2-composite/) as the _Location_ and press _OK_
+this [link](https://raw.githubusercontent.com/satyagraha/gfm_viewer/master/p2-composite/) as the _Location_ and press _OK_
 * Select the _GFM Viewer_ category in the install view, and alter the checkbox settings
 there as necessary 
 * Proceed to install the software in the usual manner accepting all defaults
 * Eclipse will prompt for a restart, accept this, then the GFM viewer is usable as documented
 [above](#usage)
 
+## Installation of Alternate Versions
+
+The above installation mechanism will install the latest official version of the plugin. It is possible to install
+older or newer beta versions of the software by using http://dl.bintray.com/satyagraha/generic/x.y.z as the
+update site URL, where x.y.z is the desired version. You can see the available versions at http://dl.bintray.com/satyagraha/generic/.
+
 ## Installation from Source Code
 
-The following build and install process can be followed to build the plugin locally should there be an issue with the
-update site:
+Should there be an issue with the update site, the following build and install process can be followed to build the plugin locally assuming
+a typical Windows 7+ environment:
 
 * Ensure you have [Maven](http://maven.apache.org/) executables installed for your OS
-and enviroment variable `JAVA_HOME` points to an installed JDK 6+
+and enviroment variable `JAVA_HOME` points to an installed **32-bit** JDK 8+ (see [Development](#development) section below 
 * Clone this project's repository to a convenient location (a path not containing special characters
 like space is advised)
 * In a shell or command window, change working directory to project root ( `gfm_viewer` with this README.md), 
@@ -151,19 +157,14 @@ standards conformant HTML document
 
 ## Development
 
-If you want to do development on the plugin, proceed as follows:
+If you want to do development on the plugin, the following steps outline the process for a Windows 7+ development environment:
 
-* get fresh new Eclipse Standard from <http://www.eclipse.org/downloads/>, or
+* download and install a **32-bit** Sun Java JDK SE8uX from http://www.oracle.com/technetwork/java/javase/downloads/index.html
 
-* You will need an Eclipse instance which does *not* have the GFM viewer installed, but does have the
-following PDE-related plugins installed (check via _Help_ -> _About Eclipse Platform_ -> _Installation Details_):
- * Eclipse Plug-in Development Environment
- * Eclipse RCP Plug-in Development Resources
- * Eclipse RCP SDK
-* If any of these are absent, you must install them from the relevant main Eclipse update site, e.g. for
-[Kepler](http://download.eclipse.org/releases/kepler)
-* Ensure the _Group items by category_ checkbox is unticked in the installer _Available Software_ dialog,
-otherwise these plugins may be hard to find
+* download and unzip a **32-bit** _Eclipse for RCP and RAP Developers_ from <http://www.eclipse.org/downloads/> (Mars version 4.5.2 recommended) 
+
+* edit the `eclipse.ini` of the new Eclipse installation, setting its' `-vm` value to the installed 32-bit JDK folder path as in
+https://wiki.eclipse.org/Eclipse.ini#-vm_value:_Windows_Example 
 
 Then you can proceed as follows:
 * In the PDE Eclipse started with a new workspace, it is advisable to use the _Git Repositories_ view
@@ -175,24 +176,16 @@ and select entry _Import_ -> _Maven_ -> _Existing Maven Projects_ and navigate t
 * If necessary (e.g. before EGit 3.0), via the context menu on the new projects, select _Team_ -> _Share Project..._ -> _Git_
 and click through accepting the defaults to connect the projects to version control
 * Create an _Eclipse Maven_ run configuration for the _GFM Viewer parent_ project with
-goals `clean package` and workspace refresh, and then run it 
+goals `clean integration-test` and workspace refresh, and then run it 
 * Verify the last step created a jar file around 4Mb in size in the `lib` directory of project _GFM Viewer plugin_,
 although there will still be build errors at this point
 * Expand the _GFM Viewer plugin_ child project and open its `plugin.xml` file, select the _Overview_ tab and click the
 _Update the classpath settings_ link; the projects should now build successfully
-* Create an _Eclipse Application_ run configuration for the _GFM Viewer plugin_ project, and then run it
-* If the child Eclipse instance has memory problems, consider adding `-XX:MaxPermSize=128m` to the launch
-configuration JVM arguments
+* Create an _Eclipse Application_ run configuration for the _GFM Viewer plugin_ project, on the _Plug-ins_ tab click _Add Required Plugins_, and then run it
 * In the child instance, follow the [usage](#usage) instructions to show the GFM view 
 * Additional debug information is available by editing the plugin run configuration, and
 on the dialog select the _Tracing_ tab and then enable the entry for `code.satyagraha.gfm.viewer.plugin`
 
-You can build all GFM project components with Tycho in Eclipse by creating a Maven build configuration in project
-_GFM Viewer parent_ with goals `clean package` and workspace refresh, ensuring that on the _JRE_ tab
-an _Alternate JRE_ is specified which refers to a full JDK. However, as the directory structure for
-Maven builds differs from that in Eclipse (by the using a `target` subdirectory) this may be more
-confusing than useful. 
- 
 You can create an update site in the traditional way as follows:
 * In the project _GFM Viewer update site_, open the file `site.xml`
 * On the presented editor's _Site Map_ tab, click the _Build All_ button, and the plugin,
@@ -249,7 +242,14 @@ classes in a project, highlighting circular dependencies which typically indicat
 
 ## History
 
-* 1.8.3 - TBD
+* 2.0.1 - Fix GH prefix; refresh tooling versions
+* 1.9.3 - Updated CSS; require JVM 1.7
+* 1.9.2 - Add null test to HTML template
+* 1.9.1 - Remove GitHub anchor name prefixes
+* 1.9.0 - Web proxy fixes
+* 1.8.5 - Web proxy support beta
+* 1.8.4 - Support Eclipse proxy settings
+* 1.8.3 - Fix broken release
 * 1.8.2 - Minor fixes and feature improvements
 * 1.8.1 - UI tests, fixes
 * 1.8.0 - On/Off-line mode

@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 
 import java.io.File;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -104,9 +105,73 @@ public class TransformerTest {
         assertThat(resultLink, not(containsString(".html")));
     }
 
-    private String getTransformedLink(String linkUri) {
+    @Test
+    public void shouldNotTransformSimpleFragmentLink() {
         // given
+
+        // when
+        String resultLink = getTransformedLink("#localref");
+
+        // then
+        assertThat(resultLink, not(containsString(".html")));
+        
+    }
+    
+    @Test
+    public void shouldTransformGitHubAnchor() {
+        // given
+        String anchorText = "<a id=\"user-content-todo\" class=\"anchor\" href=\"#TODO\">stuff</a>";
+        
+        // when
+        String resultText = getTransformedText(anchorText);
+        
+        // then
+        assertThat(resultText, is(anchorText.replace("user-content-", "")));
+    }
+    
+    @Test
+    public void shouldNotTransformNonGitHubAnchor() {
+        // given
+        String anchorText = "<a name=\"todo\" class=\"anchor\" href=\"#todo\">stuff</a>";
+        
+        // when
+        String resultText = getTransformedText(anchorText);
+        
+        // then
+        assertThat(resultText, is(anchorText));
+    }
+
+    @Test
+    public void shouldWorkWithEmptyCssJs() throws Exception {
+        // setup
+        transformer = new TransformerDefault(config, webServiceClient);
+
+        // given
+        File mdFile = File.createTempFile("src", ".md");
+        String message = "hello world - " + System.currentTimeMillis(); 
+        String mdText = message + "\n";
+        FileUtils.write(mdFile, mdText);
+        
+        File htFile = File.createTempFile("dst", ".md");
+        String htText = String.format("<p>%s</p>", message);
+        given(webServiceClient.transform(mdText)).willReturn(htText);
+        given(config.getCssText()).willReturn(null);
+        given(config.getJsText()).willReturn(null);
+        
+        // when
+        transformer.transformMarkdownFile(mdFile, htFile);
+        
+        // then
+        String resultText = FileUtils.readFileToString(htFile);
+        assertThat(resultText, containsString(message));
+    }
+    
+    private String getTransformedLink(String linkUri) {
         String htText = String.format("<a href=\"%s\">click me</a>", linkUri);
+        return getTransformedText(htText);
+    }        
+    
+    private String getTransformedText(String htText) {
         given(webServiceClient.transform(anyString())).willReturn(htText);
 
         // when

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>code.satyagraha.gfm.viewer</groupId>
   <artifactId>code.satyagraha.gfm.viewer.parent</artifactId>
-  <version>1.8.3</version>
+  <version>2.0.1</version>
   <packaging>pom</packaging>
 
   <organization>
@@ -50,16 +50,16 @@
   </contributors>
 
   <properties>
-    <tycho-version>0.19.0</tycho-version>
+    <tycho-version>0.25.0</tycho-version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <copy.warning>!!! GENERATED FILE - DO NOT EDIT !!!</copy.warning>
   </properties>
 
   <repositories>
     <repository>
-      <id>eclipse-kepler</id>
+      <id>eclipse-mars</id>
       <layout>p2</layout>
-      <url>http://download.eclipse.org/releases/kepler</url>
+      <url>http://download.eclipse.org/releases/mars</url>
     </repository>
   </repositories>
 
@@ -77,6 +77,7 @@
         <artifactId>target-platform-configuration</artifactId>
         <version>${tycho-version}</version>
         <configuration>
+          <executionEnvironment>JavaSE-1.7</executionEnvironment>
           <environments>
             <environment>
               <os>linux</os>

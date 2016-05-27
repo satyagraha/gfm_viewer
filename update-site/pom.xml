@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>code.satyagraha.gfm.viewer</groupId>
 		<artifactId>code.satyagraha.gfm.viewer.parent</artifactId>
-		<version>1.8.3</version>
+		<version>2.0.1</version>
 	</parent>
 
 	<artifactId>code.satyagraha.gfm.viewer.update-site</artifactId>
@@ -54,14 +54,9 @@
 				<bintray.repository>generic</bintray.repository>
 				<bintray.package>gfm-viewer</bintray.package>
 				<bintray.version>${project.version}</bintray.version>
-				<bintray.upload.file>site-assembly-${project.version}.zip</bintray.upload.file>
 			</properties>
 			<build>
 				<plugins>
-					<!-- <plugin> <artifactId>maven-antrun-plugin</artifactId> <version>1.7</version> 
-						<executions> <execution> <phase>package</phase> <goals> <goal>run</goal> 
-						</goals> <configuration> <target> <property environment="env" /> <echoproperties 
-						/> </target> </configuration> </execution> </executions> </plugin> -->
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
@@ -73,17 +68,16 @@
 									<goal>exec</goal>
 								</goals>
 								<configuration>
-									<executable>${curl.path}</executable>
+									<executable>${python.interpreter.path}</executable>
 									<arguments>
-										<argument>--verbose</argument>
-										<argument>--insecure</argument>
-										<argument>--user</argument>
-										<argument>${bintray.user.id}:${bintray.api.key}</argument>
-										<argument>--request</argument>
-										<argument>PUT</argument>
-										<argument>--upload-file</argument>
-										<argument>target/${bintray.upload.file}</argument>
-										<argument>${bintray.api.url}/content/${bintray.user.id}/${bintray.repository}/${bintray.package}/${bintray.version}/${bintray.upload.file};publish=0;explode=1</argument>
+										<argument>upload_bintray.py</argument>
+										<argument>target/site</argument>
+										<argument>${bintray.user.id}</argument>
+										<argument>${bintray.api.key}</argument>
+										<argument>${bintray.api.url}</argument>
+										<argument>${bintray.repository}</argument>
+										<argument>${bintray.package}</argument>
+										<argument>${bintray.version}</argument>
 									</arguments>
 								</configuration>
 							</execution>
