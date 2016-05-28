@@ -158,18 +158,15 @@ standards conformant HTML document
 ## Development
 
 If you want to do development on the plugin, the following steps outline the process for a Windows 7+ development environment:
-
 * download and install a **32-bit** Sun Java JDK SE8uX from http://www.oracle.com/technetwork/java/javase/downloads/index.html
-
 * download and unzip a **32-bit** _Eclipse for RCP and RAP Developers_ from <http://www.eclipse.org/downloads/> (Mars version 4.5.2 recommended) 
-
-* edit the `eclipse.ini` of the new Eclipse installation, setting its' `-vm` value to the installed 32-bit JDK folder path as in
-https://wiki.eclipse.org/Eclipse.ini#-vm_value:_Windows_Example 
+* edit the `eclipse.ini` of the new Eclipse installation, setting its' `-vm` value to the installed 32-bit JDK folder path as in https://wiki.eclipse.org/Eclipse.ini#-vm_value:_Windows_Example 
 
 Then you can proceed as follows:
-* In the PDE Eclipse started with a new workspace, it is advisable to use the _Git Repositories_ view
-to clone the GitHub repo by pasting the GitHub URL as this will avoid line termination issues later
-
+* In the new Eclipse started with a new workspace, do _Window_ -> _Preferences_ -> _Maven_ -> _Discovery_,
+select _Open Catalog_ and enter `Tycho` in the find filter box; when a result entitled _Tycho Configurator_
+is located, proceed to install it in the usual way, with IDE restart
+* In the _Git Repositories_ view, clone the GitHub repo by pasting the GitHub URL as this will avoid line termination issues later
 * Then switch to the _Plug-in Development_ perspective, then activate the context menu in the _Package Explorer_ panel
 and select entry _Import_ -> _Maven_ -> _Existing Maven Projects_ and navigate to the top-level project clone folder
 * Click through and accept all the defaults to complete the import process
