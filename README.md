@@ -149,7 +149,7 @@ for the host OS, e.g. IE for Windows)
 * An event listener is registered which detects the opening and saving of markdown files
 in a relevant editor
 * When such an event is detected, then the editor's text contents are captured and sent
-to the GitHub rendering API resulting an an HTML segment 
+to the GitHub rendering API resulting in an HTML segment 
 * The resulting HTML segment is embedded in an HTML template to produce a 
 standards conformant HTML document
 * The resulting HTML document is then sent to the browser component for display in the view
